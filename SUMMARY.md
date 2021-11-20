@@ -32,14 +32,14 @@
 
 ## 2. Go面试
 
-- [2.1 Go面试题总结](Go面试/Go面试题总结.md)
-- [2.2 Go结构体比较](Go面试/Go结构体比较.md)
-- [2.3 Go语言CSP：通信顺序进程简述](Go面试/Go语言CSP：通信顺序进程简述.md)
-- [2.4 Goroutine数量](Go面试/Goroutine数量.md)
-- [2.5 new和make](Go面试/new_make.md)
-- [2.6 空结构体](Go面试/Go 语言中 Set 的最佳实现方案.md)
-
-- [面试记录](Go面试/面试记录.md)
+- [2.1 Go面试题总结](面试/Go面试题总结.md)
+- [2.2 Go结构体比较](面试/Go结构体比较.md)
+- [2.3 Go语言CSP：通信顺序进程简述](面试/Go语言CSP：通信顺序进程简述.md)
+- [2.4 Goroutine数量](面试/Goroutine数量.md)
+- [2.5 new和make](面试/new_make.md)
+- [2.6 空结构体](面试/Go 语言中 Set 的最佳实现方案.md)
+- [面试操作系统](面试/面试系统.md)
+- [面试记录](面试/面试记录.md)
 
 
 

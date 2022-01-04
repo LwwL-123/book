@@ -1,0 +1,1151 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>1.1.4 []Byte与String · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-expandable-chapters/expandable-chapters.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="rune关键字.html" />
+    
+    
+    <link rel="prev" href="select.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        <li class="header">前言</li>
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../../">
+            
+                <a href="../../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">1. Go底层原理</li>
+        
+        
+    
+        <li class="chapter " data-level="2.1" >
+            
+                <span>
+            
+                    
+                    1.1 Go常见关键字及其原理
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="2.1.1" data-path="chan.html">
+            
+                <a href="chan.html">
+            
+                    
+                    1.1.1 Chan
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.1.2" data-path="defer.html">
+            
+                <a href="defer.html">
+            
+                    
+                    1.1.2 Defer
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.1.3" data-path="select.html">
+            
+                <a href="select.html">
+            
+                    
+                    1.1.3 Select
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="2.1.4" data-path="[]byte与string.html">
+            
+                <a href="[]byte与string.html">
+            
+                    
+                    1.1.4 []Byte与String
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.1.5" data-path="rune关键字.html">
+            
+                <a href="rune关键字.html">
+            
+                    
+                    1.1.5 Rune关键字
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" >
+            
+                <span>
+            
+                    
+                    1.2 Go内存管理及协程调度
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="2.2.1" data-path="../Go内存分配.html">
+            
+                <a href="../Go内存分配.html">
+            
+                    
+                    1.2.1 Go内存分配
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2.2" data-path="../内存对齐.html">
+            
+                <a href="../内存对齐.html">
+            
+                    
+                    1.2.2 内存对齐
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2.3" data-path="../逃逸分析.html">
+            
+                <a href="../逃逸分析.html">
+            
+                    
+                    1.2.3 逃逸分析
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2.4" data-path="../Go垃圾回收原理.html">
+            
+                <a href="../Go垃圾回收原理.html">
+            
+                    
+                    1.2.4 Go垃圾回收原理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2.5" data-path="../Go协程的栈内存管理.html">
+            
+                <a href="../Go协程的栈内存管理.html">
+            
+                    
+                    1.2.5 Go协程的栈内存管理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2.6" data-path="../GMP并发调度器深度解析.html">
+            
+                <a href="../GMP并发调度器深度解析.html">
+            
+                    
+                    1.2.6 GMP并发调度器深度解析
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="header">2. Go面试</li>
+        
+        
+    
+        <li class="chapter " data-level="3.1" data-path="../../Go面试/Go面试题总结.html">
+            
+                <a href="../../Go面试/Go面试题总结.html">
+            
+                    
+                    2.1 Go面试题总结
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="../../Go面试/Go结构体比较.html">
+            
+                <a href="../../Go面试/Go结构体比较.html">
+            
+                    
+                    2.2 Go结构体比较
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="../../Go面试/Go语言CSP：通信顺序进程简述.html">
+            
+                <a href="../../Go面试/Go语言CSP：通信顺序进程简述.html">
+            
+                    
+                    2.3 Go语言CSP：通信顺序进程简述
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4" data-path="../../Go面试/Goroutine数量.html">
+            
+                <a href="../../Go面试/Goroutine数量.html">
+            
+                    
+                    2.4 Goroutine数量
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5" data-path="../../Go面试/new_make.html">
+            
+                <a href="../../Go面试/new_make.html">
+            
+                    
+                    2.5 new和make
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.6" data-path="../../Go面试/面试记录.html">
+            
+                <a href="../../Go面试/面试记录.html">
+            
+                    
+                    2.6 面试记录
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">3. 数据库</li>
+        
+        
+    
+        <li class="chapter " data-level="4.1" data-path="../../数据库/锁.html">
+            
+                <a href="../../数据库/锁.html">
+            
+                    
+                    3.1 锁
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2" data-path="../../数据库/对象存储.html">
+            
+                <a href="../../数据库/对象存储.html">
+            
+                    
+                    3.2 对象存储
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">4. 计算机组成原理</li>
+        
+        
+    
+        <li class="chapter " data-level="5.1" data-path="../../计算机组成原理/CPU三级缓存.html">
+            
+                <a href="../../计算机组成原理/CPU三级缓存.html">
+            
+                    
+                    4.1 CPU三级缓存
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">5. 计算机网络</li>
+        
+        
+    
+        <li class="chapter " data-level="6.1" data-path="../../计算机网络/TCP三次握手四次挥手.html">
+            
+                <a href="../../计算机网络/TCP三次握手四次挥手.html">
+            
+                    
+                    5.1 TCP三次握手四次挥手
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.2" data-path="../../计算机网络/网络面试题.html">
+            
+                <a href="../../计算机网络/网络面试题.html">
+            
+                    
+                    5.2 网络面试题
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">6. Linux</li>
+        
+        
+    
+        <li class="chapter " data-level="7.1" data-path="../../Linux/Linux常见命令.html">
+            
+                <a href="../../Linux/Linux常见命令.html">
+            
+                    
+                    6.1 Linux常见命令
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.2" data-path="../../Linux/Linux虚拟内存.html">
+            
+                <a href="../../Linux/Linux虚拟内存.html">
+            
+                    
+                    6.2 Linux虚拟内存
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.3" data-path="../../Linux/Linux进程与线程.html">
+            
+                <a href="../../Linux/Linux进程与线程.html">
+            
+                    
+                    6.3 Linux进程与线程
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.4" data-path="../../Linux/用户级线程与内核级线程.html">
+            
+                <a href="../../Linux/用户级线程与内核级线程.html">
+            
+                    
+                    6.4用户级线程与内核级线程
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.5" data-path="../../Linux/Cgroups与Docker资源限制.html">
+            
+                <a href="../../Linux/Cgroups与Docker资源限制.html">
+            
+                    
+                    6.5 Cgroups与Docker资源限制
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.6" data-path="../../Linux/docker文件系统.html">
+            
+                <a href="../../Linux/docker文件系统.html">
+            
+                    
+                    6.6 Docker文件系统
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">7. 分布式</li>
+        
+        
+    
+        <li class="chapter " data-level="8.1" data-path="../../分布式/CAP理论.html">
+            
+                <a href="../../分布式/CAP理论.html">
+            
+                    
+                    7.1 CAP理论
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.2" >
+            
+                <span>
+            
+                    
+                    7.2 共识算法
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="8.2.1" data-path="../../分布式/共识算法/Raft.html">
+            
+                <a href="../../分布式/共识算法/Raft.html">
+            
+                    
+                    Raft
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.2.2" data-path="../../分布式/共识算法/链式共识算法.html">
+            
+                <a href="../../分布式/共识算法/链式共识算法.html">
+            
+                    
+                    链式共识算法
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="8.3" >
+            
+                <span>
+            
+                    
+                    7.3 Etcd
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="8.3.1" data-path="../../etcd/etcd.html">
+            
+                <a href="../../etcd/etcd.html">
+            
+                    
+                    Etcd
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="header">8. Ipfs</li>
+        
+        
+    
+        <li class="chapter " data-level="9.1" data-path="../../ipfs/libp2p.html">
+            
+                <a href="../../ipfs/libp2p.html">
+            
+                    
+                    Libp2p
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.2" data-path="../../ipfs/深入理解 IPFS.html">
+            
+                <a href="../../ipfs/深入理解 IPFS.html">
+            
+                    
+                    深入理解 IPFS
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">9. Substrate</li>
+        
+        
+    
+        <li class="chapter " data-level="10.1" data-path="../../substrate/Substrate的Staking模块分析.html">
+            
+                <a href="../../substrate/Substrate的Staking模块分析.html">
+            
+                    
+                    Substrate的Staking模块分析
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.2" data-path="../../substrate/权重Weight和基准Benchmarking.html">
+            
+                <a href="../../substrate/权重Weight和基准Benchmarking.html">
+            
+                    
+                    权重Weight和基准Benchmarking
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">10. 设计模式</li>
+        
+        
+    
+        <li class="chapter " data-level="11.1" data-path="../../设计模式/设计模式.html">
+            
+                <a href="../../设计模式/设计模式.html">
+            
+                    
+                    设计模式
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../.." >1.1.4 []Byte与String</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="golang&#x4E2D;byte&#x4E0E;string&#x8F6C;&#x6362;&#x5168;&#x89E3;&#x6790;">Golang&#x4E2D;[]byte&#x4E0E;string&#x8F6C;&#x6362;&#x5168;&#x89E3;&#x6790;</h1>
+<h2 id="&#x4E24;&#x79CD;&#x8F6C;&#x6362;&#x65B9;&#x5F0F;">&#x4E24;&#x79CD;&#x8F6C;&#x6362;&#x65B9;&#x5F0F;</h2>
+<ul>
+<li>&#x6807;&#x51C6;&#x8F6C;&#x6362;</li>
+</ul>
+<p>go&#x4E2D;string&#x4E0E;[]byte&#x7684;&#x4E92;&#x6362;&#xFF0C;&#x76F8;&#x4FE1;&#x6BCF;&#x4E00;&#x4F4D;gopher&#x90FD;&#x80FD;&#x7ACB;&#x523B;&#x60F3;&#x5230;&#x4EE5;&#x4E0B;&#x7684;&#x8F6C;&#x6362;&#x65B9;&#x5F0F;&#xFF0C;&#x6211;&#x4EEC;&#x5C06;&#x4E4B;&#x79F0;&#x4E3A;&#x6807;&#x51C6;&#x8F6C;&#x6362;&#x3002;</p>
+<pre><code class="lang-go"><span class="hljs-comment">// string to []byte</span>
+s1 := <span class="hljs-string">&quot;hello&quot;</span>
+b := []<span class="hljs-keyword">byte</span>(s1)
+
+<span class="hljs-comment">// []byte to string</span>
+s2 := <span class="hljs-keyword">string</span>(b)
+</code></pre>
+<ul>
+<li>&#x5F3A;&#x8F6C;&#x6362;</li>
+</ul>
+<p>&#x901A;&#x8FC7;unsafe&#x548C;reflect&#x5305;&#xFF0C;&#x53EF;&#x4EE5;&#x5B9E;&#x73B0;&#x53E6;&#x5916;&#x4E00;&#x79CD;&#x8F6C;&#x6362;&#x65B9;&#x5F0F;&#xFF0C;&#x6211;&#x4EEC;&#x5C06;&#x4E4B;&#x79F0;&#x4E3A;&#x5F3A;&#x8F6C;&#x6362;&#xFF08;&#x4E5F;&#x5E38;&#x5E38;&#x88AB;&#x4EBA;&#x79F0;&#x4F5C;&#x9ED1;&#x9B54;&#x6CD5;&#xFF09;&#x3002;</p>
+<pre><code class="lang-go"><span class="hljs-keyword">func</span> String2Bytes(s <span class="hljs-keyword">string</span>) []<span class="hljs-keyword">byte</span> {
+    sh := (*reflect.StringHeader)(unsafe.Pointer(&amp;s))
+    bh := reflect.SliceHeader{
+        Data: sh.Data,
+        Len:  sh.Len,
+        Cap:  sh.Len,
+    }
+    <span class="hljs-keyword">return</span> *(*[]<span class="hljs-keyword">byte</span>)(unsafe.Pointer(&amp;bh))
+}
+
+<span class="hljs-keyword">func</span> Bytes2String(b []<span class="hljs-keyword">byte</span>) <span class="hljs-keyword">string</span> {
+    <span class="hljs-keyword">return</span> *(*<span class="hljs-keyword">string</span>)(unsafe.Pointer(&amp;b))
+}
+</code></pre>
+<ul>
+<li><h4 id="&#x6027;&#x80FD;&#x5BF9;&#x6BD4;">&#x6027;&#x80FD;&#x5BF9;&#x6BD4;</h4>
+</li>
+</ul>
+<p>&#x7ECF;&#x8FC7;&#x6D4B;&#x8BD5;&#xFF0C;<strong>&#x5F3A;&#x8F6C;&#x6362;&#x65B9;&#x5F0F;&#x7684;&#x6027;&#x80FD;&#x4F1A;&#x660E;&#x663E;&#x4F18;&#x4E8E;&#x6807;&#x51C6;&#x8F6C;&#x6362;&#x3002;</strong></p>
+<p>&#x53EF;&#x4EE5;&#x601D;&#x8003;&#x4EE5;&#x4E0B;&#x95EE;&#x9898;</p>
+<ol>
+<li><p>&#x4E3A;&#x5565;&#x5F3A;&#x8F6C;&#x6362;&#x6027;&#x80FD;&#x4F1A;&#x6BD4;&#x6807;&#x51C6;&#x8F6C;&#x6362;&#x597D;&#xFF1F;</p>
+</li>
+<li><p>&#x4E3A;&#x5565;&#x5728;&#x4E0A;&#x8FF0;&#x6D4B;&#x8BD5;&#x4E2D;&#xFF0C;&#x5F53;x&#x7684;&#x6570;&#x636E;&#x8F83;&#x5927;&#x65F6;&#xFF0C;&#x6807;&#x51C6;&#x8F6C;&#x6362;&#x65B9;&#x5F0F;&#x4F1A;&#x6709;&#x4E00;&#x6B21;&#x5206;&#x914D;&#x5185;&#x5B58;&#x7684;&#x64CD;&#x4F5C;&#xFF0C;&#x4ECE;&#x800C;&#x5BFC;&#x81F4;&#x5176;&#x6027;&#x80FD;&#x66F4;&#x5DEE;&#xFF0C;&#x800C;&#x5F3A;&#x8F6C;&#x6362;&#x65B9;&#x5F0F;&#x5374;&#x4E0D;&#x53D7;&#x5F71;&#x54CD;&#xFF1F;</p>
+</li>
+<li><p>&#x65E2;&#x7136;&#x5F3A;&#x8F6C;&#x6362;&#x65B9;&#x5F0F;&#x6027;&#x80FD;&#x8FD9;&#x4E48;&#x597D;&#xFF0C;&#x4E3A;&#x5565;go&#x8BED;&#x8A00;&#x63D0;&#x4F9B;&#x7ED9;&#x6211;&#x4EEC;&#x4F7F;&#x7528;&#x7684;&#x662F;&#x6807;&#x51C6;&#x8F6C;&#x6362;&#x65B9;&#x5F0F;&#xFF1F;</p>
+</li>
+</ol>
+<h2 id="&#x539F;&#x7406;&#x5206;&#x6790;">&#x539F;&#x7406;&#x5206;&#x6790;</h2>
+<p>&#x8981;&#x56DE;&#x7B54;&#x4EE5;&#x4E0A;&#x4E09;&#x4E2A;&#x95EE;&#x9898;&#xFF0C;&#x9996;&#x5148;&#x8981;&#x660E;&#x767D;&#x662F;string&#x548C;[]byte&#x5728;go&#x4E2D;&#x5230;&#x5E95;&#x662F;&#x4EC0;&#x4E48;&#x3002;</p>
+<ul>
+<li>[]byte</li>
+</ul>
+<p>&#x5728;go&#x4E2D;&#xFF0C;byte&#x662F;uint8&#x7684;&#x522B;&#x540D;&#xFF0C;&#x5728;go&#x6807;&#x51C6;&#x5E93;builtin&#x4E2D;&#x6709;&#x5982;&#x4E0B;&#x8BF4;&#x660E;&#xFF1A;</p>
+<pre><code class="lang-go"><span class="hljs-comment">// byte is an alias for uint8 and is equivalent to uint8 in all ways. It is</span>
+<span class="hljs-comment">// used, by convention, to distinguish byte values from 8-bit unsigned</span>
+<span class="hljs-comment">// integer values.</span>
+<span class="hljs-keyword">type</span> <span class="hljs-keyword">byte</span> = <span class="hljs-keyword">uint8</span>
+</code></pre>
+<p>&#x5728;go&#x7684;&#x6E90;&#x7801;&#x4E2D;<code>src/runtime/slice.go</code>&#xFF0C;slice&#x7684;&#x5B9A;&#x4E49;&#x5982;&#x4E0B;&#xFF1A;</p>
+<pre><code class="lang-go"><span class="hljs-keyword">type</span> slice <span class="hljs-keyword">struct</span> {
+    array unsafe.Pointer
+    <span class="hljs-built_in">len</span>   <span class="hljs-keyword">int</span>
+    <span class="hljs-built_in">cap</span>   <span class="hljs-keyword">int</span>
+}
+</code></pre>
+<p>array&#x662F;&#x5E95;&#x5C42;&#x6570;&#x7EC4;&#x7684;&#x6307;&#x9488;&#xFF0C;len&#x8868;&#x793A;&#x957F;&#x5EA6;&#xFF0C;cap&#x8868;&#x793A;&#x5BB9;&#x91CF;&#x3002;&#x5BF9;&#x4E8E;[]byte&#x6765;&#x8BF4;&#xFF0C;array&#x6307;&#x5411;&#x7684;&#x5C31;&#x662F;byte&#x6570;&#x7EC4;&#x3002;</p>
+<p><img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211227183048.png" alt="&#x5728;&#x8FD9;&#x91CC;&#x63D2;&#x5165;&#x56FE;&#x7247;&#x63CF;&#x8FF0;"></p>
+<ul>
+<li>string
+&#x5173;&#x4E8E;string&#x7C7B;&#x578B;&#xFF0C;&#x5728;go&#x6807;&#x51C6;&#x5E93;builtin&#x4E2D;&#x6709;&#x5982;&#x4E0B;&#x8BF4;&#x660E;&#xFF1A;</li>
+</ul>
+<pre><code class="lang-go"><span class="hljs-comment">// string is the set of all strings of 8-bit bytes, conventionally but not</span>
+<span class="hljs-comment">// necessarily representing UTF-8-encoded text. A string may be empty, but</span>
+<span class="hljs-comment">// not nil. Values of string type are immutable.</span>
+<span class="hljs-keyword">type</span> <span class="hljs-keyword">string</span> <span class="hljs-keyword">string</span>
+</code></pre>
+<p>&#x7FFB;&#x8BD1;&#x8FC7;&#x6765;&#x5C31;&#x662F;&#xFF1A;string&#x662F;8&#x4F4D;&#x5B57;&#x8282;&#x7684;&#x96C6;&#x5408;&#xFF0C;&#x901A;&#x5E38;&#x4F46;&#x4E0D;&#x4E00;&#x5B9A;&#x4EE3;&#x8868;UTF-8&#x7F16;&#x7801;&#x7684;&#x6587;&#x672C;&#x3002;string&#x53EF;&#x4EE5;&#x4E3A;&#x7A7A;&#xFF0C;&#x4F46;&#x662F;&#x4E0D;&#x80FD;&#x4E3A;nil&#x3002;<strong>string&#x7684;&#x503C;&#x662F;&#x4E0D;&#x80FD;&#x6539;&#x53D8;&#x7684;&#x3002;</strong></p>
+<p>&#x5728;go&#x7684;&#x6E90;&#x7801;&#x4E2D;<code>src/runtime/string.go</code>&#xFF0C;string&#x7684;&#x5B9A;&#x4E49;&#x5982;&#x4E0B;&#xFF1A;</p>
+<pre><code class="lang-go"><span class="hljs-keyword">type</span> stringStruct <span class="hljs-keyword">struct</span> {
+    str unsafe.Pointer
+    <span class="hljs-built_in">len</span> <span class="hljs-keyword">int</span>
+}
+</code></pre>
+<p>stringStruct&#x4EE3;&#x8868;&#x7684;&#x5C31;&#x662F;&#x4E00;&#x4E2A;string&#x5BF9;&#x8C61;&#xFF0C;str&#x6307;&#x9488;&#x6307;&#x5411;&#x7684;&#x662F;&#x67D0;&#x4E2A;&#x6570;&#x7EC4;&#x7684;&#x9996;&#x5730;&#x5740;&#xFF0C;len&#x4EE3;&#x8868;&#x7684;&#x6570;&#x7EC4;&#x957F;&#x5EA6;&#x3002;&#x90A3;&#x4E48;&#x8FD9;&#x4E2A;&#x6570;&#x7EC4;&#x662F;&#x4EC0;&#x4E48;&#x5462;&#xFF1F;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5728;&#x5B9E;&#x4F8B;&#x5316;stringStruct&#x5BF9;&#x8C61;&#x65F6;&#x627E;&#x5230;&#x7B54;&#x6848;&#x3002;</p>
+<pre><code class="lang-go"><span class="hljs-comment">//go:nosplit</span>
+<span class="hljs-keyword">func</span> gostringnocopy(str *<span class="hljs-keyword">byte</span>) <span class="hljs-keyword">string</span> {
+    ss := stringStruct{str: unsafe.Pointer(str), <span class="hljs-built_in">len</span>: findnull(str)}
+    s := *(*<span class="hljs-keyword">string</span>)(unsafe.Pointer(&amp;ss))
+    <span class="hljs-keyword">return</span> s
+}
+</code></pre>
+<p>&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C;&#x5165;&#x53C2;str&#x6307;&#x9488;&#x5C31;&#x662F;&#x6307;&#x5411;byte&#x7684;&#x6307;&#x9488;&#xFF0C;&#x90A3;&#x4E48;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x786E;&#x5B9A;string&#x7684;&#x5E95;&#x5C42;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x5C31;&#x662F;byte&#x6570;&#x7EC4;&#x3002;</p>
+<p><img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211227183246.png" alt="&#x5728;&#x8FD9;&#x91CC;&#x63D2;&#x5165;&#x56FE;&#x7247;&#x63CF;&#x8FF0;"></p>
+<p>&#x7EFC;&#x4E0A;&#xFF0C;string&#x4E0E;[]byte&#x5728;&#x5E95;&#x5C42;&#x7ED3;&#x6784;&#x4E0A;&#x662F;&#x975E;&#x5E38;&#x7684;&#x76F8;&#x8FD1;&#xFF08;&#x540E;&#x8005;&#x7684;&#x5E95;&#x5C42;&#x8868;&#x8FBE;&#x4EC5;&#x591A;&#x4E86;&#x4E00;&#x4E2A;cap&#x5C5E;&#x6027;&#xFF0C;&#x56E0;&#x6B64;&#x5B83;&#x4EEC;&#x5728;&#x5185;&#x5B58;&#x5E03;&#x5C40;&#x4E0A;&#x662F;&#x53EF;&#x5BF9;&#x9F50;&#x7684;&#xFF09;&#xFF0C;&#x8FD9;&#x4E5F;&#x5C31;&#x662F;&#x4E3A;&#x4F55;builtin&#x4E2D;&#x5185;&#x7F6E;&#x51FD;&#x6570;copy&#x4F1A;&#x6709;&#x4E00;&#x79CD;&#x7279;&#x6B8A;&#x60C5;&#x51B5;<code>copy(dst []byte, src string) int</code>&#x7684;&#x539F;&#x56E0;&#x4E86;&#x3002;</p>
+<pre><code class="lang-go"><span class="hljs-comment">// The copy built-in function copies elements from a source slice into a</span>
+<span class="hljs-comment">// destination slice. (As a special case, it also will copy bytes from a</span>
+<span class="hljs-comment">// string to a slice of bytes.) The source and destination may overlap. Copy</span>
+<span class="hljs-comment">// returns the number of elements copied, which will be the minimum of</span>
+<span class="hljs-comment">// len(src) and len(dst).</span>
+<span class="hljs-keyword">func</span> <span class="hljs-built_in">copy</span>(dst, src []Type) <span class="hljs-keyword">int</span>
+</code></pre>
+<ul>
+<li><h4 id="&#x533A;&#x522B;">&#x533A;&#x522B;</h4>
+</li>
+</ul>
+<p>&#x5BF9;&#x4E8E;[]byte&#x4E0E;string&#x800C;&#x8A00;&#xFF0C;&#x4E24;&#x8005;&#x4E4B;&#x95F4;&#x6700;&#x5927;&#x7684;&#x533A;&#x522B;&#x5C31;&#x662F;string&#x7684;&#x503C;&#x4E0D;&#x80FD;&#x6539;&#x53D8;&#x3002;&#x8FD9;&#x8BE5;&#x5982;&#x4F55;&#x7406;&#x89E3;&#x5462;&#xFF1F;&#x4E0B;&#x9762;&#x901A;&#x8FC7;&#x4E24;&#x4E2A;&#x4F8B;&#x5B50;&#x6765;&#x8BF4;&#x660E;&#x3002;</p>
+<p>&#x5BF9;&#x4E8E;[]byte&#x6765;&#x8BF4;&#xFF0C;&#x4EE5;&#x4E0B;&#x64CD;&#x4F5C;&#x662F;&#x53EF;&#x884C;&#x7684;&#xFF1A;</p>
+<pre><code class="lang-go">    b := []<span class="hljs-keyword">byte</span>(<span class="hljs-string">&quot;Hello Gopher!&quot;</span>)
+    b [<span class="hljs-number">1</span>] = <span class="hljs-string">&apos;T&apos;</span>
+</code></pre>
+<p>string&#xFF0C;&#x4FEE;&#x6539;&#x64CD;&#x4F5C;&#x662F;&#x88AB;&#x7981;&#x6B62;&#x7684;&#xFF1A;</p>
+<pre><code class="lang-go">    s := <span class="hljs-string">&quot;Hello Gopher!&quot;</span>
+    s[<span class="hljs-number">1</span>] = <span class="hljs-string">&apos;T&apos;</span>
+</code></pre>
+<p>&#x800C;string&#x80FD;&#x652F;&#x6301;&#x8FD9;&#x6837;&#x7684;&#x64CD;&#x4F5C;&#xFF1A;</p>
+<pre><code class="lang-go">    s := <span class="hljs-string">&quot;Hello Gopher!&quot;</span>
+    s = <span class="hljs-string">&quot;Tello Gopher!&quot;</span>
+</code></pre>
+<p>&#x5B57;&#x7B26;&#x4E32;&#x7684;&#x503C;&#x4E0D;&#x80FD;&#x88AB;&#x66F4;&#x6539;&#xFF0C;&#x4F46;&#x53EF;&#x4EE5;&#x88AB;&#x66FF;&#x6362;&#x3002; string&#x5728;&#x5E95;&#x5C42;&#x90FD;&#x662F;&#x7ED3;&#x6784;&#x4F53;stringStruct{str: str_point, len: str_len}&#xFF0C;string&#x7ED3;&#x6784;&#x4F53;&#x7684;str&#x6307;&#x9488;&#x6307;&#x5411;&#x7684;&#x662F;&#x4E00;&#x4E2A;&#x5B57;&#x7B26;&#x5E38;&#x91CF;&#x7684;&#x5730;&#x5740;&#xFF0C; &#x8FD9;&#x4E2A;&#x5730;&#x5740;&#x91CC;&#x9762;&#x7684;&#x5185;&#x5BB9;&#x662F;&#x4E0D;&#x53EF;&#x4EE5;&#x88AB;&#x6539;&#x53D8;&#x7684;&#xFF0C;&#x56E0;&#x4E3A;&#x5B83;&#x662F;&#x53EA;&#x8BFB;&#x7684;&#xFF0C;&#x4F46;&#x662F;&#x8FD9;&#x4E2A;&#x6307;&#x9488;&#x53EF;&#x4EE5;&#x6307;&#x5411;&#x4E0D;&#x540C;&#x7684;&#x5730;&#x5740;&#x3002;</p>
+<p>&#x90A3;&#x4E48;&#xFF0C;&#x4EE5;&#x4E0B;&#x64CD;&#x4F5C;&#x7684;&#x542B;&#x4E49;&#x662F;&#x4E0D;&#x540C;&#x7684;&#xFF1A;</p>
+<pre><code class="lang-go">s := <span class="hljs-string">&quot;S1&quot;</span> <span class="hljs-comment">// &#x5206;&#x914D;&#x5B58;&#x50A8;&quot;S1&quot;&#x7684;&#x5185;&#x5B58;&#x7A7A;&#x95F4;&#xFF0C;s&#x7ED3;&#x6784;&#x4F53;&#x91CC;&#x7684;str&#x6307;&#x9488;&#x6307;&#x5411;&#x8FD9;&#x5757;&#x5185;&#x5B58;</span>
+s = <span class="hljs-string">&quot;S2&quot;</span>  <span class="hljs-comment">// &#x5206;&#x914D;&#x5B58;&#x50A8;&quot;S2&quot;&#x7684;&#x5185;&#x5B58;&#x7A7A;&#x95F4;&#xFF0C;s&#x7ED3;&#x6784;&#x4F53;&#x91CC;&#x7684;str&#x6307;&#x9488;&#x8F6C;&#x4E3A;&#x6307;&#x5411;&#x8FD9;&#x5757;&#x5185;&#x5B58;</span>
+
+b := []<span class="hljs-keyword">byte</span>{<span class="hljs-number">1</span>} <span class="hljs-comment">// &#x5206;&#x914D;&#x5B58;&#x50A8;&apos;1&apos;&#x6570;&#x7EC4;&#x7684;&#x5185;&#x5B58;&#x7A7A;&#x95F4;&#xFF0C;b&#x7ED3;&#x6784;&#x4F53;&#x7684;array&#x6307;&#x9488;&#x6307;&#x5411;&#x8FD9;&#x4E2A;&#x6570;&#x7EC4;&#x3002;</span>
+b = []<span class="hljs-keyword">byte</span>{<span class="hljs-number">2</span>}  <span class="hljs-comment">// &#x5C06;array&#x7684;&#x5185;&#x5BB9;&#x6539;&#x4E3A;&apos;2&apos;</span>
+</code></pre>
+<p><img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211227183552.png" alt="&#x5728;&#x8FD9;&#x91CC;&#x63D2;&#x5165;&#x56FE;&#x7247;&#x63CF;&#x8FF0;"></p>
+<p>&#x56E0;&#x4E3A;string&#x7684;&#x6307;&#x9488;&#x6307;&#x5411;&#x7684;&#x5185;&#x5BB9;&#x662F;&#x4E0D;&#x53EF;&#x4EE5;&#x66F4;&#x6539;&#x7684;&#xFF0C;&#x6240;&#x4EE5;&#x6BCF;&#x66F4;&#x6539;&#x4E00;&#x6B21;&#x5B57;&#x7B26;&#x4E32;&#xFF0C;&#x5C31;&#x5F97;&#x91CD;&#x65B0;&#x5206;&#x914D;&#x4E00;&#x6B21;&#x5185;&#x5B58;&#xFF0C;&#x4E4B;&#x524D;&#x5206;&#x914D;&#x7684;&#x7A7A;&#x95F4;&#x8FD8;&#x9700;&#x8981;gc&#x56DE;&#x6536;&#xFF0C;&#x8FD9;&#x662F;&#x5BFC;&#x81F4;string&#x76F8;&#x8F83;&#x4E8E;[]byte&#x64CD;&#x4F5C;&#x4F4E;&#x6548;&#x7684;&#x6839;&#x672C;&#x539F;&#x56E0;&#x3002;</p>
+<ul>
+<li><h4 id="&#x6807;&#x51C6;&#x8F6C;&#x6362;&#x7684;&#x5B9E;&#x73B0;&#x7EC6;&#x8282;">&#x6807;&#x51C6;&#x8F6C;&#x6362;&#x7684;&#x5B9E;&#x73B0;&#x7EC6;&#x8282;</h4>
+</li>
+<li><p>[]byte(string)&#x7684;&#x5B9E;&#x73B0;&#xFF08;&#x6E90;&#x7801;&#x5728;<code>src/runtime/string.go</code>&#x4E2D;&#xFF09;</p>
+</li>
+</ul>
+<pre><code class="lang-go"><span class="hljs-comment">// The constant is known to the compiler.</span>
+<span class="hljs-comment">// There is no fundamental theory behind this number.</span>
+<span class="hljs-keyword">const</span> tmpStringBufSize = <span class="hljs-number">32</span>
+
+<span class="hljs-keyword">type</span> tmpBuf [tmpStringBufSize]<span class="hljs-keyword">byte</span>
+
+<span class="hljs-keyword">func</span> stringtoslicebyte(buf *tmpBuf, s <span class="hljs-keyword">string</span>) []<span class="hljs-keyword">byte</span> {
+    <span class="hljs-keyword">var</span> b []<span class="hljs-keyword">byte</span>
+    <span class="hljs-keyword">if</span> buf != <span class="hljs-literal">nil</span> &amp;&amp; <span class="hljs-built_in">len</span>(s) &lt;= <span class="hljs-built_in">len</span>(buf) {
+        *buf = tmpBuf{}
+        b = buf[:<span class="hljs-built_in">len</span>(s)]
+    } <span class="hljs-keyword">else</span> {
+        b = rawbyteslice(<span class="hljs-built_in">len</span>(s))
+    }
+    <span class="hljs-built_in">copy</span>(b, s)
+    <span class="hljs-keyword">return</span> b
+}
+
+<span class="hljs-comment">// rawbyteslice allocates a new byte slice. The byte slice is not zeroed.</span>
+<span class="hljs-keyword">func</span> rawbyteslice(size <span class="hljs-keyword">int</span>) (b []<span class="hljs-keyword">byte</span>) {
+    <span class="hljs-built_in">cap</span> := roundupsize(<span class="hljs-keyword">uintptr</span>(size))
+    p := mallocgc(<span class="hljs-built_in">cap</span>, <span class="hljs-literal">nil</span>, <span class="hljs-literal">false</span>)
+    <span class="hljs-keyword">if</span> <span class="hljs-built_in">cap</span> != <span class="hljs-keyword">uintptr</span>(size) {
+        memclrNoHeapPointers(add(p, <span class="hljs-keyword">uintptr</span>(size)), <span class="hljs-built_in">cap</span>-<span class="hljs-keyword">uintptr</span>(size))
+    }
+
+    *(*slice)(unsafe.Pointer(&amp;b)) = slice{p, size, <span class="hljs-keyword">int</span>(<span class="hljs-built_in">cap</span>)}
+    <span class="hljs-keyword">return</span>
+}
+</code></pre>
+<p>&#x8FD9;&#x91CC;&#x6709;&#x4E24;&#x79CD;&#x60C5;&#x51B5;&#xFF1A;s&#x7684;&#x957F;&#x5EA6;&#x662F;&#x5426;&#x5927;&#x4E8E;32&#x3002;&#x5F53;&#x5927;&#x4E8E;32&#x65F6;&#xFF0C;go&#x9700;&#x8981;&#x8C03;&#x7528;mallocgc&#x5206;&#x914D;&#x4E00;&#x5757;&#x65B0;&#x7684;&#x5185;&#x5B58;&#xFF08;&#x5927;&#x5C0F;&#x7531;s&#x51B3;&#x5B9A;&#xFF09;&#xFF0C;&#x8FD9;&#x4E5F;&#x5C31;&#x56DE;&#x7B54;&#x4E86;&#x4E0A;&#x6587;&#x4E2D;&#x7684;&#x95EE;&#x9898;2&#xFF1A;&#x5F53;x&#x7684;&#x6570;&#x636E;&#x8F83;&#x5927;&#x65F6;&#xFF0C;&#x6807;&#x51C6;&#x8F6C;&#x6362;&#x65B9;&#x5F0F;&#x4F1A;&#x6709;&#x4E00;&#x6B21;&#x5206;&#x914D;&#x5185;&#x5B58;&#x7684;&#x64CD;&#x4F5C;&#x3002;</p>
+<p>&#x6700;&#x540E;&#x901A;&#x8FC7;copy&#x51FD;&#x6570;&#x5B9E;&#x73B0;string&#x5230;[]byte&#x7684;&#x62F7;&#x8D1D;&#xFF0C;&#x5177;&#x4F53;&#x5B9E;&#x73B0;&#x5728;<code>src/runtime/slice.go</code>&#x4E2D;&#x7684;<code>slicestringcopy</code>&#x65B9;&#x6CD5;&#x3002;</p>
+<pre><code class="lang-go"><span class="hljs-keyword">func</span> slicestringcopy(to []<span class="hljs-keyword">byte</span>, fm <span class="hljs-keyword">string</span>) <span class="hljs-keyword">int</span> {
+    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(fm) == <span class="hljs-number">0</span> || <span class="hljs-built_in">len</span>(to) == <span class="hljs-number">0</span> {
+        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>
+    }
+
+  <span class="hljs-comment">// copy&#x7684;&#x957F;&#x5EA6;&#x53D6;&#x51B3;&#x4E0E;string&#x548C;[]byte&#x7684;&#x957F;&#x5EA6;&#x6700;&#x5C0F;&#x503C;</span>
+    n := <span class="hljs-built_in">len</span>(fm)
+    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(to) &lt; n {
+        n = <span class="hljs-built_in">len</span>(to)
+    }
+
+  <span class="hljs-comment">// &#x5982;&#x679C;&#x5F00;&#x542F;&#x4E86;&#x7ADE;&#x6001;&#x68C0;&#x6D4B; -race</span>
+    <span class="hljs-keyword">if</span> raceenabled {
+        callerpc := getcallerpc()
+        pc := funcPC(slicestringcopy)
+        racewriterangepc(unsafe.Pointer(&amp;to[<span class="hljs-number">0</span>]), <span class="hljs-keyword">uintptr</span>(n), callerpc, pc)
+    }
+  <span class="hljs-comment">// &#x5982;&#x679C;&#x5F00;&#x542F;&#x4E86;memory sanitizer -msan</span>
+    <span class="hljs-keyword">if</span> msanenabled {
+        msanwrite(unsafe.Pointer(&amp;to[<span class="hljs-number">0</span>]), <span class="hljs-keyword">uintptr</span>(n))
+    }
+
+  <span class="hljs-comment">// &#x8BE5;&#x65B9;&#x6CD5;&#x5C06;string&#x7684;&#x5E95;&#x5C42;&#x6570;&#x7EC4;&#x4ECE;&#x5934;&#x90E8;&#x590D;&#x5236;n&#x4E2A;&#x5230;[]byte&#x5BF9;&#x5E94;&#x7684;&#x5E95;&#x5C42;&#x6570;&#x7EC4;&#x4E2D;&#x53BB;&#xFF08;&#x8FD9;&#x91CC;&#x5C31;&#x662F;copy&#x5B9E;&#x73B0;&#x7684;&#x6838;&#x5FC3;&#x65B9;&#x6CD5;&#xFF0C;&#x5728;&#x6C47;&#x7F16;&#x5C42;&#x9762;&#x5B9E;&#x73B0; &#x6E90;&#x6587;&#x4EF6;&#x4E3A;memmove_*.s&#xFF09;</span>
+    memmove(unsafe.Pointer(&amp;to[<span class="hljs-number">0</span>]), stringStructOf(&amp;fm).str, <span class="hljs-keyword">uintptr</span>(n))
+    <span class="hljs-keyword">return</span> n
+}
+</code></pre>
+<p><img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211227184003.png" alt="&#x5728;&#x8FD9;&#x91CC;&#x63D2;&#x5165;&#x56FE;&#x7247;&#x63CF;&#x8FF0;"></p>
+<ol>
+<li><p>string([]byte)&#x7684;&#x5B9E;&#x73B0;&#xFF08;&#x6E90;&#x7801;&#x4E5F;&#x5728;<code>src/runtime/string.go</code>&#x4E2D;&#xFF09;</p>
+<pre><code class="lang-go"><span class="hljs-comment">// Buf is a fixed-size buffer for the result,</span>
+<span class="hljs-comment">// it is not nil if the result does not escape.</span>
+<span class="hljs-keyword">func</span> slicebytetostring(buf *tmpBuf, b []<span class="hljs-keyword">byte</span>) (str <span class="hljs-keyword">string</span>) {
+    l := <span class="hljs-built_in">len</span>(b)
+    <span class="hljs-keyword">if</span> l == <span class="hljs-number">0</span> {
+        <span class="hljs-comment">// Turns out to be a relatively common case.</span>
+        <span class="hljs-comment">// Consider that you want to parse out data between parens in &quot;foo()bar&quot;,</span>
+        <span class="hljs-comment">// you find the indices and convert the subslice to string.</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>
+    }
+  <span class="hljs-comment">// &#x5982;&#x679C;&#x5F00;&#x542F;&#x4E86;&#x7ADE;&#x6001;&#x68C0;&#x6D4B; -race</span>
+    <span class="hljs-keyword">if</span> raceenabled {
+        racereadrangepc(unsafe.Pointer(&amp;b[<span class="hljs-number">0</span>]),
+            <span class="hljs-keyword">uintptr</span>(l),
+            getcallerpc(),
+            funcPC(slicebytetostring))
+    }
+  <span class="hljs-comment">// &#x5982;&#x679C;&#x5F00;&#x542F;&#x4E86;memory sanitizer -msan</span>
+    <span class="hljs-keyword">if</span> msanenabled {
+        msanread(unsafe.Pointer(&amp;b[<span class="hljs-number">0</span>]), <span class="hljs-keyword">uintptr</span>(l))
+    }
+    <span class="hljs-keyword">if</span> l == <span class="hljs-number">1</span> {
+        stringStructOf(&amp;str).str = unsafe.Pointer(&amp;staticbytes[b[<span class="hljs-number">0</span>]])
+        stringStructOf(&amp;str).<span class="hljs-built_in">len</span> = <span class="hljs-number">1</span>
+        <span class="hljs-keyword">return</span>
+    }
+
+    <span class="hljs-keyword">var</span> p unsafe.Pointer
+    <span class="hljs-keyword">if</span> buf != <span class="hljs-literal">nil</span> &amp;&amp; <span class="hljs-built_in">len</span>(b) &lt;= <span class="hljs-built_in">len</span>(buf) {
+        p = unsafe.Pointer(buf)
+    } <span class="hljs-keyword">else</span> {
+        p = mallocgc(<span class="hljs-keyword">uintptr</span>(<span class="hljs-built_in">len</span>(b)), <span class="hljs-literal">nil</span>, <span class="hljs-literal">false</span>)
+    }
+    stringStructOf(&amp;str).str = p
+    stringStructOf(&amp;str).<span class="hljs-built_in">len</span> = <span class="hljs-built_in">len</span>(b)
+  <span class="hljs-comment">// &#x62F7;&#x8D1D;&#x5B57;&#x8282;&#x6570;&#x7EC4;&#x81F3;&#x5B57;&#x7B26;&#x4E32;</span>
+    memmove(p, (*(*slice)(unsafe.Pointer(&amp;b))).array, <span class="hljs-keyword">uintptr</span>(<span class="hljs-built_in">len</span>(b)))
+    <span class="hljs-keyword">return</span>
+}
+
+<span class="hljs-comment">// &#x5B9E;&#x4F8B;stringStruct&#x5BF9;&#x8C61;</span>
+<span class="hljs-keyword">func</span> stringStructOf(sp *<span class="hljs-keyword">string</span>) *stringStruct {
+    <span class="hljs-keyword">return</span> (*stringStruct)(unsafe.Pointer(sp))
+}
+</code></pre>
+</li>
+</ol>
+<p>&#x53EF;&#x89C1;&#xFF0C;&#x5F53;&#x6570;&#x7EC4;&#x957F;&#x5EA6;&#x8D85;&#x8FC7;32&#x65F6;&#xFF0C;&#x540C;&#x6837;&#x9700;&#x8981;&#x8C03;&#x7528;mallocgc&#x5206;&#x914D;&#x4E00;&#x5757;&#x65B0;&#x5185;&#x5B58;&#x3002;&#x6700;&#x540E;&#x901A;&#x8FC7;memmove&#x5B8C;&#x6210;&#x62F7;&#x8D1D;&#x3002;</p>
+<h3 id="&#x5F3A;&#x8F6C;&#x6362;&#x7684;&#x5B9E;&#x73B0;&#x7EC6;&#x8282;">&#x5F3A;&#x8F6C;&#x6362;&#x7684;&#x5B9E;&#x73B0;&#x7EC6;&#x8282;</h3>
+<p>&#x4E07;&#x80FD;&#x7684;unsafe.Pointer&#x6307;&#x9488;
+&#x5728;go&#x4E2D;&#xFF0C;&#x4EFB;&#x4F55;&#x7C7B;&#x578B;&#x7684;&#x6307;&#x9488;<em>T&#x90FD;&#x53EF;&#x4EE5;&#x8F6C;&#x6362;&#x4E3A;unsafe.Pointer&#x7C7B;&#x578B;&#x7684;&#x6307;&#x9488;&#xFF0C;&#x5B83;&#x53EF;&#x4EE5;&#x5B58;&#x50A8;&#x4EFB;&#x4F55;&#x53D8;&#x91CF;&#x7684;&#x5730;&#x5740;&#x3002;&#x540C;&#x65F6;&#xFF0C;unsafe.Pointer&#x7C7B;&#x578B;&#x7684;&#x6307;&#x9488;&#x4E5F;&#x53EF;&#x4EE5;&#x8F6C;&#x6362;&#x56DE;&#x666E;&#x901A;&#x6307;&#x9488;&#xFF0C;&#x800C;&#x4E14;&#x53EF;&#x4EE5;&#x4E0D;&#x5FC5;&#x548C;&#x4E4B;&#x524D;&#x7684;&#x7C7B;&#x578B;</em>T&#x76F8;&#x540C;&#x3002;&#x53E6;&#x5916;&#xFF0C;unsafe.Pointer&#x7C7B;&#x578B;&#x8FD8;&#x53EF;&#x4EE5;&#x8F6C;&#x6362;&#x4E3A;uintptr&#x7C7B;&#x578B;&#xFF0C;&#x8BE5;&#x7C7B;&#x578B;&#x4FDD;&#x5B58;&#x4E86;&#x6307;&#x9488;&#x6240;&#x6307;&#x5411;&#x5730;&#x5740;&#x7684;&#x6570;&#x503C;&#xFF0C;&#x4ECE;&#x800C;&#x53EF;&#x4EE5;&#x4F7F;&#x6211;&#x4EEC;&#x5BF9;&#x5730;&#x5740;&#x8FDB;&#x884C;&#x6570;&#x503C;&#x8BA1;&#x7B97;&#x3002;&#x4EE5;&#x4E0A;&#x5C31;&#x662F;&#x5F3A;&#x8F6C;&#x6362;&#x65B9;&#x5F0F;&#x7684;&#x5B9E;&#x73B0;&#x4F9D;&#x636E;&#x3002;</p>
+<p>&#x800C;string&#x548C;slice&#x5728;reflect&#x5305;&#x4E2D;&#xFF0C;&#x5BF9;&#x5E94;&#x7684;&#x7ED3;&#x6784;&#x4F53;&#x662F;reflect.StringHeader&#x548C;reflect.SliceHeader&#xFF0C;&#x5B83;&#x4EEC;&#x662F;string&#x548C;slice&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x8868;&#x8FBE;&#x3002;</p>
+<pre><code class="lang-go"><span class="hljs-keyword">type</span> StringHeader <span class="hljs-keyword">struct</span> {
+    Data <span class="hljs-keyword">uintptr</span>
+    Len  <span class="hljs-keyword">int</span>
+}
+
+<span class="hljs-keyword">type</span> SliceHeader <span class="hljs-keyword">struct</span> {
+    Data <span class="hljs-keyword">uintptr</span>
+    Len  <span class="hljs-keyword">int</span>
+    Cap  <span class="hljs-keyword">int</span>
+}
+</code></pre>
+<ol>
+<li>&#x5185;&#x5B58;&#x5E03;&#x5C40;</li>
+</ol>
+<p>&#x4ECE;string&#x548C;slice&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x8868;&#x8FBE;&#x53EF;&#x4EE5;&#x770B;&#x51FA;&#xFF0C;&#x9664;&#x4E86;SilceHeader&#x591A;&#x4E86;&#x4E00;&#x4E2A;int&#x7C7B;&#x578B;&#x7684;Cap&#x5B57;&#x6BB5;&#xFF0C;Date&#x548C;Len&#x5B57;&#x6BB5;&#x662F;&#x4E00;&#x81F4;&#x7684;&#x3002;&#x6240;&#x4EE5;&#xFF0C;&#x5B83;&#x4EEC;&#x7684;&#x5185;&#x5B58;&#x5E03;&#x5C40;&#x662F;&#x53EF;&#x5BF9;&#x9F50;&#x7684;&#xFF0C;&#x8FD9;&#x8BF4;&#x660E;&#x6211;&#x4EEC;&#x5C31;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x901A;&#x8FC7;unsafe.Pointer&#x8FDB;&#x884C;&#x8F6C;&#x6362;&#x3002;</p>
+<ul>
+<li>[]byte&#x8F6C;string&#x56FE;&#x89E3;</li>
+</ul>
+<p><img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211227184932.png" alt="&#x5728;&#x8FD9;&#x91CC;&#x63D2;&#x5165;&#x56FE;&#x7247;&#x63CF;&#x8FF0;"></p>
+<ul>
+<li>string&#x8F6C;[]byte&#x56FE;&#x89E3;</li>
+</ul>
+<p><img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211227184943.png" alt="&#x5728;&#x8FD9;&#x91CC;&#x63D2;&#x5165;&#x56FE;&#x7247;&#x63CF;&#x8FF0;"></p>
+<ul>
+<li><h4 id="qa">Q&amp;A</h4>
+</li>
+</ul>
+<p>Q1. &#x4E3A;&#x5565;&#x5F3A;&#x8F6C;&#x6362;&#x6027;&#x80FD;&#x4F1A;&#x6BD4;&#x6807;&#x51C6;&#x8F6C;&#x6362;&#x597D;&#xFF1F;</p>
+<p>&#x5BF9;&#x4E8E;&#x6807;&#x51C6;&#x8F6C;&#x6362;&#xFF0C;&#x65E0;&#x8BBA;&#x662F;&#x4ECE;[]byte&#x8F6C;string&#x8FD8;&#x662F;string&#x8F6C;[]byte&#x90FD;&#x4F1A;&#x6D89;&#x53CA;&#x5E95;&#x5C42;&#x6570;&#x7EC4;&#x7684;&#x62F7;&#x8D1D;&#x3002;&#x800C;&#x5F3A;&#x8F6C;&#x6362;&#x662F;&#x76F4;&#x63A5;&#x66FF;&#x6362;&#x6307;&#x9488;&#x7684;&#x6307;&#x5411;&#xFF0C;&#x4ECE;&#x800C;&#x4F7F;&#x5F97;string&#x548C;[]byte&#x6307;&#x5411;&#x540C;&#x4E00;&#x4E2A;&#x5E95;&#x5C42;&#x6570;&#x7EC4;&#x3002;&#x8FD9;&#x6837;&#xFF0C;&#x5F53;&#x7136;&#x540E;&#x8005;&#x7684;&#x6027;&#x80FD;&#x4F1A;&#x66F4;&#x597D;&#x3002;</p>
+<p>Q2. &#x4E3A;&#x5565;&#x5728;&#x4E0A;&#x8FF0;&#x6D4B;&#x8BD5;&#x4E2D;&#xFF0C;&#x5F53;x&#x7684;&#x6570;&#x636E;&#x8F83;&#x5927;&#x65F6;&#xFF0C;&#x6807;&#x51C6;&#x8F6C;&#x6362;&#x65B9;&#x5F0F;&#x4F1A;&#x6709;&#x4E00;&#x6B21;&#x5206;&#x914D;&#x5185;&#x5B58;&#x7684;&#x64CD;&#x4F5C;&#xFF0C;&#x4ECE;&#x800C;&#x5BFC;&#x81F4;&#x5176;&#x6027;&#x80FD;&#x66F4;&#x5DEE;&#xFF0C;&#x800C;&#x5F3A;&#x8F6C;&#x6362;&#x65B9;&#x5F0F;&#x5374;&#x4E0D;&#x53D7;&#x5F71;&#x54CD;&#xFF1F;</p>
+<p>&#x6807;&#x51C6;&#x8F6C;&#x6362;&#x65F6;&#xFF0C;&#x5F53;&#x6570;&#x636E;&#x957F;&#x5EA6;&#x5927;&#x4E8E;32&#x4E2A;&#x5B57;&#x8282;&#x65F6;&#xFF0C;&#x9700;&#x8981;&#x901A;&#x8FC7;mallocgc&#x7533;&#x8BF7;&#x65B0;&#x7684;&#x5185;&#x5B58;&#xFF0C;&#x4E4B;&#x540E;&#x518D;&#x8FDB;&#x884C;&#x6570;&#x636E;&#x62F7;&#x8D1D;&#x5DE5;&#x4F5C;&#x3002;&#x800C;&#x5F3A;&#x8F6C;&#x6362;&#x53EA;&#x662F;&#x66F4;&#x6539;&#x6307;&#x9488;&#x6307;&#x5411;&#x3002;&#x6240;&#x4EE5;&#xFF0C;&#x5F53;&#x8F6C;&#x6362;&#x6570;&#x636E;&#x8F83;&#x5927;&#x65F6;&#xFF0C;&#x4E24;&#x8005;&#x6027;&#x80FD;&#x5DEE;&#x8DDD;&#x4F1A;&#x6108;&#x52A0;&#x660E;&#x663E;&#x3002;</p>
+<p>Q3. &#x65E2;&#x7136;&#x5F3A;&#x8F6C;&#x6362;&#x65B9;&#x5F0F;&#x6027;&#x80FD;&#x8FD9;&#x4E48;&#x597D;&#xFF0C;&#x4E3A;&#x5565;go&#x8BED;&#x8A00;&#x63D0;&#x4F9B;&#x7ED9;&#x6211;&#x4EEC;&#x4F7F;&#x7528;&#x7684;&#x662F;&#x6807;&#x51C6;&#x8F6C;&#x6362;&#x65B9;&#x5F0F;&#xFF1F;</p>
+<p>&#x9996;&#x5148;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x77E5;&#x9053;Go&#x662F;&#x4E00;&#x95E8;&#x7C7B;&#x578B;&#x5B89;&#x5168;&#x7684;&#x8BED;&#x8A00;&#xFF0C;&#x800C;&#x5B89;&#x5168;&#x7684;&#x4EE3;&#x4EF7;&#x5C31;&#x662F;&#x6027;&#x80FD;&#x7684;&#x59A5;&#x534F;&#x3002;&#x4F46;&#x662F;&#xFF0C;&#x6027;&#x80FD;&#x7684;&#x5BF9;&#x6BD4;&#x662F;&#x76F8;&#x5BF9;&#x7684;&#xFF0C;&#x8FD9;&#x70B9;&#x6027;&#x80FD;&#x7684;&#x59A5;&#x534F;&#x5BF9;&#x4E8E;&#x73B0;&#x5728;&#x7684;&#x673A;&#x5668;&#x800C;&#x8A00;&#x5FAE;&#x4E4E;&#x5176;&#x5FAE;&#x3002;&#x53E6;&#x5916;&#x5F3A;&#x8F6C;&#x6362;&#x7684;&#x65B9;&#x5F0F;&#xFF0C;&#x4F1A;&#x7ED9;&#x6211;&#x4EEC;&#x7684;&#x7A0B;&#x5E8F;&#x5E26;&#x6765;&#x6781;&#x5927;&#x7684;&#x5B89;&#x5168;&#x9690;&#x60A3;&#x3002;</p>
+<p>Q4. &#x4E3A;&#x5565;string&#x8981;&#x8BBE;&#x8BA1;&#x4E3A;&#x4E0D;&#x53EF;&#x4FEE;&#x6539;&#x7684;&#xFF1F;</p>
+<p>&#x6211;&#x8BA4;&#x4E3A;&#x6709;&#x5FC5;&#x8981;&#x601D;&#x8003;&#x4E00;&#x4E0B;&#x8BE5;&#x95EE;&#x9898;&#x3002;string&#x4E0D;&#x53EF;&#x4FEE;&#x6539;&#xFF0C;&#x610F;&#x5473;&#x5B83;&#x662F;&#x53EA;&#x8BFB;&#x5C5E;&#x6027;&#xFF0C;&#x8FD9;&#x6837;&#x7684;&#x597D;&#x5904;&#x5C31;&#x662F;&#xFF1A;&#x5728;&#x5E76;&#x53D1;&#x573A;&#x666F;&#x4E0B;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5728;&#x4E0D;&#x52A0;&#x9501;&#x7684;&#x63A7;&#x5236;&#x4E0B;&#xFF0C;&#x591A;&#x6B21;&#x4F7F;&#x7528;&#x540C;&#x4E00;&#x5B57;&#x7B26;&#x4E32;&#xFF0C;&#x5728;&#x4FDD;&#x8BC1;&#x9AD8;&#x6548;&#x5171;&#x4EAB;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#x800C;&#x4E0D;&#x7528;&#x62C5;&#x5FC3;&#x5B89;&#x5168;&#x95EE;&#x9898;&#x3002;</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="select.html" class="navigation navigation-prev " aria-label="Previous page: 1.1.3 Select">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="rune关键字.html" class="navigation navigation-next " aria-label="Next page: 1.1.5 Rune关键字">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"1.1.4 []Byte与String","level":"2.1.4","depth":2,"next":{"title":"1.1.5 Rune关键字","level":"2.1.5","depth":2,"path":"Go底层原理/Go常见关键字及其原理/rune关键字.md","ref":"Go底层原理/Go常见关键字及其原理/rune关键字.md","articles":[]},"previous":{"title":"1.1.3 Select","level":"2.1.3","depth":2,"path":"Go底层原理/Go常见关键字及其原理/select.md","ref":"Go底层原理/Go常见关键字及其原理/select.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["expandable-chapters","livereload"],"pluginsConfig":{"expandable-chapters":{},"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Go底层原理/Go常见关键字及其原理/[]byte与string.md","mtime":"2021-12-27T10:53:38.072Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2022-01-04T09:55:23.318Z"},"basePath":"../..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../../gitbook/gitbook.js"></script>
+    <script src="../../gitbook/theme.js"></script>
+    
+        
+        <script src="../../gitbook/gitbook-plugin-expandable-chapters/expandable-chapters.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-livereload/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

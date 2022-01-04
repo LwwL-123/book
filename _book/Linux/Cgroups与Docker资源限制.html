@@ -1,0 +1,937 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>6.5 Cgroups与Docker资源限制 · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-expandable-chapters/expandable-chapters.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="docker文件系统.html" />
+    
+    
+    <link rel="prev" href="用户级线程与内核级线程.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        <li class="header">前言</li>
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">1. Go底层原理</li>
+        
+        
+    
+        <li class="chapter " data-level="2.1" >
+            
+                <span>
+            
+                    
+                    1.1 Go常见关键字及其原理
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="2.1.1" data-path="../Go底层原理/Go常见关键字及其原理/chan.html">
+            
+                <a href="../Go底层原理/Go常见关键字及其原理/chan.html">
+            
+                    
+                    1.1.1 Chan
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.1.2" data-path="../Go底层原理/Go常见关键字及其原理/defer.html">
+            
+                <a href="../Go底层原理/Go常见关键字及其原理/defer.html">
+            
+                    
+                    1.1.2 Defer
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.1.3" data-path="../Go底层原理/Go常见关键字及其原理/select.html">
+            
+                <a href="../Go底层原理/Go常见关键字及其原理/select.html">
+            
+                    
+                    1.1.3 Select
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.1.4" data-path="../Go底层原理/Go常见关键字及其原理/[]byte与string.html">
+            
+                <a href="../Go底层原理/Go常见关键字及其原理/[]byte与string.html">
+            
+                    
+                    1.1.4 []Byte与String
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.1.5" data-path="../Go底层原理/Go常见关键字及其原理/rune关键字.html">
+            
+                <a href="../Go底层原理/Go常见关键字及其原理/rune关键字.html">
+            
+                    
+                    1.1.5 Rune关键字
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" >
+            
+                <span>
+            
+                    
+                    1.2 Go内存管理及协程调度
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="2.2.1" data-path="../Go底层原理/Go内存分配.html">
+            
+                <a href="../Go底层原理/Go内存分配.html">
+            
+                    
+                    1.2.1 Go内存分配
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2.2" data-path="../Go底层原理/内存对齐.html">
+            
+                <a href="../Go底层原理/内存对齐.html">
+            
+                    
+                    1.2.2 内存对齐
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2.3" data-path="../Go底层原理/逃逸分析.html">
+            
+                <a href="../Go底层原理/逃逸分析.html">
+            
+                    
+                    1.2.3 逃逸分析
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2.4" data-path="../Go底层原理/Go垃圾回收原理.html">
+            
+                <a href="../Go底层原理/Go垃圾回收原理.html">
+            
+                    
+                    1.2.4 Go垃圾回收原理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2.5" data-path="../Go底层原理/Go协程的栈内存管理.html">
+            
+                <a href="../Go底层原理/Go协程的栈内存管理.html">
+            
+                    
+                    1.2.5 Go协程的栈内存管理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2.6" data-path="../Go底层原理/GMP并发调度器深度解析.html">
+            
+                <a href="../Go底层原理/GMP并发调度器深度解析.html">
+            
+                    
+                    1.2.6 GMP并发调度器深度解析
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="header">2. Go面试</li>
+        
+        
+    
+        <li class="chapter " data-level="3.1" data-path="../Go面试/Go面试题总结.html">
+            
+                <a href="../Go面试/Go面试题总结.html">
+            
+                    
+                    2.1 Go面试题总结
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="../Go面试/Go结构体比较.html">
+            
+                <a href="../Go面试/Go结构体比较.html">
+            
+                    
+                    2.2 Go结构体比较
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="../Go面试/Go语言CSP：通信顺序进程简述.html">
+            
+                <a href="../Go面试/Go语言CSP：通信顺序进程简述.html">
+            
+                    
+                    2.3 Go语言CSP：通信顺序进程简述
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4" data-path="../Go面试/Goroutine数量.html">
+            
+                <a href="../Go面试/Goroutine数量.html">
+            
+                    
+                    2.4 Goroutine数量
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5" data-path="../Go面试/new_make.html">
+            
+                <a href="../Go面试/new_make.html">
+            
+                    
+                    2.5 new和make
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.6" data-path="../Go面试/面试记录.html">
+            
+                <a href="../Go面试/面试记录.html">
+            
+                    
+                    2.6 面试记录
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">3. 数据库</li>
+        
+        
+    
+        <li class="chapter " data-level="4.1" data-path="../数据库/锁.html">
+            
+                <a href="../数据库/锁.html">
+            
+                    
+                    3.1 锁
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2" data-path="../数据库/对象存储.html">
+            
+                <a href="../数据库/对象存储.html">
+            
+                    
+                    3.2 对象存储
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">4. 计算机组成原理</li>
+        
+        
+    
+        <li class="chapter " data-level="5.1" data-path="../计算机组成原理/CPU三级缓存.html">
+            
+                <a href="../计算机组成原理/CPU三级缓存.html">
+            
+                    
+                    4.1 CPU三级缓存
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">5. 计算机网络</li>
+        
+        
+    
+        <li class="chapter " data-level="6.1" data-path="../计算机网络/TCP三次握手四次挥手.html">
+            
+                <a href="../计算机网络/TCP三次握手四次挥手.html">
+            
+                    
+                    5.1 TCP三次握手四次挥手
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.2" data-path="../计算机网络/网络面试题.html">
+            
+                <a href="../计算机网络/网络面试题.html">
+            
+                    
+                    5.2 网络面试题
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">6. Linux</li>
+        
+        
+    
+        <li class="chapter " data-level="7.1" data-path="Linux常见命令.html">
+            
+                <a href="Linux常见命令.html">
+            
+                    
+                    6.1 Linux常见命令
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.2" data-path="Linux虚拟内存.html">
+            
+                <a href="Linux虚拟内存.html">
+            
+                    
+                    6.2 Linux虚拟内存
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.3" data-path="Linux进程与线程.html">
+            
+                <a href="Linux进程与线程.html">
+            
+                    
+                    6.3 Linux进程与线程
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.4" data-path="用户级线程与内核级线程.html">
+            
+                <a href="用户级线程与内核级线程.html">
+            
+                    
+                    6.4用户级线程与内核级线程
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="7.5" data-path="Cgroups与Docker资源限制.html">
+            
+                <a href="Cgroups与Docker资源限制.html">
+            
+                    
+                    6.5 Cgroups与Docker资源限制
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.6" data-path="docker文件系统.html">
+            
+                <a href="docker文件系统.html">
+            
+                    
+                    6.6 Docker文件系统
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">7. 分布式</li>
+        
+        
+    
+        <li class="chapter " data-level="8.1" data-path="../分布式/CAP理论.html">
+            
+                <a href="../分布式/CAP理论.html">
+            
+                    
+                    7.1 CAP理论
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.2" >
+            
+                <span>
+            
+                    
+                    7.2 共识算法
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="8.2.1" data-path="../分布式/共识算法/Raft.html">
+            
+                <a href="../分布式/共识算法/Raft.html">
+            
+                    
+                    Raft
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.2.2" data-path="../分布式/共识算法/链式共识算法.html">
+            
+                <a href="../分布式/共识算法/链式共识算法.html">
+            
+                    
+                    链式共识算法
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="8.3" >
+            
+                <span>
+            
+                    
+                    7.3 Etcd
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="8.3.1" data-path="../etcd/etcd.html">
+            
+                <a href="../etcd/etcd.html">
+            
+                    
+                    Etcd
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+        
+        <li class="header">8. Ipfs</li>
+        
+        
+    
+        <li class="chapter " data-level="9.1" data-path="../ipfs/libp2p.html">
+            
+                <a href="../ipfs/libp2p.html">
+            
+                    
+                    Libp2p
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.2" data-path="../ipfs/深入理解 IPFS.html">
+            
+                <a href="../ipfs/深入理解 IPFS.html">
+            
+                    
+                    深入理解 IPFS
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">9. Substrate</li>
+        
+        
+    
+        <li class="chapter " data-level="10.1" data-path="../substrate/Substrate的Staking模块分析.html">
+            
+                <a href="../substrate/Substrate的Staking模块分析.html">
+            
+                    
+                    Substrate的Staking模块分析
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.2" data-path="../substrate/权重Weight和基准Benchmarking.html">
+            
+                <a href="../substrate/权重Weight和基准Benchmarking.html">
+            
+                    
+                    权重Weight和基准Benchmarking
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">10. 设计模式</li>
+        
+        
+    
+        <li class="chapter " data-level="11.1" data-path="../设计模式/设计模式.html">
+            
+                <a href="../设计模式/设计模式.html">
+            
+                    
+                    设计模式
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >6.5 Cgroups与Docker资源限制</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="1-ubuntu-1804&#x548C;-1604&#x7684;&#x5185;&#x6838;&#x7248;&#x672C;&#x4E00;&#x6837;&#x4E48;">1. Ubuntu 18.04&#x548C; 16.04&#x7684;&#x5185;&#x6838;&#x7248;&#x672C;&#x4E00;&#x6837;&#x4E48;</h1>
+<p>&#x9996;&#x5148;&#xFF0C;&#x5BB9;&#x5668;&#x548C;&#x865A;&#x62DF;&#x673A;&#x7684;&#x533A;&#x522B;&#x662F;&#x4EC0;&#x4E48;&#x5462;&#xFF1F;</p>
+<p><img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211118141155.png" alt="img"></p>
+<p>&#x6211;&#x4EEC;&#x77E5;&#x9053;&#xFF0C;ubuntu 16.04&#x548C; ubuntu18.04&#x7684;&#x5185;&#x6838;&#x7248;&#x672C;&#x662F;&#x4E0D;&#x4E00;&#x6837;&#x7684;&#xFF0C;ubuntu16.04&#x7684;&#x865A;&#x62DF;&#x673A;&#x548C; ubuntu18.04&#x7684;&#x865A;&#x62DF;&#x673A;&#x7684;&#x5185;&#x6838;&#x7248;&#x672C;&#x4E5F;&#x5FC5;&#x5B9A;&#x4E0D;&#x4E00;&#x81F4;&#x3002;&#x90A3;&#x4E48;&#xFF0C;&#x5982;&#x679C;&#x662F; ubuntu16.04&#x548C; ubuntu18.04&#x7684; docker &#x73AF;&#x5883;&#x5462;&#xFF1F;</p>
+<p>&#x6211;&#x4EEC;&#x6765;&#x8BD5;&#x4E00;&#x4E0B;&#xFF1A;&#x67E5;&#x770B;linux &#x7CFB;&#x7EDF;&#x5185;&#x6838;&#x4FE1;&#x606F;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x547D;&#x4EE4; uname -a&#xFF0C;&#x5269;&#x4E0B;&#x7684;&#x4F60;&#x5E94;&#x8BE5;&#x77E5;&#x9053;&#x600E;&#x4E48;&#x505A;&#x4E86;&#x3002;&#x4E0D;&#x77E5;&#x9053;&#x7684;&#x8BDD;&#xFF0C;&#x518D;&#x53BB;&#x770B;&#x4E00;&#x4E0B;&#x524D;&#x51E0;&#x7BC7;&#x3002;</p>
+<p>&#x8FD9;&#x662F;&#x6211;&#x5728; macos&#x4E0A;&#x7684;&#x6267;&#x884C;&#x7ED3;&#x679C;</p>
+<p><img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211118141237.png" alt="img"></p>
+<p>&#x6211;&#x4EEC;&#x53D1;&#x73B0;&#xFF0C;debian &#x548C; ubuntu &#x7684;&#x5185;&#x6838;&#x7248;&#x672C;&#x7ADF;&#x7136;&#x662F;&#x4E00;&#x6837;&#x7684;&#xFF01;&#x5982;&#x679C;&#x4F60;&#x6709;&#x5174;&#x8DA3;&#xFF0C;&#x8FD8;&#x53EF;&#x4EE5;&#x8BD5;&#x9A8C; debian&#x6216;&#x8005;&#x5176;&#x4ED6;&#x7CFB;&#x7EDF;&#xFF0C;&#x4F60;&#x4F1A;&#x53D1;&#x73B0;&#x4ED6;&#x4EEC;&#x90FD;&#x662F;&#x4E00;&#x6837;&#x7684;&#xFF01;</p>
+<h1 id="2-&#x5185;&#x6838;-vs-&#x7528;&#x6237;&#x7A0B;&#x5E8F;">2. &#x5185;&#x6838; VS &#x7528;&#x6237;&#x7A0B;&#x5E8F;</h1>
+<p>&#x6211;&#x4EEC;&#x77E5;&#x9053;&#xFF0C;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x5206;&#x4E3A;&#x5185;&#x6838;&#x548C;&#x7528;&#x6237;&#x7A0B;&#x5E8F;&#xFF0C;&#x8FDB;&#x800C;&#x5B58;&#x5728;&#x5185;&#x6838;&#x7A7A;&#x95F4;&#xFF08;kernel space&#xFF09;&#x548C;&#x7528;&#x6237;&#x7A7A;&#x95F4;&#xFF08;user Space&#xFF09;&#x3002;&#x7B80;&#x5355;&#x8BF4;&#xFF0C;Kernel Space &#x662F; Linux &#x5185;&#x6838;&#x7684;&#x8FD0;&#x884C;&#x7A7A;&#x95F4;&#xFF0C;User space &#x662F;&#x7528;&#x6237;&#x7A0B;&#x5E8F;&#x7684;&#x8FD0;&#x884C;&#x7A7A;&#x95F4;&#x3002;Kernel space &#x53EF;&#x4EE5;&#x6267;&#x884C;&#x4EFB;&#x610F;&#x547D;&#x4EE4;&#xFF0C;&#x8C03;&#x7528;&#x7CFB;&#x7EDF;&#x7684;&#x4E00;&#x5207;&#x8D44;&#x6E90;&#xFF1B;User space &#x53EA;&#x80FD;&#x6267;&#x884C;&#x7B80;&#x5355;&#x7684;&#x8FD0;&#x7B97;&#xFF0C;&#x4E0D;&#x80FD;&#x76F4;&#x63A5;&#x8C03;&#x7528;&#x7CFB;&#x7EDF;&#x8D44;&#x6E90;&#xFF0C;&#x5FC5;&#x987B;&#x901A;&#x8FC7;&#x7CFB;&#x7EDF;&#x63A5;&#x53E3;&#xFF08;&#x53C8;&#x79F0; system call&#xFF09;&#xFF0C;&#x624D;&#x80FD;&#x5411;&#x5185;&#x6838;&#x53D1;&#x51FA;&#x6307;&#x4EE4;&#x3002;</p>
+<p>&#x800C;&#x5BB9;&#x5668;&#x4E8B;&#x5B9E;&#x4E0A;&#x5C31;&#x662F;&#x4E00;&#x4E2A;&#x7528;&#x6237;&#x7A0B;&#x5E8F;&#xFF0C;&#x5B83;&#x540C;&#x6837;&#x901A;&#x8FC7;&#x8C03;&#x7528;&#x7CFB;&#x7EDF;&#x63A5;&#x53E3;&#x5B9E;&#x73B0;&#x529F;&#x80FD;&#x3002;&#x5BF9;&#x4E8E; docker &#x800C;&#x8A00;&#xFF0C;&#x5982;&#x679C;&#x5BBF;&#x4E3B;&#x673A;&#x662F; linux&#xFF0C;&#x5B83;&#x5C31;&#x76F4;&#x63A5;&#x4F7F;&#x7528;&#x5BBF;&#x4E3B;&#x673A;&#x5185;&#x6838;&#xFF0C;&#x5982;&#x679C;&#x5BBF;&#x4E3B;&#x673A;&#x662F; macos &#x6216;&#x8005; windows&#xFF0C;docker&#x670D;&#x52A1;&#x4F1A;&#x63D0;&#x4F9B;&#x4E00;&#x4E2A;&#x516C;&#x7528;&#x7684; linux&#x5185;&#x6838;&#x4F9B;&#x5404;&#x5BB9;&#x5668;&#x8C03;&#x7528;&#xFF0C;&#x56E0;&#x6B64;&#x4F60;&#x4F1A;&#x770B;&#x5230; ubuntu18.04&#x548C;16.04&#x7684;&#x5185;&#x6838;&#x7248;&#x672C;&#x662F;&#x4E00;&#x81F4;&#x7684;&#x3002;</p>
+<p><img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211118141922.png" alt="image-20211118141922226"></p>
+<p>&#x800C;&#x5BB9;&#x5668;&#x955C;&#x50CF;&#x91CC;&#x7684;&#x6587;&#x4EF6;&#xFF0C;&#x5305;&#x62EC;&#x4E86;&#x53EF;&#x6267;&#x884C;&#x7A0B;&#x5E8F;&#x4EE5;&#x53CA;&#x5B83;&#x7684;&#x4F9D;&#x8D56;&#xFF0C;&#x4F8B;&#x5982; ubuntu18.04&#x955C;&#x50CF;&#xFF0C;&#x5C31;&#x662F;&#x628A;18.04&#x7684;&#x6240;&#x6709;&#x53EF;&#x6267;&#x884C;&#x7A0B;&#x5E8F;&#x4EE5;&#x53CA;&#x5B83;&#x4EEC;&#x7684;&#x4F9D;&#x8D56;&#x8FDB;&#x884C;&#x6253;&#x5305;&#xFF0C;&#x5BB9;&#x5668;&#x542F;&#x52A8;&#x7684;&#x65F6;&#x5019;&#x6587;&#x4EF6;&#x88AB;&#x52A0;&#x8F7D;&#x8FDB;&#x5185;&#x5B58;&#xFF0C;&#x4E8B;&#x5B9E;&#x4E0A;&#x5C31;&#x5BF9;&#x5E94;&#x7740;&#x7528;&#x6237;&#x7A7A;&#x95F4;&#xFF0C;&#x800C;&#x8FD9;&#x4E9B;&#x7A0B;&#x5E8F;&#x7684;&#x8FD0;&#x884C;&#xFF0C;&#x8FD8;&#x9700;&#x8981;&#x8C03;&#x7528;&#x7CFB;&#x7EDF;&#x63A5;&#x53E3;&#x3002;</p>
+<p>&#x4F60;&#x4E00;&#x5B9A;&#x4F1A;&#x8BF4;&#xFF0C;&#x90A3;&#x73B0;&#x5728;&#x5BB9;&#x5668;&#x4F9D;&#x8D56;&#x5185;&#x6838;&#x63A5;&#x53E3;&#xFF0C;&#x5982;&#x679C;&#x5185;&#x6838;&#x63A5;&#x53E3;&#x53D8;&#x4E86;&#xFF0C;&#x5BB9;&#x5668;&#x4E0D;&#x5C31;&#x65E0;&#x6CD5;&#x6B63;&#x5E38;&#x8FD0;&#x884C;&#x4E86;&#xFF1F;</p>
+<p>&#x4E8B;&#x5B9E;&#x4E0A;&#xFF0C;&#x5185;&#x6838;&#x63A5;&#x53E3;&#x7684;&#x53D8;&#x66F4;&#x662F;&#x6BD4;&#x8F83;&#x614E;&#x91CD;&#x3001;&#x7F13;&#x6162;&#x7684;&#xFF0C;&#x5728;&#x77ED;&#x65F6;&#x95F4;&#x5185;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x9884;&#x671F;&#x5BB9;&#x5668;&#x80FD;&#x591F;&#x6B63;&#x5E38;&#x8FD0;&#x884C;&#x3002;&#x4F46;&#x662F;&#xFF0C;&#x968F;&#x7740;&#x5BBF;&#x4E3B;&#x7CFB;&#x7EDF;&#x5C24;&#x5176;&#x662F;&#x5185;&#x6838;&#x7684;&#x5347;&#x7EA7;&#xFF0C;&#x6211;&#x4EEC;&#x5E76;&#x4E0D;&#x80FD;&#x4FDD;&#x8BC1; docker &#x5BB9;&#x5668;&#x6C38;&#x8FDC;&#x53EF;&#x4EE5;&#x6B63;&#x5E38;&#x8FD0;&#x884C;&#x3002;</p>
+<h1 id="3-&#x5BB9;&#x5668;&#x4E0E;&#x865A;&#x62DF;&#x673A;">3. &#x5BB9;&#x5668;&#x4E0E;&#x865A;&#x62DF;&#x673A;</h1>
+<p>&#x73B0;&#x5728;&#xFF0C;&#x4F60;&#x5E94;&#x8BE5;&#x660E;&#x767D;&#x4E86;&#x4E3A;&#x4EC0;&#x4E48;ubuntu16.04&#x548C;18.04&#x7684; docker &#x5BB9;&#x5668;&#x5185;&#x6838;&#x7248;&#x672C;&#x4E00;&#x6837;&#xFF0C;&#x90A3;&#x4E48;&#xFF0C;&#x5BB9;&#x5668;&#x548C;&#x865A;&#x62DF;&#x673A;&#x7684;&#x533A;&#x522B;&#x4E5F;&#x5C31;&#x660E;&#x663E;&#x4E86;&#xFF0C;&#x5B83;&#x4EEC;&#x865A;&#x62DF;&#x5316;&#x7684;&#x5C42;&#x6B21;&#x5E76;&#x4E0D;&#x4E00;&#x6837;&#x3002;</p>
+<p><img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211118142312.png" alt="image-20211118142312761" style="zoom:150%;"></p>
+<p>&#x865A;&#x62DF;&#x673A;&#x5B8C;&#x6574;&#x865A;&#x62DF;&#x4E86;&#x5185;&#x6838;&#x548C;&#x7528;&#x6237;&#x7A7A;&#x95F4;&#xFF0C;&#x800C; docker &#x4EC5;&#x4EC5;&#x865A;&#x62DF;&#x4E86;&#x7528;&#x6237;&#x7A7A;&#x95F4;&#xFF0C;&#x90A3;&#x4E48; docker &#x5FC5;&#x7136;&#x66F4;&#x8F7B;&#x91CF;&#x3001;&#x66F4;&#x5FEB;&#x3002;</p>
+<p>&#x518D;&#x56DE;&#x5934;&#x770B;&#x7B2C;&#x4E00;&#x5F20;&#x56FE;&#xFF0C;&#x4E5F;&#x5C31;&#x6E05;&#x6670;&#x4E86;&#x3002;&#x865A;&#x62DF;&#x673A;&#x5EFA;&#x7ACB;&#x5728;&#x865A;&#x62DF;&#x786C;&#x4EF6;&#x5C42;&#x4E4B;&#x4E0A;&#xFF0C;&#x6BCF;&#x4E2A;&#x865A;&#x62DF;&#x673A;&#x90FD;&#x6709;&#x72EC;&#x7ACB;&#x7684;&#x5185;&#x6838;&#x548C;&#x7528;&#x6237;&#x7A0B;&#x5E8F;&#x4EE5;&#x53CA;&#x4F9D;&#x8D56;&#x5E93;&#xFF1B;&#x800C; docker &#x5BB9;&#x5668;&#x5EFA;&#x7ACB;&#x5728;&#x5BBF;&#x4E3B;&#x673A;&#x5185;&#x6838;&#x548C; docker &#x670D;&#x52A1;&#x4E4B;&#x4E0A;&#xFF0C;&#x4F7F;&#x7528;&#x5171;&#x540C;&#x7684;&#x5185;&#x6838;&#xFF0C;&#x6BCF;&#x4E2A;&#x5BB9;&#x5668;&#x4EC5;&#x4EC5;&#x662F;&#x7528;&#x6237;&#x7A0B;&#x5E8F;&#x3001;&#x4F9D;&#x8D56;&#x5E93;&#x4E0D;&#x540C;&#xFF1B;&#x518D;&#x66F4;&#x8FDB;&#x4E00;&#x6B65;&#xFF0C;&#x666E;&#x901A;&#x7684;&#x7A0B;&#x5E8F;&#x90FD;&#x4F7F;&#x7528;&#x5171;&#x540C;&#x7684;&#x4F9D;&#x8D56;&#x5E93;&#xFF0C;&#x53EA;&#x6709;&#x7A0B;&#x5E8F;&#x6587;&#x4EF6;&#x4E0D;&#x540C;&#x3002;</p>
+<h1 id="4-namespace">4. Namespace</h1>
+<p>Linux &#x5185;&#x6838;&#x4ECE;&#x7248;&#x672C; 2.4.19 &#x5F00;&#x59CB;&#x9646;&#x7EED;&#x5F15;&#x5165;&#x4E86; namespace &#x7684;&#x6982;&#x5FF5;&#x3002;&#x5176;&#x76EE;&#x7684;&#x662F;&#x5C06;&#x67D0;&#x4E2A;&#x7279;&#x5B9A;&#x7684;&#x5168;&#x5C40;&#x7CFB;&#x7EDF;&#x8D44;&#x6E90;&#x901A;&#x8FC7;&#x62BD;&#x8C61;&#x65B9;&#x6CD5;&#x4F7F;&#x5F97;namespace &#x4E2D;&#x7684;&#x8FDB;&#x7A0B;&#x770B;&#x8D77;&#x6765;&#x62E5;&#x6709;&#x5B83;&#x4EEC;&#x81EA;&#x5DF1;&#x7684;&#x9694;&#x79BB;&#x7684;&#x5168;&#x5C40;&#x7CFB;&#x7EDF;&#x8D44;&#x6E90;&#x5B9E;&#x4F8B;&#x3002;Linux &#x5185;&#x6838;&#x4E2D;&#x5B9E;&#x73B0;&#x4E86;&#x516D;&#x79CD; namespace&#xFF0C;&#x6309;&#x7167;&#x5F15;&#x5165;&#x7684;&#x5148;&#x540E;&#x987A;&#x5E8F;&#xFF0C;&#x5217;&#x8868;&#x5982;&#x4E0B;&#xFF1A;</p>
+<p>&#x7EB5;&#x89C2;&#x5168;&#x5C40;&#xFF0C;&#x4ECE;&#x666E;&#x901A;&#x7684;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#xFF0C;&#x5230;docker &#x5BB9;&#x5668;&#xFF0C;&#x518D;&#x5230;&#x865A;&#x62DF;&#x673A;&#x6280;&#x672F;&#xFF0C;&#x65E0;&#x975E;&#x662F;&#x5BF9;&#x78C1;&#x76D8;&#x7A7A;&#x95F4;&#x3001;&#x7CFB;&#x7EDF;&#x8D44;&#x6E90;&#x548C;&#x9694;&#x79BB;&#x6027;&#x3001;&#x5B89;&#x5168;&#x6027;&#x7684;&#x6743;&#x8861;&#x53D6;&#x820D;&#x800C;&#x5DF2;&#x3002;&#x81F3;&#x4E8E; docker &#x7684;&#x81EA;&#x52A8;&#x5316;&#xFF0C;&#x5BF9;&#x6BD4;&#x865A;&#x62DF;&#x673A;&#x4F3C;&#x4E4E;&#x5E76;&#x4E0D;&#x516C;&#x5E73;&#xFF0C;&#x4E8E; Vagrant &#x8FD9;&#x6837;&#x7684;&#x5DE5;&#x5177;&#x76F8;&#x6BD4;&#x5012;&#x662F;&#x66F4;&#x52A0;&#x5408;&#x9002;&#x3002;</p>
+<p><img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211118142909.jpg" alt="img"></p>
+<p>&#x4F8B;&#x5982;&#xFF0C;&#x5BB9;&#x5668;&#x8FDB;&#x7A0B;&#x542F;&#x52A8;&#x65F6;&#xFF0C;&#x53EA;&#x8981;&#x542F;&#x7528;&#x4E86;Mount Namespace&#xFF0C;&#x5E76;&#x5C06;&#x81EA;&#x5DF1;&#x6253;&#x5305;&#x7684;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x6302;&#x8F7D;&#x597D;&#xFF0C;&#x5C31;&#x53EF;&#x4EE5;&#x5B9E;&#x73B0;&#x6BCF;&#x4E2A;&#x5BB9;&#x5668;&#x4EC5;&#x770B;&#x5230;&#x81EA;&#x5DF1;&#x7684;&#x6587;&#x4EF6;&#xFF0C;&#x5B9E;&#x73B0;&#x6587;&#x4EF6;&#x8D44;&#x6E90;&#x7684;&#x9694;&#x79BB;&#x3002;&#x603B;&#x4E4B;&#xFF0C;Docker &#x5B88;&#x62A4;&#x8FDB;&#x7A0B;&#x521B;&#x5EFA;&#x5BB9;&#x5668;&#x5B9E;&#x4F8B;&#x65F6;&#x90FD;&#x542F;&#x7528;&#x4E86;&#x76F8;&#x5E94;&#x7684;namespace&#xFF0C;&#x4F7F;&#x5F97;&#x5BB9;&#x5668;&#x4E2D;&#x7684;&#x8FDB;&#x7A0B;&#x90FD;&#x5904;&#x4E8E;&#x4E00;&#x79CD;&#x9694;&#x79BB;&#x7684;&#x8FD0;&#x884C;&#x73AF;&#x5883;&#x4E4B;&#x4E2D;&#x3002;</p>
+<h2 id="&#x90A3;&#x4E48;&#x5982;&#x4F55;&#x542F;&#x7528;&#x76F8;&#x5E94;namespace&#x5462;&#xFF1F;"><strong>&#x90A3;&#x4E48;&#x5982;&#x4F55;&#x542F;&#x7528;&#x76F8;&#x5E94;Namespace&#x5462;&#xFF1F;</strong></h2>
+<p>&#x901A;&#x8FC7;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;clone()&#x6765;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x5177;&#x6709;&#x72EC;&#x7ACB;Namespace&#x7684;&#x8FDB;&#x7A0B;&#x662F;&#x6700;&#x5E38;&#x89C1;&#x7684;&#x505A;&#x6CD5;&#xFF0C;&#x5B83;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;flags&#x53C2;&#x6570;&#x4F20;&#x5165;&#x76F8;&#x5E94;&#x6807;&#x5FD7;&#x4F4D;&#x6765;&#x63A7;&#x5236;&#x8FDB;&#x7A0B;&#x7684;&#x5404;&#x79CD;&#x72B6;&#x6001;&#xFF0C;&#x5982;&#x4EE5;&#x4E0B;&#x793A;&#x610F;&#x4EE3;&#x7801;&#xFF1A;</p>
+<pre><code>pid = clone(fun,stack,flags,clone_arg);
+(flags:CLONE_NEWPID  | CLONE_NEWNS |
+    CLONE_NEWUSER | CLONE_NEWNUT |
+    CLONE_NEWIPC  | CLONE_NEWUTS |
+    ...)
+</code></pre><p><strong>docker run&#x4E2D;namespace&#x76F8;&#x5173;&#x53C2;&#x6570;</strong></p>
+<ul>
+<li>--ipc string IPC namespace to use</li>
+<li>--pid string PID namespace to use</li>
+<li>--userns string User namespace to use</li>
+<li>--uts string UTS namespace to use</li>
+</ul>
+<p>&#x4F60;&#x53EF;&#x4EE5;&#x5728;&#x5BB9;&#x5668;&#x542F;&#x52A8;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x6307;&#x5B9A;&#x8FD9;&#x4E9B;&#x53C2;&#x6570;&#xFF0C;&#x4ECE;&#x800C;&#x5F3A;&#x5236;&#x5BB9;&#x5668;&#x8FD0;&#x884C;&#x5728;&#x7279;&#x5B9A;namespace&#x4E4B;&#x4E2D;&#x3002;&#x4F8B;&#x5982;&#xFF0C;&#x4F60;&#x53EF;&#x4EE5;&#x6307;&#x5B9A; --pid host&#xFF0C;&#x4ECE;&#x800C;&#x8BA9;&#x5BB9;&#x5668;&#x8FDB;&#x7A0B;&#x4F7F;&#x7528;&#x5BBF;&#x4E3B;&#x673A;&#x8FDB;&#x7A0B;&#x7A7A;&#x95F4;&#xFF0C;&#x6B64;&#x65F6;&#x5BB9;&#x5668;&#x53EF;&#x4EE5;&#x770B;&#x5230;host&#x4E0A;&#x6240;&#x6709;&#x7684;&#x8FDB;&#x7A0B;&#xFF08;&#x60F3;&#x8C61;&#x8FD9;&#x6837;&#x4E00;&#x4E2A;&#x573A;&#x666F;&#xFF0C;&#x4F60;&#x628A;&#x5E38;&#x7528;&#x7684;&#x6027;&#x80FD;&#x8BCA;&#x65AD;&#x5DE5;&#x5177;&#x90FD;&#x6253;&#x5305;&#x5230;&#x4E00;&#x4E2A;&#x955C;&#x50CF;&#x4E2D;&#xFF0C;&#x7136;&#x540E;&#x5FC5;&#x8981;&#x7684;&#x65F6;&#x5019;&#x5728;&#x670D;&#x52A1;&#x5668;&#x4E0A;&#x4F7F;&#x7528;&#x6B64;&#x955C;&#x50CF;&#x8FDB;&#x884C;&#x95EE;&#x9898;&#x5206;&#x6790;&#xFF0C;&#x6B64;&#x65F6;&#x52A0;&#x4E0A;&#x8BE5;&#x53C2;&#x6570;&#x4F1A;&#x5F88;&#x65B9;&#x4FBF;&#xFF09;&#x3002;</p>
+<h2 id="5-cgroups-linux-control-groups">5. Cgroups (Linux control groups)</h2>
+<p>&#x901A;&#x8FC7;Namespace&#xFF0C;&#x5BB9;&#x5668;&#x5B9E;&#x73B0;&#x4E86;&#x8D44;&#x6E90;&#x7684;&#x9694;&#x79BB;&#xFF0C;&#x4ECE;&#x800C;&#x6BCF;&#x4E2A;&#x5BB9;&#x5668;&#x770B;&#x8D77;&#x6765;&#x90FD;&#x50CF;&#x662F;&#x62E5;&#x6709;&#x81EA;&#x5DF1;&#x72EC;&#x7ACB;&#x7684;&#x8FD0;&#x884C;&#x73AF;&#x5883;&#x3002;&#x6CE8;&#x610F;&#xFF0C;&#x53EA;&#x662F;&#x770B;&#x8D77;&#x6765;&#x3002;&#x56E0;&#x4E3A;&#x5BB9;&#x5668;&#x4F7F;&#x7528;cpu&#x3001;&#x5185;&#x5B58;&#x7B49;&#x5E76;&#x4E0D;&#x53D7;&#x9650;&#x5236;&#xFF0C;&#x5047;&#x5982;&#x67D0;&#x4E2A;&#x5BB9;&#x5668;&#x5360;&#x7528;&#x8FD9;&#x4E9B;&#x8D44;&#x6E90;&#x8FC7;&#x9AD8;&#xFF0C;&#x5C31;&#x53EF;&#x80FD;&#x4F1A;&#x9020;&#x6210;&#x5176;&#x5B83;&#x5BB9;&#x5668;&#x8FD0;&#x884C;&#x8FDF;&#x7F13;&#x751A;&#x81F3;&#x5F02;&#x5E38;&#xFF0C;&#x8FD9;&#x5C31;&#x9700;&#x8981;Cgroups&#x4E86;&#x3002;</p>
+<h3 id="&#x7B80;&#x4ECB;">&#x7B80;&#x4ECB;</h3>
+<p>Linux CGroup&#x5168;&#x79F0;Linux Control Group&#xFF0C; &#x662F;Linux&#x5185;&#x6838;&#x7684;&#x4E00;&#x4E2A;&#x529F;&#x80FD;&#xFF0C;&#x7528;&#x6765;&#x9650;&#x5236;&#xFF0C;&#x63A7;&#x5236;&#x4E0E;&#x5206;&#x79BB;&#x4E00;&#x4E2A;&#x8FDB;&#x7A0B;&#x7EC4;&#x7FA4;&#x7684;&#x8D44;&#x6E90;&#xFF08;&#x5982;CPU&#x3001;&#x5185;&#x5B58;&#x3001;&#x78C1;&#x76D8;&#x8F93;&#x5165;&#x8F93;&#x51FA;&#x7B49;&#xFF09;&#x3002;</p>
+<ul>
+<li>&#x5176;&#x5178;&#x578B;&#x7684;&#x5B50;&#x7CFB;&#x7EDF;&#x5982;&#x4E0B;&#xFF1A;<ul>
+<li>cpu &#x5B50;&#x7CFB;&#x7EDF;&#xFF0C;&#x4E3B;&#x8981;&#x9650;&#x5236;&#x8FDB;&#x7A0B;&#x7684; cpu &#x4F7F;&#x7528;&#x7387;&#x3002;</li>
+<li>cpuacct &#x5B50;&#x7CFB;&#x7EDF;&#xFF0C;&#x53EF;&#x4EE5;&#x7EDF;&#x8BA1; cgroups &#x4E2D;&#x7684;&#x8FDB;&#x7A0B;&#x7684; cpu &#x4F7F;&#x7528;&#x62A5;&#x544A;&#x3002;</li>
+<li>cpuset &#x5B50;&#x7CFB;&#x7EDF;&#xFF0C;&#x53EF;&#x4EE5;&#x4E3A; cgroups &#x4E2D;&#x7684;&#x8FDB;&#x7A0B;&#x5206;&#x914D;&#x5355;&#x72EC;&#x7684; cpu &#x8282;&#x70B9;&#x6216;&#x8005;&#x5185;&#x5B58;&#x8282;&#x70B9;&#x3002;</li>
+<li>memory &#x5B50;&#x7CFB;&#x7EDF;&#xFF0C;&#x53EF;&#x4EE5;&#x9650;&#x5236;&#x8FDB;&#x7A0B;&#x7684; memory &#x4F7F;&#x7528;&#x91CF;&#x3002;</li>
+<li>blkio &#x5B50;&#x7CFB;&#x7EDF;&#xFF0C;&#x53EF;&#x4EE5;&#x9650;&#x5236;&#x8FDB;&#x7A0B;&#x7684;&#x5757;&#x8BBE;&#x5907; io&#x3002;</li>
+<li>devices &#x5B50;&#x7CFB;&#x7EDF;&#xFF0C;&#x53EF;&#x4EE5;&#x63A7;&#x5236;&#x8FDB;&#x7A0B;&#x80FD;&#x591F;&#x8BBF;&#x95EE;&#x67D0;&#x4E9B;&#x8BBE;&#x5907;&#x3002;</li>
+<li>net_cls &#x5B50;&#x7CFB;&#x7EDF;&#xFF0C;&#x53EF;&#x4EE5;&#x6807;&#x8BB0; cgroups &#x4E2D;&#x8FDB;&#x7A0B;&#x7684;&#x7F51;&#x7EDC;&#x6570;&#x636E;&#x5305;&#xFF0C;&#x7136;&#x540E;&#x53EF;&#x4EE5;&#x4F7F;&#x7528; tc &#x6A21;&#x5757;&#xFF08;traffic control&#xFF09;&#x5BF9;&#x6570;&#x636E;&#x5305;&#x8FDB;&#x884C;&#x63A7;&#x5236;&#x3002;</li>
+<li>freezer &#x5B50;&#x7CFB;&#x7EDF;&#xFF0C;&#x53EF;&#x4EE5;&#x6302;&#x8D77;&#x6216;&#x8005;&#x6062;&#x590D; cgroups &#x4E2D;&#x7684;&#x8FDB;&#x7A0B;&#x3002;</li>
+<li>ns &#x5B50;&#x7CFB;&#x7EDF;&#xFF0C;&#x53EF;&#x4EE5;&#x4F7F;&#x4E0D;&#x540C; cgroups &#x4E0B;&#x9762;&#x7684;&#x8FDB;&#x7A0B;&#x4F7F;&#x7528;&#x4E0D;&#x540C;&#x7684; namespace&#x3002;</li>
+</ul>
+</li>
+</ul>
+<p>&#x800C;Cgroups&#x7684;&#x5B9E;&#x73B0;&#x4E5F;&#x5F88;&#x6709;&#x610F;&#x601D;&#xFF0C;&#x5B83;&#x5E76;&#x4E0D;&#x662F;&#x4E00;&#x7EC4;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#xFF0C;linux&#x5C06;&#x5176;&#x5B9E;&#x73B0;&#x4E3A;&#x4E86;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#xFF0C;&#x8FD9;&#x5F88;&#x7B26;&#x5408;Unix&#x4E00;&#x5207;&#x7686;&#x6587;&#x4EF6;&#x7684;&#x54F2;&#x5B66;&#xFF0C;&#x56E0;&#x6B64;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x67E5;&#x770B;&#x3002;</p>
+<p>&#x4F8B;&#x5982;&#xFF0C;&#x6211;&#x5728;ubuntu18.04&#x7CFB;&#x7EDF;&#x4E2D;&#xFF0C;&#x76F4;&#x63A5;&#x6267;&#x884C;mount -t cgroup&#x5373;&#x53EF;&#x770B;&#x5230;&#xFF0C;&#x7CFB;&#x7EDF;&#x5DF2;&#x7ECF;&#x81EA;&#x52A8;&#x5728;sys/fs/cgroup&#x76EE;&#x5F55;&#x4E0B;&#x6302;&#x8F7D;&#x597D;&#x4E86;&#x76F8;&#x5E94;&#x6587;&#x4EF6;&#xFF0C;&#x6BCF;&#x4E2A;&#x6587;&#x5939;&#x4EF6;&#x4EE3;&#x8868;&#x4E86;&#x4E0A;&#x9762;&#x6240;&#x8BB2;&#x7684;&#x67D0;&#x79CD;&#x8D44;&#x6E90;&#x7C7B;&#x578B;&#x3002;</p>
+<p><strong>&#x5982;&#x4F55;&#x4F7F;&#x7528;Cgroups&#x5462;</strong></p>
+<p>&#x5F88;&#x7B80;&#x5355;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x5728;&#x76F8;&#x5E94;&#x8D44;&#x6E90;&#x63A7;&#x5236;&#x7EC4;&#x76EE;&#x5F55;&#x4E0B;&#x521B;&#x5EFA;&#x6587;&#x4EF6;&#x5939;&#xFF0C;&#x7CFB;&#x7EDF;&#x4F1A;&#x81EA;&#x52A8;&#x521B;&#x5EFA;&#x9700;&#x8981;&#x7684;&#x6587;&#x4EF6;&#xFF0C;&#x4F8B;&#x5982;&#xFF0C;&#x5728;&#x4E0A;&#x8FF0;cpu&#x76EE;&#x5F55;&#x4E0B;&#x521B;&#x5EFA;hello&#x76EE;&#x5F55;&#xFF0C;&#x7136;&#x540E;&#x770B;&#x5230;&#x76F8;&#x5E94;&#x6587;&#x4EF6;&#x5DF2;&#x81EA;&#x52A8;&#x521B;&#x5EFA;&#x3002;</p>
+<p><strong>docker&#x5BF9;Cgroups&#x7684;&#x4F7F;&#x7528;</strong></p>
+<p>&#x9ED8;&#x8BA4;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;docker &#x542F;&#x52A8;&#x4E00;&#x4E2A;&#x5BB9;&#x5668;&#x540E;&#xFF0C;&#x5C31;&#x4F1A;&#x5728; /sys/fs/cgroup &#x76EE;&#x5F55;&#x4E0B;&#x7684;&#x5404;&#x4E2A;&#x8D44;&#x6E90;&#x76EE;&#x5F55;&#x4E0B;&#x751F;&#x6210;&#x4EE5;&#x5BB9;&#x5668; ID &#x4E3A;&#x540D;&#x5B57;&#x7684;&#x76EE;&#x5F55;&#xFF0C;&#x5728;&#x5BB9;&#x5668;&#x88AB; stopped &#x540E;&#xFF0C;&#x8BE5;&#x76EE;&#x5F55;&#x88AB;&#x5220;&#x9664;&#x3002;&#x90A3;&#x4E48;&#xFF0C;&#x5BF9;&#x5BB9;&#x5668;&#x8D44;&#x6E90;&#x8FDB;&#x884C;&#x63A7;&#x5236;&#x7684;&#x65B9;&#x5F0F;&#xFF0C;&#x5C31;&#x540C;&#x4E0A;&#x8FB9;&#x7684;&#x4F8B;&#x5B50;&#x4E00;&#x6837;&#xFF0C;&#x663E;&#x800C;&#x6613;&#x89C1;&#x4E86;</p>
+<p>docker&#x63D0;&#x4F9B;&#x4E86;&#x2013;cpu-period&#x3001;&#x2013;cpu-quota&#x4E24;&#x4E2A;&#x53C2;&#x6570;&#x63A7;&#x5236;&#x5BB9;&#x5668;&#x53EF;&#x4EE5;&#x5206;&#x914D;&#x5230;&#x7684;CPU&#x65F6;&#x949F;&#x5468;&#x671F;&#x3002;&#x2013;cpu-period&#x662F;&#x7528;&#x6765;&#x6307;&#x5B9A;&#x5BB9;&#x5668;&#x5BF9;CPU&#x7684;&#x4F7F;&#x7528;&#x8981;&#x5728;&#x591A;&#x957F;&#x65F6;&#x95F4;&#x5185;&#x505A;&#x4E00;&#x6B21;&#x91CD;&#x65B0;&#x5206;&#x914D;&#xFF0C;&#x800C;&#x2013;cpu-quota&#x662F;&#x7528;&#x6765;&#x6307;&#x5B9A;&#x5728;&#x8FD9;&#x4E2A;&#x5468;&#x671F;&#x5185;&#xFF0C;&#x6700;&#x591A;&#x53EF;&#x4EE5;&#x6709;&#x591A;&#x5C11;&#x65F6;&#x95F4;&#x7528;&#x6765;&#x8DD1;&#x8FD9;&#x4E2A;&#x5BB9;&#x5668;&#x3002;&#x8DDF;&#x2013;cpu-shares&#x4E0D;&#x540C;&#x7684;&#x662F;&#x8FD9;&#x79CD;&#x914D;&#x7F6E;&#x662F;&#x6307;&#x5B9A;&#x4E00;&#x4E2A;&#x7EDD;&#x5BF9;&#x503C;&#xFF0C;&#x800C;&#x4E14;&#x6CA1;&#x6709;&#x5F39;&#x6027;&#x5728;&#x91CC;&#x9762;&#xFF0C;&#x5BB9;&#x5668;&#x5BF9;CPU&#x8D44;&#x6E90;&#x7684;&#x4F7F;&#x7528;&#x7EDD;&#x5BF9;&#x4E0D;&#x4F1A;&#x8D85;&#x8FC7;&#x914D;&#x7F6E;&#x7684;&#x503C;&#x3002;</p>
+<p>cpu-period&#x548C;cpu-quota&#x7684;&#x5355;&#x4F4D;&#x4E3A;&#x5FAE;&#x79D2;&#xFF08;&#x3BC;s&#xFF09;&#x3002;cpu-period&#x7684;&#x6700;&#x5C0F;&#x503C;&#x4E3A;1000&#x5FAE;&#x79D2;&#xFF0C;&#x6700;&#x5927;&#x503C;&#x4E3A;1&#x79D2;&#xFF08;10^6 &#x3BC;s&#xFF09;&#xFF0C;&#x9ED8;&#x8BA4;&#x503C;&#x4E3A;0.1&#x79D2;&#xFF08;100000 &#x3BC;s&#xFF09;&#x3002;cpu-quota&#x7684;&#x503C;&#x9ED8;&#x8BA4;&#x4E3A;-1&#xFF0C;&#x8868;&#x793A;&#x4E0D;&#x505A;&#x63A7;&#x5236;&#x3002;</p>
+<p>&#x4E3E;&#x4E2A;&#x4F8B;&#x5B50;&#xFF0C;&#x5982;&#x679C;&#x5BB9;&#x5668;&#x8FDB;&#x7A0B;&#x9700;&#x8981;&#x6BCF;1&#x79D2;&#x4F7F;&#x7528;&#x5355;&#x4E2A;CPU&#x7684;0.2&#x79D2;&#x65F6;&#x95F4;&#xFF0C;&#x53EF;&#x4EE5;&#x5C06;cpu-period&#x8BBE;&#x7F6E;&#x4E3A;1000000&#xFF08;&#x5373;1&#x79D2;&#xFF09;&#xFF0C;cpu-quota&#x8BBE;&#x7F6E;&#x4E3A;200000&#xFF08;0.2&#x79D2;&#xFF09;&#x3002;&#x5F53;&#x7136;&#xFF0C;&#x5728;&#x591A;&#x6838;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x5982;&#x679C;&#x5141;&#x8BB8;&#x5BB9;&#x5668;&#x8FDB;&#x7A0B;&#x9700;&#x8981;&#x5B8C;&#x5168;&#x5360;&#x7528;&#x4E24;&#x4E2A;CPU&#xFF0C;&#x5219;&#x53EF;&#x4EE5;&#x5C06;cpu-period&#x8BBE;&#x7F6E;&#x4E3A;100000&#xFF08;&#x5373;0.1&#x79D2;&#xFF09;&#xFF0C;cpu-quota&#x8BBE;&#x7F6E;&#x4E3A;200000&#xFF08;0.2&#x79D2;&#xFF09;&#x3002;</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="用户级线程与内核级线程.html" class="navigation navigation-prev " aria-label="Previous page: 6.4用户级线程与内核级线程">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="docker文件系统.html" class="navigation navigation-next " aria-label="Next page: 6.6 Docker文件系统">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"6.5 Cgroups与Docker资源限制","level":"7.5","depth":1,"next":{"title":"6.6 Docker文件系统","level":"7.6","depth":1,"path":"Linux/docker文件系统.md","ref":"Linux/docker文件系统.md","articles":[]},"previous":{"title":"6.4用户级线程与内核级线程","level":"7.4","depth":1,"path":"Linux/用户级线程与内核级线程.md","ref":"Linux/用户级线程与内核级线程.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["expandable-chapters","livereload"],"pluginsConfig":{"expandable-chapters":{},"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Linux/Cgroups与Docker资源限制.md","mtime":"2021-11-19T02:40:41.116Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2022-01-04T09:55:23.318Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-expandable-chapters/expandable-chapters.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-livereload/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

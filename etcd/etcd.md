@@ -1,6 +1,6 @@
 #  etcd
 
-![图片](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211215164459)
+![image-20220105141925924](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220105141926.png)
 
 # 1. 什么是etcd
 
@@ -26,7 +26,7 @@ etcd 是一个分布式、高可靠的 kv 系统，基于 Go 语言实现，内�
 
 # 2.Leader 是怎么选举出来的？
 
-![图片](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211215170103)
+![image-20220105141932302](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220105141932.png)
 
 
 raft 是针对 paxos 的简化版本，拆解为三个**核心问题**：
@@ -51,7 +51,7 @@ raft 是针对 paxos 的简化版本，拆解为三个**核心问题**：
 
 看下 raft 论文中的角色转化：
 
-![图片](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211215172858)
+![image-20220105141937194](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220105141937.png)
 
 从论文很清晰能得到几个要点：
 

@@ -180,7 +180,7 @@ type mcentral struct {
 
 Go没法使用工作线程的本地缓存`mcache`和全局中心缓存`mcentral`上管理超过32KB的内存分配，所以对于那些超过32KB的内存申请，会直接从堆上(`mheap`)上分配对应的数量的内存页（每页大小是8KB）给程序。
 
-![图片](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211222155723)
+![image-20220105141746303](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220105141746.png)
 
 
 
@@ -188,7 +188,7 @@ Go没法使用工作线程的本地缓存`mcache`和全局中心缓存`mcentral`
 
 我们把内存分配管理涉及的所有概念串起来，可以勾画出Go内存管理的一个全局视图：
 
-![图片](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211222155735)
+![image-20220105141751765](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220105141751.png)
 
 总结起来关于Go内存分配管理的策略有如下几点：
 

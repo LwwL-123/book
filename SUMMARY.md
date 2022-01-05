@@ -28,7 +28,9 @@
 - [2.3 Go语言CSP：通信顺序进程简述](Go面试/Go语言CSP：通信顺序进程简述.md)
 - [2.4 Goroutine数量](Go面试/Goroutine数量.md)
 - [2.5 new和make](Go面试/new_make.md)
-- [2.6 面试记录](Go面试/面试记录.md)
+- [2.6 空结构体](Go面试/Go 语言中 Set 的最佳实现方案.md)
+
+- [面试记录](Go面试/面试记录.md)
 
 
 

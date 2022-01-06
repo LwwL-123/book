@@ -101,3 +101,48 @@ bucket数据结构指示下一个bucket的指针称为overflow bucket，意为�
 
 ![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220106170234.png)
 
+当前map存储了7个键值对，只有1个bucket。此地负载因子为7。再次插入数据时将会触发扩容操作，扩容之后再将新插入键写入新的bucket。
+
+当第8个键值对插入时，将会触发扩容，扩容后示意图如下：
+
+![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220106182423.png)
+
+hmap数据结构中oldbuckets成员指身原bucket，而buckets指向了新申请的bucket。新的键值对被插入新的bucket中。 后续对map的访问操作会触发迁移，将oldbuckets中的键值对逐步的搬迁过来。当oldbuckets中的键值对全部搬迁完毕后，删除oldbuckets。
+
+搬迁完成后的示意图如下：
+
+![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220106183020.png)
+
+数据搬迁过程中原bucket中的键值对将存在于新bucket的前面，新插入的键值对将存在于新bucket的后面。 实际搬迁过程中比较复杂，将在后续源码分析中详细介绍。
+
+## 5.3 等量扩容
+
+所谓等量扩容，实际上并不是扩大容量，buckets数量不变，重新做一遍类似增量扩容的搬迁动作，把松散的键值对重新排列一次，以使bucket的使用率更高，进而保证更快的存取。 在极端场景下，比如不断的增删，而键值对正好集中在一小部分的bucket，这样会造成overflow的bucket数量增多，但负载因子又不高，从而无法执行增量搬迁的情况，如下图所示：
+
+![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220106183114.png)
+
+上图可见，overflow的buckt中大部分是空的，访问效率会很差。此时进行一次等量扩容，即buckets数量不变，经过重新组织后overflow的bucket数量会减少，即节省了空间又会提高访问效率。
+
+# 6. 查找过程
+
+查找过程如下：
+
+1. 跟据key值算出哈希值
+2. 取哈希值低位与hmpa.B取模确定bucket位置
+3. 取哈希值高位在tophash数组中查询
+4. 如果tophash[i]中存储值也哈希值相等，则去找到该bucket中的key值进行比较
+5. 当前bucket没有找到，则继续从下个overflow的bucket中查找。
+6. 如果当前处于搬迁过程，则优先从oldbuckets查找
+
+注：如果查找不到，也不会返回空值，而是返回相应类型的0值。
+
+
+
+# 7. 插入过程
+
+新元素插入过程如下：
+
+1. 跟据key值算出哈希值
+2. 取哈希值低位与hmap.B取模确定bucket位置
+3. 查找该key是否已经存在，如果存在则直接更新值
+4. 如果没找到将key，将key插入

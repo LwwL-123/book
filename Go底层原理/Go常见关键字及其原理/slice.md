@@ -99,6 +99,39 @@ func main() {
 
 
 
+题目四
+
+```go
+array := [10]int{1,2,3,4,5,6,7,8,9,10}
+
+var slice = array[0:10]
+fmt.Println(&slice[0] == &array[0])
+slice[0] = 1000
+slice = append(slice,11)
+
+
+fmt.Println("lenth of slice: ", len(slice))
+fmt.Println("capacity of slice: ", cap(slice))
+fmt.Println(slice)
+fmt.Println(&slice[0] == &array[0])
+
+slice[0] = 100
+fmt.Println(slice)
+fmt.Println(array)
+```
+
+```go
+true
+lenth of slice:  11
+capacity of slice:  20
+[1000 2 3 4 5 6 7 8 9 10 11]
+false
+[100 2 3 4 5 6 7 8 9 10 11]
+[1000 2 3 4 5 6 7 8 9 10]
+```
+
+扩容后，slice地址改变，不指向array
+
 # 3. Slice实现原理
 
 Slice依托数组实现，底层数组对用户屏蔽，在底层数组容量不足时可以实现自动重分配并生成新的Slice。 接下来按照实际使用场景分别介绍其实现机制。

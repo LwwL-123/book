@@ -130,3 +130,46 @@ scp /home/upload.tar.gz root@remoteHost:/root/upload.tar.gz
 -6 强制使用ipv6
 -v 和大多数 linux 命令中的 -v 意思一样 , 用来显示进度 . 可以用来查看连接 , 认证 , 或是配置错误 .
 -C 使能压缩
+
+
+
+## stat
+
+查看文件状态
+
+```
+  File: substrate/
+  Size: 4096            Blocks: 8          IO Block: 4096   directory
+Device: fd00h/64768d    Inode: 1964985     Links: 3
+Access: (0755/drwxr-xr-x)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2022-01-07 10:28:48.602214918 +0800
+Modify: 2021-09-07 16:39:22.904578990 +0800
+Change: 2022-01-07 10:16:02.578833544 +0800
+ Birth: -
+```
+
+
+
+## ls
+
+ls -lh查看文件夹大小
+
+
+
+## du
+
+du -sh查看文件夹总大小
+
+命令参数：
+
+-a   #显示目录中文件的大小  单位 KB 。
+
+-b  #显示目录中文件的大小，以字节byte为单位。
+
+-c  #显示目录中文件的大小，同时也显示总和；单位KB。
+
+-k 、 -m  、#显示目录中文件的大小，-k 单位KB，-m 单位MB.
+
+-s  #仅显示目录的总值，单位KB。
+
+-h  #以K  M  G为单位显示，提高可读性~~~（最常用的一个~也可能只用这一个就满足需求了）

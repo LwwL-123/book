@@ -317,3 +317,84 @@ if atomic.CompareAndSwapInt32(&m.state, old, new) {
 
 ![Group 5](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220112180544.png)
 
+下面这张图是处于唤醒后的示意图，如何被唤醒的可以直接到跳到解锁部分看完再回来。
+
+被唤醒一开始是需要判断一下当前的starving状态以及等待的时间如果超过了1ms，那么会将starving设置为true；
+
+接下来会有一个if判断， 这里有个细节，因为是被唤醒的，所以判断前需要重新获取一下锁，如果当前不是饥饿模式，那么会直接返回，然后重新进入到for循环中；
+
+如果当前是处于饥饿模式，那么会计算一下delta为加锁，并且当前的goroutine是可以直接抢占锁的，所以需要将waiter减一，如果starving不为饥饿，或者等待时间没有超过1ms，或者waiter只有一个了，那么还需要将delta减去mutexStarving，表示退出饥饿模式；
+
+最后通过AddInt32将state加上delta，这里之所以可以直接加上，因为这时候state的mutexLocked值肯定为0，并且mutexStarving位肯定为1，并且在获取锁之前至少还有当前一个goroutine在等待队列中，所以waiter可以直接减1。
+
+![Group 6](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220113101629.png)
+
+
+
+
+
+## 解锁流程
+
+### fast path
+
+```go
+func (m *Mutex) Unlock() {
+    if race.Enabled {
+        _ = m.state
+        race.Release(unsafe.Pointer(m))
+    }
+    //返回一个state被减后的值    
+    new := atomic.AddInt32(&m.state, -mutexLocked)
+    if new != 0 { 
+        //如果返回的state值不为0，那么进入到unlockSlow中
+        m.unlockSlow(new)
+    }
+}
+```
+
+这里主要就是AddInt32重新设置state的mutexLocked位为0，然后判断新的state值是否不为0，不为0则调用unlockSlow方法。
+
+### unlockSlow
+
+![Group 7](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220113102125.png)
+
+unlockSlow方法里面也分为正常模式和饥饿模式下的解锁：
+
+```go
+func (m *Mutex) unlockSlow(new int32) {
+    if (new+mutexLocked)&mutexLocked == 0 {
+        throw("sync: unlock of unlocked mutex")
+    }
+    // 正常模式
+    if new&mutexStarving == 0 {
+        old := new
+        for { 
+            // 如果没有 waiter，或者已经有在处理的情况，直接返回
+            if old>>mutexWaiterShift == 0 || old&(mutexLocked|mutexWoken|mutexStarving) != 0 {
+                return
+            } 
+            // waiter 数减 1，mutexWoken 标志设置上，通过 CAS 更新 state 的值
+            new = (old - 1<<mutexWaiterShift) | mutexWoken
+            if atomic.CompareAndSwapInt32(&m.state, old, new) {
+                // 直接唤醒等待队列中的 waiter
+                runtime_Semrelease(&m.sema, false, 1)
+                return
+            }
+            old = m.state
+        }
+    } else { // 饥饿模式
+        // 直接唤醒等待队列中的 waiter
+        runtime_Semrelease(&m.sema, true, 1)
+    }
+}
+```
+
+在正常模式下，如果没有 waiter，或者mutexLocked、mutexStarving、mutexWoken有一个不为零说明已经有其他goroutine在处理了，直接返回；如果互斥锁存在等待者，那么通过runtime_Semrelease直接唤醒等待队列中的 waiter；
+
+在正常模式下，如果没有 waiter，或者mutexLocked、mutexStarving、mutexWoken有一个不为零说明已经有其他goroutine在处理了，直接返回；如果互斥锁存在等待者，那么通过runtime_Semrelease直接唤醒等待队列中的 waiter；
+
+在饥饿模式，直接调用runtime_Semrelease方法将当前锁交给下一个正在尝试获取锁的等待者，等待者被唤醒后会得到锁。
+
+## 总结
+
+Mutex的设计非常的简洁的，从代码可以看出为了设计出这么简洁的代码state一个字段可以当4个字段使用。并且为了解决goroutine饥饿问题，在1.9 中 Mutex 增加了饥饿模式让锁变得更公平，不公平的等待时间限制在 1 毫秒，但同时，代码也变得越来越难懂了，所以要理解它上面的思想需要慢慢的废些时间细细的体会一下了。

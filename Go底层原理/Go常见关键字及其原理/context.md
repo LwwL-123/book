@@ -1,4 +1,4 @@
-# 1. context
+# context
 
 `Context` 是 Golang 中非常有趣的设计，它与 Go 语言中的并发编程有着比较密切的关系，在其他语言中我们很难见到类似 `Context` 的东西，它不仅能够用来设置截止日期、同步『信号』还能用来传递请求相关的值。
 
@@ -97,3 +97,98 @@ handle context deadline exceeded
 两个函数都会因为 `ctx.Done()` 返回的管道被关闭而中止，也就是上下文超时。
 
 相信这两个例子能够帮助各位读者了解 `Context` 的使用方法以及基本的工作原理 — 多个 Goroutine 同时订阅 `ctx.Done()` 管道中的消息，一旦接收到取消信号就停止当前正在执行的工作并提前返回。
+
+
+
+## 实现原理
+
+`Context` 相关的源代码都在 context.go 这个文件中，在这一节中我们就会从 Go 语言的源代码出发介绍 `Context` 的实现原理，包括如何在多个 Goroutine 之间同步信号、为请求设置截止日期并传递参数和信息。
+
+
+
+### 默认上下文
+
+在 `context` 包中，最常使用其实还是 `context.Background` 和 `context.TODO` 两个方法，这两个方法最终都会返回一个预先初始化好的私有变量 `background` 和 `todo`：
+
+```go
+func Background() Context {
+    return background
+}
+
+func TODO() Context {
+    return todo
+}
+```
+
+这两个变量是在包初始化时就被创建好的，它们都是通过 `new(emptyCtx)` 表达式初始化的指向私有结构体 `emptyCtx` 的指针，这是包中最简单也是最常用的类型：
+
+```go
+type emptyCtx int
+
+func (*emptyCtx) Deadline() (deadline time.Time, ok bool) {
+    return
+}
+
+func (*emptyCtx) Done() <-chan struct{} {
+    return nil
+}
+
+func (*emptyCtx) Err() error {
+    return nil
+}
+
+func (*emptyCtx) Value(key interface{}) interface{} {
+    return nil
+}
+```
+
+它对 `Context` 接口方法的实现也都非常简单，无论何时调用都会返回 `nil` 或者空值，并没有任何特殊的功能，`Background` 和 `TODO` 方法在某种层面上看其实也只是互为别名，两者没有太大的差别，不过 `context.Background()` 是上下文中最顶层的默认值，所有其他的上下文都应该从 `context.Background()` 演化出来。
+
+<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220120000256.png" alt="image-20220120000256509" style="zoom:50%;" />
+
+我们应该只在不确定时使用 `context.TODO()`，在多数情况下如果函数没有上下文作为入参，我们往往都会使用 `context.Background()` 作为起始的 `Context` 向下传递。
+
+
+
+### 取消信号
+
+`WithCancel` 方法能够从 `Context` 中创建出一个新的子上下文，同时还会返回用于取消该上下文的函数，也就是 `CancelFunc`，我们直接从 `WithCancel` 函数的实现来看它到底做了什么：
+
+```go
+func WithCancel(parent Context) (ctx Context, cancel CancelFunc) {
+    c := newCancelCtx(parent)
+    propagateCancel(parent, &c)
+    return &c, func() { c.cancel(true, Canceled) }
+}
+```
+
+`newCancelCtx` 是包中的私有方法，它将传入的父上下文包到私有结构体 `cancelCtx{Context: parent}` 中，`cancelCtx` 就是当前函数最终会返回的结构体类型，我们在详细了解它是如何实现接口之前，先来了解一下用于传递取消信号的 `propagateCancel` 函数：
+
+```go
+func propagateCancel(parent Context, child canceler) {
+    if parent.Done() == nil {
+        return // parent is never canceled
+    }
+    if p, ok := parentCancelCtx(parent); ok {
+        p.mu.Lock()
+        if p.err != nil {
+            child.cancel(false, p.err)
+        } else {
+            if p.children == nil {
+                p.children = make(map[canceler]struct{})
+            }
+            p.children[child] = struct{}{}
+        }
+        p.mu.Unlock()
+    } else {
+        go func() {
+            select {
+            case <-parent.Done():
+                child.cancel(false, parent.Err())
+            case <-child.Done():
+            }
+        }()
+    }
+}
+```
+

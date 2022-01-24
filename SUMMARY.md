@@ -38,7 +38,6 @@
 - [2.4 Goroutine数量](面试/Goroutine数量.md)
 - [2.5 new和make](面试/new_make.md)
 - [2.6 空结构体](面试/Go 语言中 Set 的最佳实现方案.md)
-- [面试操作系统](面试/面试系统.md)
 - [面试记录](面试/面试记录.md)
 
 
@@ -58,16 +57,15 @@
 - [5.2 网络面试题](计算机网络/网络面试题.md)
 - [5.3 NAT](计算机网络/NAT.md)
 
-## 6. Linux
+## 6. 操作系统
 
 - [6.1 Linux常见命令](Linux/Linux常见命令.md)
-- [6.2 Linux虚拟内存](Linux/Linux虚拟内存.md)
-- [6.3 Linux进程与线程](Linux/Linux进程与线程.md)
-- [6.4用户级线程与内核级线程](Linux/用户级线程与内核级线程.md)
-- [6.5 Cgroups与Docker资源限制](Linux/Cgroups与Docker资源限制.md)
-- [6.6 Docker文件系统](Linux/docker文件系统.md)
+- [6.2 虚拟内存](Linux/Linux虚拟内存.md)
+- [6.3 进程与线程](Linux/Linux进程与线程.md)
 
-- [6.7 栈帧](Linux/栈帧.md)
+- [6.4 Cgroups与Docker资源限制](Linux/Cgroups与Docker资源限制.md)
+- [6.5 Docker文件系统](Linux/docker文件系统.md)
+- [6.6 栈帧](Linux/栈帧.md)
 
 ## 7. 分布式
 

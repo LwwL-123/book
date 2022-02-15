@@ -1,5 +1,28 @@
 {
-  "plugins": [
-    "expandable-chapters"
-  ]
+  "plugins": 
+    ["expandable-chapters","anchor-navigation-ex","custom-favicon"],
+  "pluginsConfig": {
+    "anchor-navigation-ex": {
+      "showLevel": true,
+      "associatedWithSummary": true,
+      "printLog": false,
+      "multipleH1": true,
+      "mode": "float",
+      "showGoTop":true,
+      "float": {
+          "floatIcon": "fa fa-navicon",
+          "showLevelIcon": false,
+          "level1Icon": "fa fa-hand-o-right",
+          "level2Icon": "fa fa-hand-o-right",
+          "level3Icon": "fa fa-hand-o-right"
+      },
+      "pageTop": {
+          "showLevelIcon": false,
+          "level1Icon": "fa fa-hand-o-right",
+          "level2Icon": "fa fa-hand-o-right",
+          "level3Icon": "fa fa-hand-o-right"
+      }
+    },
+    "favicon": "icon/favicon.ico"
+  }
 }

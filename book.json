@@ -3,7 +3,7 @@
     ["expandable-chapters","anchor-navigation-ex","custom-favicon"],
   "pluginsConfig": {
     "anchor-navigation-ex": {
-      "showLevel": true,
+      "showLevel": false,
       "associatedWithSummary": true,
       "printLog": false,
       "multipleH1": true,

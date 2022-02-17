@@ -1,6 +1,6 @@
 {
   "plugins": 
-    ["expandable-chapters","anchor-navigation-ex","custom-favicon"],
+    ["expandable-chapters","anchor-navigation-ex","custom-favicon","code","-lunr", "-search", "search-pro"],
   "pluginsConfig": {
     "anchor-navigation-ex": {
       "showLevel": false,

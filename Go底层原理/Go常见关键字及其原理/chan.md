@@ -146,7 +146,7 @@ func makechan(t *chantype, size int) *hchan {
 
 # 4. 常见用法
 
-# 4.1 单向channel
+## 4.1 单向channel
 
 顾名思义，单向channel指只能用于发送或接收数据，实际上也没有单向channel。
 
@@ -176,7 +176,7 @@ func main() {
 
 mychan是个正常的channel，而readChan()参数限制了传入的channel只能用来读，writeChan()参数限制了传入的channel只能用来写。
 
-# 4.2 select
+## 4.2 select
 
 使用select可以监控多channel，比如监控多个channel，当其中某一个channel有数据时，就从其读出数据。
 
@@ -221,3 +221,14 @@ func main() {
 从输出可见，从channel中读出数据的顺序是随机的，事实上select语句的多个case执行顺序是随机的，关于select的实现原理会有专门章节分析。
 
 通过这个示例想说的是：select的case语句读channel不会阻塞，尽管channel中没有数据。这是由于case语句编译后调用读channel时会明确传入不阻塞的参数，此时读不到数据时不会将当前goroutine加入到等待队列，而是直接返回。
+
+
+
+对**已经关闭**的的 `chan` 进行读写，会怎么样？**为什么？**
+
+# 5. 对已经关闭的chan读写会怎么样
+
+- 读**已经关闭**的 `chan` 能一直读到东西，但是读到的内容根据通道内`关闭前`是否有元素而不同。
+  - 如果 `chan` 关闭前，`buffer` 内有元素**还未读** , 会正确读到 `chan` 内的值，且返回的第二个 bool 值（是否读成功）为 `true`。
+  - 如果 `chan` 关闭前，`buffer` 内有元素**已经被读完**，`chan` 内无值，接下来所有接收的值都会非阻塞直接成功，返回 `channel` 元素的**零值**，但是第二个 `bool` 值一直为 `false`。
+- 写**已经关闭**的 `chan` 会 `panic`

@@ -108,3 +108,30 @@ func nextPermutation(nums []int)  {
 }
 ```
 
+#### [6. Z 字形变换](https://leetcode-cn.com/problems/zigzag-conversion/)
+
+```go
+func convert(s string, numRows int) string {
+    res := make([]string,numRows)
+    i := 0
+    for i < len(s) {
+        for j := 0; j < numRows && i < len(s); j++ {
+            res[j] += string(s[i])
+            i++
+        }
+
+        for j := numRows-2; j >0 && i < len(s); j-- {
+            res[j] += string(s[i])
+            i++
+        }
+    }
+
+    var a string
+    for _,j := range res {
+        a += j
+    }
+
+    return a
+}
+```
+

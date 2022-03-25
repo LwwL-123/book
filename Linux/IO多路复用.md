@@ -20,13 +20,13 @@
 
 连接建立后，客户端和服务端就开始相互传输数据了，双方都可以通过 `read()` 和 `write()` 函数来读写数据。
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220128162303.png" alt="image-20220128162303389" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171537.png" alt="image-20220128162303389" style="zoom:50%;" />
 
 ##  I/O 多路复用
 
 我们知道通过操作系统记录的进程控制信息PCB，可以找到打开文件描述符表，进程打开文件，创建的socket等等都会记录到这张表里。
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220128112132.png" alt="image-20220128112117650" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171602.png" alt="image-20220128112117650" style="zoom:50%;" />
 
 socket所有操作都有OS来提供，也就是要通过系统调用来完成。每创建一个socket，就会在文件描述符表中，对应增加一条记录，而返回给应用程序的，只有一个socket描述符，用于识别不同的socket，而且每个TCP sokcet在创建时，系统都会为他分配一个读缓冲区和一个写缓冲区。要获得响应数据，就要从读缓冲区拷贝过来，同样的要通过socket发送数据，也要先将数据拷贝到写缓冲区。所以用户在读数据的时候，读缓冲区未必有数据，写数据的时候，写缓冲区也未必有空间。那么有三种办法
 
@@ -40,7 +40,7 @@ socket所有操作都有OS来提供，也就是要通过系统调用来完成。
 
 第一种办法，进程让出cpu，由运行态变为阻塞态，进入等待队列里，等socket就绪后，由阻塞态变为就绪态，再次获取时间片后，就可以运行了
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220128112700.png" alt="img" style="zoom: 67%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171606.png" alt="img" style="zoom: 67%;" />
 
 read为例：
 
@@ -118,11 +118,11 @@ epoll 通过两个方面，很好解决了 select/poll 的问题。
 
 从下图你可以看到 epoll 相关的接口作用：
 
-![image-20220128164958560](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220128164958.png)
+![image-20220128164958560](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171615.png)
 
 epoll 的方式即使监听的 Socket 数量越多的时候，效率不会大幅度降低，能够同时监听的 Socket 的数目也非常的多了，上限就为系统定义的进程打开的最大文件描述符个数。
 
-![2.png](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220324004303.png)
+![2.png](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171618.png)
 
 总的来说，就是内核不断地调用epoll_wailt，来监测是否有新事件。
 

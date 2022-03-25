@@ -36,7 +36,7 @@ chan内部实现了一个环形队列作为其缓冲区，队列的长度是创�
 
 下图展示了一个可缓存6个元素的channel示意图：
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211026180450.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172857.png)
 
 - qcount表示队列中还有两个元素；
 - dataqsiz指示了队列长度为6，即可缓存6个元素；
@@ -67,7 +67,7 @@ recvq    waitq          // 等待读消息的goroutine队列
 sendq    waitq          // 等待写消息的goroutine队列
 ```
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211026183131.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172902.png)
 
 
 
@@ -117,7 +117,7 @@ func makechan(t *chantype, size int) *hchan {
 
 
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211027165936.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172905.png)
 
 # 3.3 从channel读数据
 
@@ -130,7 +130,7 @@ func makechan(t *chantype, size int) *hchan {
 
 简单流程图如下：
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211028110656.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172908.png)
 
 # 3.4 关闭channel
 

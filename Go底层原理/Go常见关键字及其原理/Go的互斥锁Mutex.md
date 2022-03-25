@@ -32,7 +32,7 @@ type Mutex struct {
 
 下图展示Mutex的内存布局：
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220112170344.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173111.png)
 
 - Locked: 表示该Mutex是否已被锁定，0：没有锁定 1：已被锁定。
 - Woken: 表示是否有协程已被唤醒，0：没有协程唤醒 1：已有协程唤醒，正在加锁过程中。
@@ -64,7 +64,7 @@ Mutext对外提供两个方法，实际上也只有这两个方法：
 
 假定当前只有一个协程在加锁，没有其他协程干扰，那么过程如下图所示：
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220112171430.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173114.png)
 
 加锁过程会去判断Locked标志位是否为0，如果是0则把Locked位置1，代表加锁成功。从上图可见，加锁成功后，只是Locked位置1，其他状态位没发生变化。
 
@@ -74,7 +74,7 @@ Mutext对外提供两个方法，实际上也只有这两个方法：
 
 假定加锁时，锁已被其他协程占用了，此时加锁过程如下图所示：
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220112171825.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173118.png)
 
 从上图可看到，当协程B对一个已被占用的锁再次加锁时，Waiter计数器增加了1，此时协程B将被阻塞，直到Locked值变为0后才会被唤醒。
 
@@ -82,7 +82,7 @@ Mutext对外提供两个方法，实际上也只有这两个方法：
 
 假定解锁时，没有其他协程阻塞，此时解锁过程如下图所示：
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220112171847.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173121.png)
 
 由于没有其他协程阻塞等待加锁，所以此时解锁时只需要把Locked位置为0即可，不需要释放信号量。
 
@@ -92,7 +92,7 @@ Mutext对外提供两个方法，实际上也只有这两个方法：
 
 假定解锁时，有1个或多个协程阻塞，此时解锁过程如下图所示：
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220112171902.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173124.png)
 
 协程A解锁过程分为两个步骤，一是把Locked位置0，二是查看到Waiter>0，所以释放一个信号量，唤醒一个阻塞的协程，被唤醒的协程B把Locked位置1，于是协程B获得锁。
 
@@ -315,7 +315,7 @@ if atomic.CompareAndSwapInt32(&m.state, old, new) {
 
 接着往下判断，waitStartTime是否等于0，如果不等于，说明不是第一次来了，而是被唤醒后来到这里，那么就不能直接放到队尾再休眠了，而是要放到队首，防止长时间抢不到锁；
 
-![Group 5](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220112180544.png)
+![Group 5](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173132.png)
 
 下面这张图是处于唤醒后的示意图，如何被唤醒的可以直接到跳到解锁部分看完再回来。
 
@@ -327,7 +327,7 @@ if atomic.CompareAndSwapInt32(&m.state, old, new) {
 
 最后通过AddInt32将state加上delta，这里之所以可以直接加上，因为这时候state的mutexLocked值肯定为0，并且mutexStarving位肯定为1，并且在获取锁之前至少还有当前一个goroutine在等待队列中，所以waiter可以直接减1。
 
-![Group 6](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220113101629.png)
+![Group 6](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173139.png)
 
 
 
@@ -356,7 +356,7 @@ func (m *Mutex) Unlock() {
 
 ### unlockSlow
 
-![Group 7](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220113102125.png)
+![Group 7](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173142.png)
 
 unlockSlow方法里面也分为正常模式和饥饿模式下的解锁：
 

@@ -8,7 +8,7 @@ $ git checkout -b mywork origin
 
 
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220111103436.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173812.png)
 
 
 
@@ -26,7 +26,7 @@ $ git commit
 
 
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220111103445.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173815.png)
 
 
 
@@ -34,7 +34,7 @@ $ git commit
 
 
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220111103449.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173821.png)
 
 
 
@@ -49,7 +49,7 @@ $ git rebase origin
 
 
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220111103454.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173823.png)
 
 
 
@@ -57,7 +57,7 @@ $ git rebase origin
 
 
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220111103458.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173826.png)
 
 
 
@@ -65,7 +65,7 @@ $ git rebase origin
 
 
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220111103502.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173832.png)
 
 
 

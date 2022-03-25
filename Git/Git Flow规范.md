@@ -30,7 +30,7 @@
 
 所有在Master分支上的Commit应该Tag
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220110190111.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173753.png)
 
 
 
@@ -40,7 +40,7 @@
 
 Feature分支做完后，必须合并回Develop分支, 合并完分支后一般会删点这个Feature分支，但是我们也可以保留
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220110190123.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173756.png)
 
 
 
@@ -52,7 +52,7 @@ Release分支基于Develop分支创建，打完Release分之后，我们可以�
 
 发布Release分支时，合并Release到Master和Develop， 同时在Master分支上打个Tag记住Release版本号，然后可以删除Release分支了。
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220110190136.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173759.png)
 
 
 
@@ -62,7 +62,7 @@ Release分支基于Develop分支创建，打完Release分之后，我们可以�
 
 hotfix分支基于Master分支创建，开发完后需要合并回Master和Develop分支，同时在Master上打一个tag
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220110190148.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173801.png)
 
 
 

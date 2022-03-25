@@ -8,15 +8,15 @@ context翻译成中文是"上下文"，即它可以控制一组呈树状结构�
 
 Go 语言中的每一个请求的都是通过一个单独的 Goroutine 进行处理的，HTTP/RPC 请求的处理器往往都会启动新的 Goroutine 访问数据库和 RPC 服务，我们可能会创建多个 Goroutine 来处理一次请求，而 `Context` 的主要作用就是在不同的 Goroutine 之间同步请求特定的数据、取消信号以及处理请求的截止日期。
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220118190756.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173223.png)
 
 每一个 `Context` 都会从最顶层的 Goroutine 一层一层传递到最下层，这也是 Golang 中上下文最常见的使用方式，如果没有 `Context`，当上层执行的操作出现错误时，下层其实不会收到错误而是会继续执行下去。
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220118191053.png" alt="image-20220118191053067" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173226.png" alt="image-20220118191053067" style="zoom:50%;" />
 
 当最上层的 Goroutine 因为某些原因执行失败时，下两层的 Goroutine 由于没有接收到这个信号所以会继续工作；但是当我们正确地使用 `Context` 时，就可以在下层及时停掉无用的工作减少额外资源的消耗：
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220118191137.png" alt="image-20220118191137684" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173229.png" alt="image-20220118191137684" style="zoom:50%;" />
 
 这其实就是 Golang 中上下文的最大作用，在不同 Goroutine 之间对信号进行同步避免对计算资源的浪费，与此同时 `Context` 还能携带以请求为作用域的键值对信息。
 
@@ -144,7 +144,7 @@ func (*emptyCtx) Value(key interface{}) interface{} {
 
 它对 `Context` 接口方法的实现也都非常简单，无论何时调用都会返回 `nil` 或者空值，并没有任何特殊的功能，`Background` 和 `TODO` 方法在某种层面上看其实也只是互为别名，两者没有太大的差别，不过 `context.Background()` 是上下文中最顶层的默认值，所有其他的上下文都应该从 `context.Background()` 演化出来。
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220120000256.png" alt="image-20220120000256509" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173236.png" alt="image-20220120000256509" style="zoom:50%;" />
 
 我们应该只在不确定时使用 `context.TODO()`，在多数情况下如果函数没有上下文作为入参，我们往往都会使用 `context.Background()` 作为起始的 `Context` 向下传递。
 

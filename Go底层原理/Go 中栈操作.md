@@ -6,7 +6,7 @@
 
 ### LInux 进程在内存布局
 
-![Linux_stack](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220110111159.png)
+![Linux_stack](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172213.png)
 
 多任务操作系统中的每个进程都在自己的内存沙盒中运行。在32位模式下，它总是4GB内存地址空间，内存分配是分配虚拟内存给进程，当进程真正访问某一虚拟内存地址时，操作系统通过触发缺页中断，在物理内存上分配一段相应的空间再与之建立映射关系，这样进程访问的虚拟内存地址，会被自动转换变成有效物理内存地址，便可以进行数据的存储与访问了。
 
@@ -36,7 +36,7 @@
 
 调用者与被调用者的栈帧结构如下图所示：
 
-![Stack layout](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220111111502.png)
+![Stack layout](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172217.png)
 
 Go 语言的汇编代码中栈寄存器解释的非常模糊，我们大概只要知道两个寄存器 BP 和 SP 的作用就可以了：
 
@@ -48,7 +48,7 @@ SP：**栈指针寄存器**，总是指向栈顶；
 
 ### Goroutine 栈操作
 
-![G Stack](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220111113015.png)
+![G Stack](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172220.png)
 
 在 Goroutine 中有一个 stack 数据结构，里面有两个属性 lo 与 hi，描述了实际的栈内存地址：
 

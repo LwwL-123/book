@@ -158,7 +158,7 @@ type slice struct {
 
 例如，语句`slice := make([]int, 5, 10)`所创建的Slice，结构如下图所示：
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220106153345.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173013.png)
 
 该Slice长度为5，即可以使用下标slice[0] ~ slice[4]来操作里面的元素，capacity为10，表示后续向slice添加新的元素时可以不必重新分配内存，直接使用预留内存即可。
 
@@ -170,7 +170,7 @@ type slice struct {
 
 例如，语句`slice := array[5:7]`所创建的Slice，结构如下图所示：
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220106153515.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173016.png)
 
 切片从数组array[5]开始，到数组array[7]结束（不含array[7]），即切片长度为2，数组后面的内容都作为切片的预留内存，即capacity为5。
 
@@ -184,7 +184,7 @@ type slice struct {
 
 例如，当向一个capacity为5，且length也为5的Slice再次追加1个元素时，就会发生扩容，如下图所示：
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220106154036.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173023.png)
 
 扩容操作只关心容量，会把原Slice数据拷贝到新Slice，追加数据由append在扩容结束后完成。上图可见，扩容后新的Slice长度仍然是5，但容量由5提升到了10，原Slice的数据也都拷贝到了新Slice指向的数组中。
 

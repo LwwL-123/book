@@ -13,7 +13,7 @@
 
 
 
-![image-20210615112721198](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20210624151959.png)
+![image-20210615112721198](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325174920.png)
 
 
 
@@ -46,7 +46,7 @@ Staking Module 有两个重要的角色：验证人和提名人：
 
 - `Controller`：控制帐户是存储账户的代理，有申请提名人和验证人、设置收款账户和佣金的权利。如果是验证人，它还可以设置 session keys 会话密钥。只需要保证控制账户有足够的资金来支付交易手续费。
 
-  <img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20210623103043.png" alt="image-20210623103033966" style="zoom:33%;" />
+  <img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325174925.png" alt="image-20210623103033966" style="zoom:33%;" />
 
 ## 2.2 质押资金（fn bond）
 
@@ -72,7 +72,7 @@ Staking Module 有两个重要的角色：验证人和提名人：
 
 ## 2.6 slot/session/era
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20210623103233.png" alt="image-20210623103226657" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325174929.png" alt="image-20210623103226657" style="zoom:50%;" />
 
 - Slot（插槽）：每一个Slot都会产生一个新的区块——基于Babe共识机制
 
@@ -90,7 +90,7 @@ NPoS（Nominated Proof of Stake，提名权益证明）是Polkadot基于PoS算�
 
 ​	 在波卡的设计思想中，中继链就是设计成了维护平行链的共识。 也就是说，加入波卡的平行链，不需要记账了！由波卡的中继链统一给你记账，统一维护你的区块链的安全！ 
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20210623102731.png" alt="image-20210623102719318" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325174933.png" alt="image-20210623102719318" style="zoom:50%;" />
 
 在传统的PoS中：
 
@@ -101,7 +101,7 @@ NPoS（Nominated Proof of Stake，提名权益证明）是Polkadot基于PoS算�
 
  在波卡的设计思想中，中继链就是设计成了维护平行链的共识。 也就是说，加入波卡的平行链，不需要记账了。由波卡的中继链统一给你记账，统一维护你的区块链的安全！
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20210623102757.png" alt="image-20210623102751147" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325174937.png" alt="image-20210623102751147" style="zoom:50%;" />
 
 ​	可以看出，波卡给人最大的安全感就是因为中继链维护共识的能力，那么中继链是如何维护共识的呢，如果中继链的节点不够分散，被一些节点垄断了，即使节点再多也不会有安全感。
 
@@ -133,7 +133,7 @@ NPoS（Nominated Proof of Stake，提名权益证明）是Polkadot基于PoS算�
 
 ​	安全性：我们希望尽可能让对候选验证人很难获得一个验证人，他们只有得到足够高的支持才能做到这一点。因此，我们将选举结果的安全级别等同于被选验证人的最小支持数量。
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20210623102251.png" alt="image-20210615134833761" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325174941.png" alt="image-20210615134833761" style="zoom:50%;" />
 
 # 4. 奖励和惩罚
 
@@ -146,7 +146,7 @@ NPoS（Nominated Proof of Stake，提名权益证明）是Polkadot基于PoS算�
 
 
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20210623102945.png" alt="image-20210623102939847" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325174944.png" alt="image-20210623102939847" style="zoom:50%;" />
 
 ## 4.1 奖励结算
 
@@ -162,7 +162,7 @@ NPoS（Nominated Proof of Stake，提名权益证明）是Polkadot基于PoS算�
 
 ## 4.2 奖励分配（fn do_payout_stakers）
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20210623103004.png" alt="image-20210623102959766" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325174947.png" alt="image-20210623102959766" style="zoom:50%;" />
 
 两个验证人在相同的工作中获得相同数量的 DOT，即它们的报酬与每个验证人的 stake 质押数量不成比例
 

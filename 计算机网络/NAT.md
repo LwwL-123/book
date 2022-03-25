@@ -22,7 +22,7 @@
 
 NAT(Network Address Translators)，网络地址转换：网络地址转换是在IP地址日益缺乏的情况下产生的，它的主要目的就是为了能够地址重用。NAT分为两大类，基本 的NAT和NAPT(Network Address/Port Translator)。
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220119183613.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173359.png)
 
 
 ### 1.1 基础型NAT
@@ -76,7 +76,7 @@ NAT(Network Address Translators)，网络地址转换：网络地址转换是在
 
 #### 2.2.1 同一个NAT设备下
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220119185012.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173404.png)
 
 1. clinet A与Server S建立UDP连接，公共NAT（155.99.25.11）给client A分配一个公网端口62000；
 2. client B与Server S建立UDP连接，公共NAT（155.99.25.11）给client B分配一个公网端口62005；
@@ -86,7 +86,7 @@ NAT(Network Address Translators)，网络地址转换：网络地址转换是在
 
 #### 2.2.2 不同NAT设备下
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220119190452.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173406.png)
 
 假设Client A打算与Client B直接建立一个UDP通信会话。如果Client A直接给Client B的公网地址138.76.29.7:31000发送UDP数据，NAT B很可能会无视进入的数据（除非是Full Cone NAT），Client B往Client A直接发信息也类似。
 
@@ -95,7 +95,7 @@ NAT(Network Address Translators)，网络地址转换：网络地址转换是在
 
 UDP打洞技术有许多有用的性质。一旦一个的P2P连接建立，连接的双方都能反过来作为“引导服务器”来帮助其他中间件后的客户端进行打洞，极大减少了服务器的负载。应用程序不需要知道中间件是什么（如果有的话），因为以上的过程在没有中间件或者有多个中间件的情况下也一样能建立通信链路。
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220119185227.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173408.png)
 
 1. A使用4321端口与S连接，NAT给回话在NAT分配外网62000端口（155.99.25.11:62000）与S连接；同理B以相同的方式与S连接，分配的外网地址端口是138.76.29.7:31000。
 2. A往S注册消息包里包含里A的私有地址10.0.0.1:4321，此时S保存了A的地址；S给A临时分配了一个用于公网的地址（155.99.25.11:62000），同时用于观察外网数据包。
@@ -117,7 +117,7 @@ UDP打洞技术有许多有用的性质。一旦一个的P2P连接建立，连�
 
 我们知道，内网穿透的作用是将两台处于NAT中的主机连接，所以上述介绍了四种NAT的类型，如果对其进行两两组合，共有10种组合方式。事实上，不同的组合方式在进行穿透时的方法也不同，甚至存在两种组合方式无法进行内网穿透（当然，如果全程用一个服务器进行转发自然是可以的，但是我们这里不考虑这种方法，另外目前有一些方式也可以实现这两种的内网穿透，只不过目前还不成熟，成功率较低，事实上不只是目前，我个人认为以后也不会成熟，因为这两种组合无法穿透是nat在设计上就存在的逻辑问题，或者说nat在设计之初就没有考虑这两种的穿透问题），下图将这些组合以及是否可以穿透列了出来。
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220119201836.webp)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173412.webp)
 
 
 
@@ -125,7 +125,7 @@ UDP打洞技术有许多有用的性质。一旦一个的P2P连接建立，连�
 
 准备工作：内网穿透是使两个处于NAT中的网络进行连接，所以假设其中一个NAT网关是A，另一个NAT网关是B。另外内网穿透都需要有一个中心服务器来帮助，A和B都需要先连接到这台中心服务器，这里假定中心服务器的名字是server1，所以大致上拓扑应该是这样的。
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220119201926.webp)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173414.webp)
 
 #### 2.3.1 完全锥型NAT和完全锥型NAT进行穿透
 

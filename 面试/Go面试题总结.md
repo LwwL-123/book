@@ -40,8 +40,6 @@ if _, ok := map[key]; !ok {
 - 接下来初始化当前包的变量。
 - 最后，调用当前包的 init() 函数。
 
-![在这里插入图片描述](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223163615.png)
-
 ```
 import --> const --> var --> init()
 ```

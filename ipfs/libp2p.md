@@ -33,7 +33,7 @@ DHT算法大致可以描述为以下两个子算法：
 
 
 
-![ZTQGjf](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211013163746.png)
+![ZTQGjf](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325174726.png)
 
 > **注意：这里的Ring结构只是举个例子，并不是所有的DHT都使用此结构**
 
@@ -69,7 +69,7 @@ Kad使用160位的Hash算法，完整的Key有160二进制位，所以最多可�
 Kad将所有的Key都映射到一个二叉树，每一个Key都是二叉树的叶子
 将Key看作160位的二进制，二叉树的第n层就对应了第n位，可以按照左0右1的规则如下分割下去：
 
-![k2P4PD](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211013164632.png)
+![k2P4PD](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325174730.png)
 
 
 
@@ -285,7 +285,7 @@ PeerID生成的过程：创建私钥 => 导出公钥 => hash函数 => Base58编�
 
 ## 4.1 libp2p节点发现构建流程
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211013182948.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325174738.png)
 
 
 
@@ -293,5 +293,5 @@ PeerID生成的过程：创建私钥 => 导出公钥 => hash函数 => Base58编�
 
 ## 4.2 libp2p中地址的转换关系
 
-![libp2p_addr](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211013183055.png)
+![libp2p_addr](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325174742.png)
 

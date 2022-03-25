@@ -103,7 +103,7 @@ state1是个长度为3的数组，其中包含了state和一个信号量，而st
 
 考虑到字节是否对齐，三者出现的位置不同，为简单起见，依照字节已对齐情况下，三者在内存中的位置如下所示：
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220113111534.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173154.png)
 
 # 3. WaitGroup中state方法的内存对齐
 
@@ -119,7 +119,7 @@ state1是个长度为3的数组，其中包含了state和一个信号量，而st
 
 因为有内存对齐的存在，在64位架构里面WaitGroup结构体state1起始的位置肯定是64位对齐的，所以在64位架构上用state1前两个元素并成uint64来表示state，state1最后一个元素表示semap；
 
-![image-20220113111712028](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220113111712.png)
+![image-20220113111712028](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173157.png)
 
 那么64位架构上面获取state1的时候能不能第一个元素表示semap，后两个元素拼成64位返回呢？
 
@@ -139,7 +139,7 @@ state1是个长度为3的数组，其中包含了state和一个信号量，而st
 
 在32位架构中，WaitGroup在初始化的时候，分配内存地址的时候是随机的，所以WaitGroup结构体state1起始的位置不一定是64位对齐，可能会是：`uintptr(unsafe.Pointer(&wg.state1))%8 = 4`，如果出现这样的情况，那么就需要用state1的第一个元素做padding，用state1的后两个元素合并成uint64来表示statep。
 
-![image-20220113112143629](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220113112143.png)
+![image-20220113112143629](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173200.png)
 
 
 
@@ -149,7 +149,7 @@ state1是个长度为3的数组，其中包含了state和一个信号量，而st
 
 在cpu内有一个cache line的缓存，这个缓存通常是8个字节的长度，在intel的cpu中，会保证针对一个cache line的操作是原子，如果只有8个字节很有可能会出现上面的这种情况，即垮了两个cache line, 这样不论是在原子操作还是性能上可能都会有问题
 
-![image.png](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220113132303.png)
+![image.png](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173204.png)
 
 也就是说，如果在64位的系统中，如果semap放在前面的话，由于读取步长是8bytes，会出现以下情况
 
@@ -210,7 +210,7 @@ func (wg *WaitGroup) Add(delta int) {
 
 1. add方法首先会调用state方法获取statep、semap的值。statep是一个uint64类型的值，高32位用来记录add方法传入的delta值之和；低32位用来表示调用wait方法等待的goroutine的数量，也就是waiter的数量。如下：
 
-<img src="https://img.luozhiyun.com/20210117150225.svg" alt="Group 15" style="zoom:200%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173209.svg" alt="Group 15" style="zoom:200%;" />
 
 1. add方法会调用`atomic.AddUint64`方法将传入的delta左移32位，也就是将counter加上delta的值；
 2. 因为计数器counter可能为负数，所以int32来获取计数器的值，waiter不可能为负数，所以使用uint32来获取；

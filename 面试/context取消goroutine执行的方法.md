@@ -10,19 +10,19 @@
 
 考虑以下常见的场景：一个`HTTP`服务器查询数据库并将查询到的数据作为响应返回给客户端：
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220118200505.jpg)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325170946.jpg)
 
 如果一切正常，时序图将如下所示：
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220118200523.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325170950.png)
 
 但是，如果客户端在中途取消了请求会发生什么？这种情况可以发生在，比如用户在请求中途关闭了浏览器。如果不支持取消功能，`HTTP`服务器和数据库会继续工作，由于客户端已经关闭所以他们工作的成果也就被浪费了。这种情况的时序图如下所示：
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220118203553.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325170955.png)
 
 理想情况下，如果我们知道某个处理过程（在此示例中为HTTP请求）已停止，则希望该过程的所有下游组件都停止运行：
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220118203703.jpg)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325170958.jpg)
 
 ## 使用context实现取消功能
 

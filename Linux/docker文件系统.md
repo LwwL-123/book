@@ -1,6 +1,6 @@
 ## docker文件系统
 
-![Docker 容器文件系统](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211219193112.png)
+![Docker 容器文件系统](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171406.png)
 
 
 
@@ -47,11 +47,11 @@ AUFS：全称 Union File System，又叫做 Another UnionFS,所谓的UnionFS,就
 aUFS的工作原理
 
 
-![image-20211219190937070](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211219190944.png)
+![image-20211219190937070](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171411.png)
 
 可以看到，假设我们存在2个目录X,Y，分别有A，B文件，那么aUFS的作用就是将这两个目录合并，并且重新挂载的Z上,这样在Z目录上就可以同时看到A和B文件。这就是联合文件系统，目的就是**将多个文件联合在一起成为一个统一的视图**。
 
-![image-20211219191347601](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211219191347.png)
+![image-20211219191347601](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171419.png)
 
 如上图，我们在Z目录中删除B文件，同时，在A文件中增加一些内容，如Hello。此时可以发现，X内的A文件新增了Hello,并且新增了一条B被删除的记录，但是Y中的B并没有任何变化。这是aUFS的一个重要特性。在所有的联合起来的目录中，**只有第一个目录是有写的权限**，即我们不管如何的去对Z进行修改操作，都只能对第一个联合进来的X修改，对Y是没有权限修改的。
 
@@ -63,13 +63,13 @@ aUFS的工作原理
 当镜像启动的时候，一个新的可写层会加载到镜像的顶部，这一层我们一般称为**容器层**，之下是镜像层。
 **容器层可以读写，容器所有发生文件变更都发生在这一层，而镜像层是read-only只读**。
 
-![image-20211219192008852](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211219192008.png)
+![image-20211219192008852](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171424.png)
 
 根据aUFS的定义，容器的文件系统就是由下面的15个只读镜像层和1个可写的容器层通过aUFS mount出来的。
 
 到这里，就能和前面的aUFS联系起来了，**X就是容器层，可修改，可记录，Y就是镜像层，不可更改，只读，而Z就是我们进入联合起来的视图层**。
 
-![image-20211219192513505](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211219192513.png)
+![image-20211219192513505](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171427.png)
 
 
 
@@ -77,7 +77,7 @@ aUFS的工作原理
 
 了解了aUFS之后，再来看一下docker的分层镜像。
 
-![在这里插入图片描述](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211219192545.png)
+![在这里插入图片描述](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171432.png)
 
 我们通过对容器层A的修改重新构建了一层镜像，此时的镜像由原来的Y和X共同构成。
 当我们运行这个新的镜像的时候，就创建出了一个新的容器P,而这个新创建的容器层P会继续接受视图层的更改请求。
@@ -89,6 +89,3 @@ aUFS的工作原理
 **问：启动docker的时候，对硬盘使用只读，意义在于什么？**
 
 答：一个image可以启动多个container，这时候会有一个问题，如果每个container对大家共有的部分都有可写的权限，就会出问题。所以docker启动的时候会加载镜像的文件系统那层是只读的，然后每个contianer 获取自己的可读写的层，如果container要修改只读层的文件，那么该文件就会从只读层提取到读写层。只读层的文件就被读写层的文件覆盖了，但只读层的那个文件依然存在 这个就实现了文件系统上的隔离。
-
-
-

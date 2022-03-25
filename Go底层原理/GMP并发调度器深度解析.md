@@ -75,7 +75,7 @@
 
 该算法避免了在 goroutine 调度时使用全局锁。
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211207164927.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172715.png)
 
 ## G-P-M 模型调度
 
@@ -120,7 +120,7 @@ Go runtime 会在下面的 goroutine 被阻塞的情况下运行另外一个 gor
 
 监控线程是由main.goroutine创建的，这个监控线程和GMP中的工作线程不同，并不需要依赖P，也不由GPM模型调度，他会重复执行一系列任务，视情况来调整自己的休眠时间，其中一项就是保障timer正常执行，他会在空不出m时，创建新的工作线程，以保障timer可以正常执行
 
-![image-20220321182813354](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220321182814.png)
+![image-20220321182813354](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172723.png)
 
 - channel
 
@@ -128,7 +128,7 @@ Go runtime 会在下面的 goroutine 被阻塞的情况下运行另外一个 gor
 
 而获取就绪的IO事件，需要主动轮询，所以为了降低IO的延迟，需要时不时的轮询以下，也就是执行netpoll。实际上，监控线程、调度器、GC等过程中都会按需执行netpoll
 
-![image-20220321183715203](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220321183715.png)
+![image-20220321183715203](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172727.png)
 
 
 

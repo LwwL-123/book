@@ -4,7 +4,7 @@
 
 Set 集合是其他语言中常见的数据结构。特性：集合中的对象不按特定的方式排序，并且没有重复对象。
 
-![image-20220105175906258](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220105175906.png)
+![image-20220105175906258](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171008.png)
 
 学习 Go ，要记住：Go 没有包含的东西，不代表 Go 真的没有。根据 Set 特性，我们可以很轻松地想到使用 map 的实现方案（因为 map 的 key 是不重复的）：把对象当做 key 存入 map。
 

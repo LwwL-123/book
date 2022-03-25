@@ -6,7 +6,7 @@
 
 简单的说，垃圾回收的核心就是标记出哪些内存还在使用中(即被引用到)，哪些内存不再使用了（即未被引用），把未被引用的内存回收掉，以供后续内存分配时使用。
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223140201.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172247.png)
 
 上图中，内存块1、2、4号位上的内存块已被分配(数字1代表已被分配，0 未分配)。变量a, b为一指针，指向内存的1、2号位。内存块的4号位曾经被使用过，但现在没有任何对象引用了，就需要被回收掉。
 
@@ -81,15 +81,15 @@ Golang中的垃圾回收主要应用三色标记法，GC过程和其他用户gor
 
 mark and sweep算法在执行的时候，需要程序暂停，即 STW(stop the world)。也就是说，这段时间程序会卡在哪儿。
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223141854.png" alt="gc" style="zoom: 33%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172254.png" alt="gc" style="zoom: 33%;" />
 
 **第二步, 开始标记，程序找出它所有可达的对象，并做上标记。**
 
-<img src="http://interview.wzcu.com/static/gc03.png" alt="gc" style="zoom: 40%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172301.png" alt="gc" style="zoom: 40%;" />
 
 **第三步, 标记完了之后，然后开始清除未标记的对象.**
 
-<img src="http://interview.wzcu.com/static/gc04.png" alt="gc" style="zoom:33%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172308.png" alt="gc" style="zoom:33%;" />
 
 **第四步, 停止暂停，让程序继续跑。然后循环重复这个过程，直到process程序生命周期结束。**
 
@@ -101,9 +101,9 @@ mark and sweep算法在执行的时候，需要程序暂停，即 STW(stop the w
 
 所以Go V1.3版本之前就是以上来实施的, 流程是
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223142455.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172313.png)
 
-Go V1.3 做了简单的优化,将STW提前, 减少STW暂停的时间范围.![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223142505.png)
+Go V1.3 做了简单的优化,将STW提前, 减少STW暂停的时间范围.![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172316.png)
 
 这里面最重要的问题就是：mark-and-sweep 算法会暂停整个程序 。
 
@@ -117,31 +117,31 @@ Go是如何面对并这个问题的呢？接下来Go V1.5版本 就用三色并�
 
 **第一步,就是只要是新创建的对象,默认的颜色都是标记为“白色”.**
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223142603.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172323.png)
 
 这里面需要注意的是, 所谓“程序”, 则是一些对象的根节点集合.
 
 
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223145739.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172326.png)
 
 **第二步, 每次GC回收开始, 然后从根节点开始遍历所有对象，把遍历到的对象从白色集合放入“灰色”集合。**
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223150628.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172330.png)
 
 **第三步, 遍历灰色集合，将灰色对象引用的对象从白色集合放入灰色集合，之后将此灰色对象放入黑色集合**
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223151034.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172334.png)
 
 **第四步, 重复第三步, 直到灰色中无任何对象.**
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223151111.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172337.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223151239.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172341.png)
 
 **第五步: 回收所有的白色标记表的对象. 也就是回收垃圾.**
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223152440.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172345.png)
 
 
 
@@ -149,15 +149,15 @@ Go是如何面对并这个问题的呢？接下来Go V1.5版本 就用三色并�
 
 三色并发标记法是一定要依赖STW的. 因为如果不暂停程序, 程序的逻辑改变对象引用关系, 这种动作如果在标记阶段做了修改，会影响标记结果的正确性。
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223152543.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172349.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223153200.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172354.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223153408.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172359.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223153602.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172402.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223153720.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172406.png)
 
 可以看出，有两个问题, 在三色标记法中,是不希望被发生的
 
@@ -186,13 +186,13 @@ Go是如何面对并这个问题的呢？接下来Go V1.5版本 就用三色并�
 
 不存在黑色对象引用到白色对象的指针。
 
-<img src="http://interview.wzcu.com/static/gc19.png" alt="gc" style="zoom: 50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172411.png" alt="gc" style="zoom: 50%;" />
 
 
 
 #### 弱三色不变式
 
-<img src="http://interview.wzcu.com/static/gc20.png" alt="gc" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172416.png" alt="gc" style="zoom:50%;" />
 
 为了遵循上述的两个方式,Golang团队初步得到了如下具体的两种屏障方式“插入屏障”, “删除屏障”.
 
@@ -205,25 +205,25 @@ Go是如何面对并这个问题的呢？接下来Go V1.5版本 就用三色并�
 
 我们知道,黑色对象的内存槽有两种位置, 栈和堆. 栈空间的特点是容量小,但是要求响应速度快,因为函数调用弹出频繁使用, 所以“插入屏障”机制,在栈空间的对象操作中不使用. 而仅仅使用在堆空间对象的操作中.
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223162301.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172421.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223162427.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172424.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223170110.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172429.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223170220.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172433.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223170436.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172436.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223170517.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172439.png)
 
 但是如果栈不添加,当全部三色标记扫描之后,栈上有可能依然存在白色对象被引用的情况(如上图的对象9). 所以要对栈重新进行三色标记扫描, 但这次为了对象不丢失, 要对本次标记扫描启动STW暂停. 直到栈空间的三色标记结束.
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223170725.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172444.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223170833.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172451.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223170923.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172458.png)
 
 最后将栈和堆空间 扫描剩余的全部 白色节点清除. 这次STW大约的时间在10~100ms间.
 
@@ -236,19 +236,19 @@ Go是如何面对并这个问题的呢？接下来Go V1.5版本 就用三色并�
 - 具体操作: 被删除的对象，如果自身为灰色或者白色，那么被标记为灰色。
 - 满足: **弱三色不变式**. (保护灰色对象到白色对象的路径不会断)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223171102.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172505.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223171218.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172509.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223171539.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172516.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223172108.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172522.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223172535.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172526.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223172611.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172530.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223172710.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172533.png)
 
 这种方式的回收精度低，一个对象即使被删除了最后一个指向它的指针也依旧可以活过这一轮，在下一轮GC中被清理掉。
 
@@ -280,43 +280,43 @@ Go V1.8版本引入了**混合写屏障机制（hybrid write barrier）**，避�
 
 GC开始：扫描栈区，将可达对象全部标记为黑
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223172947.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172539.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223173156.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172542.png)
 
 **场景一： 对象被一个堆对象删除引用，成为栈对象的下游**
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223173635.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172549.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223173716.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172553.png)
 
 
 
 **场景二： 对象被一个栈对象删除引用，成为另一个栈对象的下游**
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223173842.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172558.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223173945.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172603.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223174025.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172608.png)
 
 
 
 **场景三：对象被一个堆对象删除引用，成为另一个堆对象的下游**
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223174110.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172612.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223174209.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172616.png)
 
-![](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223174216.png)
+![](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172623.png)
 
 
 
 **场景四：对象从一个栈对象删除引用，成为另一个堆对象的下游**
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223174308.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172626.png)
 
-![gc](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211223174354.png)
+![gc](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172630.png)
 
 Golang中的混合写屏障满足弱三色不变式，结合了删除写屏障和插入写屏障的优点，只需要在开始时并发扫描各个goroutine的栈，使其变黑并一直保持，这个过程不需要STW，而标记结束后，因为栈在扫描后始终是黑色的，也无需再进行re-scan操作了，减少了STW的时间。
 
@@ -341,9 +341,9 @@ GoV1.8-三色标记法，混合写屏障机制， 栈空间不启动，堆空间
 3. mheap中每个arena对应一个heaparena，记录arena的元数据信息，bitmap中，一个字节(8位)可以标记四个指针。每个指针对应两个bit，低位用来表示是否为指针，高位用来标记是否需要继续扫描。
 4. heaparena中还有一个*mspan字段，用来标记当前area的某一页，所以你可以根据某个对象的地址，查到他在哪一页，存在哪个span中。
 
-![image-20220320231412868](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220320231413.png)
+![image-20220320231412868](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172637.png)
 
 5. 每个span会对应两个位图标记，会表示该对象是否已分配和该对象是否存活
 
-![image-20220320231621290](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220320231621.png)
+![image-20220320231621290](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172641.png)
 

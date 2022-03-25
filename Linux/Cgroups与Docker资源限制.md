@@ -10,7 +10,7 @@ Kernel space 可以执行任意命令，调用系统的一切资源；User space
 
 
 
-![image-20211118141922226](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211118141922.png)
+![image-20211118141922226](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171143.png)
 
 
 
@@ -18,7 +18,7 @@ Kernel space 可以执行任意命令，调用系统的一切资源；User space
 
 那么，容器和虚拟机的区别也就明显了，它们虚拟化的层次并不一样。
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211118142312.png" alt="image-20211118142312761" style="zoom:150%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171147.png" alt="image-20211118142312761" style="zoom:150%;" />
 
 虚拟机完整虚拟了内核和用户空间，而 docker 仅仅虚拟了用户空间，那么 docker 必然更轻量、更快。
 
@@ -34,7 +34,7 @@ Linux 内核从版本 2.4.19 开始陆续引入了 namespace 的概念。其目�
 
 纵观全局，从普通的应用程序，到docker 容器，再到虚拟机技术，无非是对磁盘空间、系统资源和隔离性、安全性的权衡取舍而已。至于 docker 的自动化，对比虚拟机似乎并不公平，于 Vagrant 这样的工具相比倒是更加合适。
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211118142909.jpg)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171151.jpg)
 
 例如，容器进程启动时，只要启用了Mount Namespace，并将自己打包的文件系统挂载好，就可以实现每个容器仅看到自己的文件，实现文件资源的隔离。总之，Docker 守护进程创建容器实例时都启用了相应的namespace，使得容器中的进程都处于一种隔离的运行环境之中。
 

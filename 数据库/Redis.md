@@ -1,12 +1,12 @@
 # Redis
 
-![图片](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220224171742.png)
+![图片](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173657.png)
 
 ## 1. string
 
 ### SDS
 
-![图片](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220224171806.png)
+![图片](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173700.png)
 
 - **len，SDS 所保存的字符串长度**。这样获取字符串长度的时候，只需要返回这个变量值就行，时间复杂度只需要 O（1）。
 - **alloc，分配给字符数组的空间长度**。这样在修改字符串的时候，可以通过 `alloc - len` 计算 出剩余的空间大小，然后用来判断空间是否满足修改需求，如果不满足的话，就会自动将 SDS  的空间扩展至执行修改所需的大小，然后才执行实际的修改操作，所以使用 SDS 既不需要手动修改 SDS 的空间大小，也不会出现前面所说的缓冲区益处的问题。
@@ -35,7 +35,7 @@ Redis 的链表实现优点如下：
 - 当一个列表键（list）只包含少量的列表项，并且每个列表项都是小整数值，或者长度比较短的字符串，那么 Redis 就会使用压缩列表作为列表键（list）的底层实现。
 - 当一个哈希键（hash）只包含少量键值对，并且每个键值对的键和值都是小整数值，或者长度比较短的字符串，那么 Redis 就会使用压缩列表作为哈希键（hash）的底层实现。
 
-![图片](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220225141652.png)
+![图片](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173703.png)
 
 - ***zlbytes\***，记录整个压缩列表占用对内存字节数；
 - ***zltail\***，记录压缩列表「尾部」节点距离起始地址由多少字节，也就是列表尾的偏移量；
@@ -116,7 +116,7 @@ Zset 对象是唯一一个同时使用了两个数据结构来实现的 Redis �
 
 链表在查找元素的时候，因为需要逐一查找，所以查询效率非常低，时间复杂度是O(N)，于是就出现了跳表。**跳表是在链表基础上改进过来的，实现了一种「多层」的有序链表**，这样的好处是能快读定位数据。
 
-![图片](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220225155805.png)
+![图片](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173707.png)
 
 图中头节点有 L0~L2 三个头指针，分别指向了不同层级的节点，然后每个层级的节点都通过指针连接起来：
 
@@ -155,7 +155,7 @@ Zset 对象要同时保存元素和元素的权重，对应到跳表节点结构
 
 level 数组中的每一个元素代表跳表的一层，也就是由 zskiplistLevel 结构体表示，比如 leve[0] 就表示第一层，leve[1] 就表示第二层。zskiplistLevel 结构体里定义了「指向下一个跳表节点的指针」和「跨度」，跨度时用来记录两个节点之间的距离。-
 
-![图片](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220225160903.png)
+![图片](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173711.png)
 
 第一眼看到跨度的时候，以为是遍历操作有关，实际上并没有任何关系，遍历操作只需要用前向指针就可以完成了。
 
@@ -198,7 +198,7 @@ typedef struct zskiplist {
 
 举个例子，下图有个 3 层级的跳表。
 
-![图片](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220225161145.png)
+![图片](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173715.png)
 
 如果要查找「元素：abcd，权重：4」的节点，查找的过程是这样的：
 
@@ -215,7 +215,7 @@ typedef struct zskiplist {
 
 举个例子，下图的跳表，第二层的节点数量只有 1 个，而第一层的节点数量有 6 个。
 
-![图片](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220225161352.png)
+![图片](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173718.png)
 
 这时，如果想要查询节点 6，那基本就跟链表的查询复杂度一样，就需要在第一层的节点中依次顺序查找，复杂度就是 O(N) 了。所以，为了降低查询复杂度，我们就需要维持相邻层结点数间的关系。
 

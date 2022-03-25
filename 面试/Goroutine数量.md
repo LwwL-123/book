@@ -40,9 +40,9 @@ Go scheduler 的主要功能是针对在处理器上运行的 OS 线程分发可
 
 我们以 GMP 模型的工作流程图进行简单分析，官方图如下:
 
-![image-20211004105430928](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211004105437.png)
+![image-20211004105430928](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325170554.png)
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211004105500.png" alt="image-20211004105500505" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325170558.png" alt="image-20211004105500505" style="zoom:50%;" />
 
 1. 当我们执行 `go func()` 时，实际上就是创建一个全新的 Goroutine，我们称它为 G。
 2. 新创建的 G 会被放入 P 的本地队列（Local Queue）或全局队列（Global Queue）中，准备下一步的动作。需要注意的一点，这里的 P 指的是创建 G 的 P。
@@ -67,7 +67,7 @@ Go scheduler 的主要功能是针对在处理器上运行的 OS 线程分发可
 
 官方图如下：
 
-![image-20211009141808955](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211009141809.png)
+![image-20211009141808955](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325170603.png)
 
 在这个例子中，P2 在本地队列中找不到可以运行的 G，它会执行 `work-stealing` 调度算法，随机选择其它的处理器 P1，并从 P1 的本地队列中窃取了三个 G 到它自己的本地队列中去。
 

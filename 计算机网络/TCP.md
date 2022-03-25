@@ -6,7 +6,7 @@
 
 我们先来看看 TCP 头的格式，标注颜色的表示与本文关联比较大的字段，其他字段不做详细阐述。
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220128181950.png" alt="image-20220128181950275" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173424.png" alt="image-20220128181950275" style="zoom:50%;" />
 
 **序列号**：在建立连接时由计算机生成的随机数作为其初始值，通过 SYN 包传给接收端主机，每发送一次数据，就「累加」一次该「数据字节数」的大小。**用来解决网络包乱序问题。**
 
@@ -84,17 +84,17 @@
 
 ## 2. TCP建立连接
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220128194408.png" alt="image-20220128194408373" style="zoom: 50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173429.png" alt="image-20220128194408373" style="zoom: 50%;" />
 
 - 一开始，客户端和服务端都处于 `CLOSED` 状态。先是服务端主动监听某个端口，处于 `LISTEN` 状态
 
 - 客户端会随机初始化序号（`client_isn`），将此序号置于 TCP 首部的「序号」字段中，同时把 `SYN` 标志位置为 `1` ，表示 `SYN` 报文。接着把第一个 SYN 报文发送给服务端，表示向服务端发起连接，该报文不包含应用层数据，之后客户端处于 `SYN-SENT` 状态。
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220128194053.png" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173432.png" style="zoom:50%;" />
 
 - 服务端收到客户端的 `SYN` 报文后，首先服务端也随机初始化自己的序号（`server_isn`），将此序号填入 TCP 首部的「序号」字段中，其次把 TCP 首部的「确认应答号」字段填入 `client_isn + 1`, 接着把 `SYN` 和 `ACK` 标志位置为 `1`。最后把该报文发给客户端，该报文也不包含应用层数据，之后服务端处于 `SYN-RCVD` 状态。
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220128194202.png" alt="image-20220128194202461" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173439.png" alt="image-20220128194202461" style="zoom:50%;" />
 
 - 客户端收到服务端报文后，还要向服务端回应最后一个应答报文，首先该应答报文 TCP 首部 `ACK` 标志位置为 `1` ，其次「确认应答号」字段填入 `server_isn + 1` ，最后把报文发送给服务端，这次报文可以携带客户到服务器的数据，之后客户端处于 `ESTABLISHED` 状态。
 - 服务器收到客户端的应答报文后，也进入 `ESTABLISHED` 状态。
@@ -129,7 +129,7 @@
 
 网络环境是错综复杂的，往往并不是如我们期望的一样，先发送的数据包，就先到达目标主机，反而它很骚，可能会由于网络拥堵等乱七八糟的原因，会使得旧的数据包，先到达目标主机，那么这种情况下 TCP 三次握手是如何避免的呢？
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220202101850.png" alt="image-20220202101850559" style="zoom: 67%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173446.png" alt="image-20220202101850559" style="zoom: 67%;" />
 
 客户端连续发送多次 SYN 建立连接的报文，在网络拥堵等情况下：
 
@@ -158,7 +158,7 @@ TCP 协议的通信双方， 都必须维护一个「序列号」， 序列号�
 
 可见，序列号在 TCP 连接中占据着非常重要的作用，所以当客户端发送携带「初始序列号」的 `SYN` 报文的时候，需要服务端回一个 `ACK` 应答报文，表示客户端的 SYN 报文已被服务端成功接收，那当服务端发送「初始序列号」给客户端的时候，依然也要得到客户端的应答回应，**这样一来一回，才能确保双方的初始序列号能被可靠的同步。**
 
-![image-20220203115409220](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220203115409.png)
+![image-20220203115409220](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173449.png)
 
 四次握手其实也能够可靠的同步双方的初始化序号，但由于**第二步和第三步可以优化成一步**，所以就成了「三次握手」。
 
@@ -172,7 +172,7 @@ TCP 协议的通信双方， 都必须维护一个「序列号」， 序列号�
 
 如果客户端的 `SYN` 阻塞了，重复发送多次 `SYN` 报文，那么服务器在收到请求后就会**建立多个冗余的无效链接，造成不必要的资源浪费。**
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220203115527.png" alt="image-20220203115526983" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173453.png" alt="image-20220203115526983" style="zoom:50%;" />
 
 即两次握手会造成消息滞留情况下，服务器重复接受无用的连接请求 `SYN` 报文，而造成重复分配资源。
 
@@ -199,7 +199,7 @@ TCP 建立连接时，通过三次握手**能防止历史连接的建立，能�
 
 双方都可以主动断开连接，断开连接后主机中的「资源」将被释放。
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220204185141.png" alt="image-20220204185141082" style="zoom: 67%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173457.png" alt="image-20220204185141082" style="zoom: 67%;" />
 
 - 客户端打算关闭连接，此时会发送一个 TCP 首部 `FIN` 标志位被置为 `1` 的报文，也即 `FIN` 报文，之后客户端进入 `FIN_WAIT_1` 状态。
 - 服务端收到该报文后，就向客户端发送 `ACK` 应答报文，接着服务端进入 `CLOSED_WAIT` 状态。
@@ -297,7 +297,7 @@ TCP 会在以下两种情况发生超时重传：
 - 数据包丢失
 - 确认应答丢失
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220208124437.png" alt="image-20220208124437772" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173502.png" alt="image-20220208124437772" style="zoom:50%;" />
 
 > 超时时间应该设置为多少呢？
 
@@ -315,13 +315,13 @@ TCP 会在以下两种情况发生超时重传：
 - 根据上述的两种情况，我们可以得知，**超时重传时间 RTO 的值应该略大于报文往返  RTT 的值**。
   - `RTT` 是**数据从网络一端传送到另一端所需的时间**，也就是包的往返时间。
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220208124731.png" alt="image-20220208124731019" style="zoom: 67%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173510.png" alt="image-20220208124731019" style="zoom: 67%;" />
 
 #### 快速重传
 
 TCP 还有另外一种**快速重传（Fast Retransmit）机制**，它**不以时间为驱动，而是以数据驱动重传**。
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220208124858.png" alt="image-20220208124858436" style="zoom: 67%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173513.png" alt="image-20220208124858436" style="zoom: 67%;" />
 
 在上图，发送方发出了 1，2，3，4，5 份数据：
 
@@ -345,7 +345,7 @@ TCP 还有另外一种**快速重传（Fast Retransmit）机制**，它**不以�
 
 如下图，发送方收到了三次同样的 ACK 确认报文，于是就会触发快速重发机制，通过 `SACK` 信息发现只有 `200~299` 这段数据丢失，则重发时，就只选择了这个 TCP 段进行重复。
 
-![image-20220209135528733](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220209135528.png)
+![image-20220209135528733](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173517.png)
 
 如果要支持 `SACK`，必须双方都要支持。在 Linux 下，可以通过 `net.ipv4.tcp_sack` 参数打开这个功能（Linux 2.4 后默认打开）。
 
@@ -373,7 +373,7 @@ TCP 还有另外一种**快速重传（Fast Retransmit）机制**，它**不以�
 
 假设窗口大小为 `3` 个 TCP 段，那么发送方就可以「连续发送」 `3` 个 TCP 段，并且中途若有 ACK 丢失，可以通过「下一个确认应答进行确认」。如下图：
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220209141026.png" alt="image-20220209141026460" style="zoom: 67%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173520.png" alt="image-20220209141026460" style="zoom: 67%;" />
 
 图中的 ACK 600 确认应答报文丢失，也没关系，因为可以通话下一个确认应答进行确认，只要发送方收到了 ACK 700 确认应答，就意味着 700 之前的所有数据「接收方」都收到了。这个模式就叫**累计确认**或者**累计应答**。
 
@@ -393,7 +393,7 @@ TCP 头里有一个字段叫 `Window`，也就是窗口大小。
 
 我们先来看看发送方的窗口，下图就是发送方缓存的数据，根据处理的情况分成四个部分，其中深蓝色方框是发送窗口，紫色方框是可用窗口：
 
-![image-20220212211208581](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220212211220.png)
+![image-20220212211208581](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173523.png)
 
 - \#1 是已发送并收到 ACK确认的数据：1~31 字节
 - \#2 是已发送但未收到 ACK确认的数据：32~45 字节
@@ -404,17 +404,17 @@ TCP 头里有一个字段叫 `Window`，也就是窗口大小。
 
 在下图，当发送方把数据「全部」都一下发送出去后，可用窗口的大小就为 0 了，表明可用窗口耗尽，在没收到 ACK 确认之前是无法继续发送数据了。
 
-![image-20220212235139027](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220212235139.png)
+![image-20220212235139027](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173526.png)
 
 在下图，当收到之前发送的数据 `32~36` 字节的 ACK 确认应答后，如果发送窗口的大小没有变化，则**滑动窗口往右边移动 5 个字节，因为有 5 个字节的数据被应答确认**，接下来 `52~56` 字节又变成了可用窗口，那么后续也就可以发送 `52~56` 这 5 个字节的数据了。
 
-![image-20220212235226957](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220212235226.png)
+![image-20220212235226957](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173529.png)
 
 > 程序是如何表示发送方的四个部分的呢？
 
 TCP 滑动窗口方案使用三个指针来跟踪在四个传输类别中的每一个类别中的字节。其中两个指针是绝对指针（指特定的序列号），一个是相对指针（需要做偏移）。
 
-![image-20220213231334375](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220213231334.png)
+![image-20220213231334375](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173532.png)
 
 - `SND.WND`：表示发送窗口的大小（大小是由接收方指定的）；
 - `SND.UNA`：是一个绝对指针，它指向的是已发送但未收到确认的第一个字节的序列号，也就是 #2 的第一个字节。
@@ -435,7 +435,7 @@ TCP 滑动窗口方案使用三个指针来跟踪在四个传输类别中的每�
 - \#3 是未收到数据但可以接收的数据；
 - \#4 未收到数据并不可以接收的数据
 
-![image-20220213231859280](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220213231859.png)
+![image-20220213231859280](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173537.png)
 
 其中三个接收部分，使用两个指针进行划分:
 
@@ -509,7 +509,7 @@ TCP 滑动窗口方案使用三个指针来跟踪在四个传输类别中的每�
 - 客户端作为发送方，服务端作为接收方，发送窗口和接收窗口初始大小为 `360`；
 - 服务端非常的繁忙，当收到客户端的数据时，应用层不能及时读取数据。
 
-![image-20220216153549000](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220216153549.png)
+![image-20220216153549000](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173542.png)
 
 可见最后窗口都收缩为 0 了，也就是发生了窗口关闭。当发送方可用窗口变为 0 时，发送方实际上会定时发送窗口探测报文，以便知道接收方的窗口是否发生了改变，这个内容后面会说，这里先简单提一下。
 
@@ -519,7 +519,7 @@ TCP 滑动窗口方案使用三个指针来跟踪在四个传输类别中的每�
 
 当服务端系统资源非常紧张的时候，操心系统可能会直接减少了接收缓冲区大小，这时应用程序又无法及时读取缓存数据，那么这时候就有严重的事情发生了，会出现数据包丢失的现象。
 
-![image-20220216153811054](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220216153811.png)
+![image-20220216153811054](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173546.png)
 
 所以，如果发生了先减少缓存，再收缩窗口，就会出现丢包的现象。
 
@@ -543,7 +543,7 @@ TCP 滑动窗口方案使用三个指针来跟踪在四个传输类别中的每�
 
 那么，当发生窗口关闭时，接收方处理完数据后，会向发送方通告一个窗口非 0 的 ACK 报文，如果这个通告窗口的 ACK 报文在网络中丢失了，那麻烦就大了。
 
-![image-20220216154047644](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220216154047.png)
+![image-20220216154047644](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173551.png)
 
 这会导致发送方一直等待接收方的非 0 窗口通知，接收方也一直等待发送方的数据，如不不采取措施，这种相互等待的过程，会造成了死锁的现象。
 
@@ -553,7 +553,7 @@ TCP 滑动窗口方案使用三个指针来跟踪在四个传输类别中的每�
 
 如果持续计时器超时，就会发送**窗口探测 ( Window probe ) 报文**，而对方在确认这个探测报文时，给出自己现在的接收窗口大小。
 
-![image-20220216162635379](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220216162635.png)
+![image-20220216162635379](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173555.png)
 
 - 如果接收窗口仍然为 0，那么收到这个报文的一方就会重新启动持续计时器；
 - 如果接收窗口不是 0，那么死锁的局面就可以被打破了。
@@ -650,7 +650,7 @@ TCP 在刚建立连接完成后，首先是有个慢启动的过程，这个慢�
 
 - 当 8 个 ACK 应答确认到来时，每个确认增加 1/8，8 个 ACK 确认 cwnd 一共增加 1，于是这一次能够发送 9 个 `MSS` 大小的数据，变成了**线性增长。**
 
-![image-20220216171142437](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220216171142.png)
+![image-20220216171142437](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173600.png)
 
 所以，我们可以发现，拥塞避免算法就是将原本慢启动算法的指数增长变成了线性增长，还是增长阶段，但是增长速度缓慢了一些。
 
@@ -680,7 +680,7 @@ TCP 在刚建立连接完成后，首先是有个慢启动的过程，这个慢�
 - `ssthresh` 设为 `cwnd/2`，
 - `cwnd` 重置为 `1`
 
-![image-20220217144914452](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220217144914.png)
+![image-20220217144914452](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173603.png)
 
 接着，就重新开始慢启动，慢启动是会突然减少数据流的。这真是一旦「超时重传」，马上回到解放前。但是这种方式太激进了，反应也很强烈，会造成网络卡顿。
 
@@ -714,5 +714,5 @@ TCP 认为这种情况不严重，因为大部分没丢，只丢了一小部分�
 - 如果再收到重复的 ACK，那么 cwnd 增加 1
 - 如果收到新数据的 ACK 后，设置 cwnd 为 ssthresh，接着就进入了拥塞避免算法
 
-![image-20220217145215976](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220217145216.png)
+![image-20220217145215976](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173608.png)
 

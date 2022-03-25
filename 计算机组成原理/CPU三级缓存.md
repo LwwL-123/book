@@ -79,7 +79,7 @@ func b(){
 
 我们说，CPU Cache 解决的是内存访问速度和 CPU 的速度差距太大的问题。而多核 CPU 提供的是，在主频难以提升的时候，通过增加 CPU 核心来提升 CPU 的吞吐率的办法。我们把多核和 CPU Cache 两者一结合，就给我们带来了一个新的挑战。因为 CPU 的每个核各有各的缓存，互相之间的操作又是各自独立的，就会带来[**缓存一致性**](https://en.wikipedia.org/wiki/Cache_coherence)（Cache Coherence）的问题。
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211027151608.jpeg)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325175026.jpeg)
 
 MESI 是指4中状态的首字母。每个Cache line有4个状态，可用2个bit表示，它们分别是：
 
@@ -110,7 +110,7 @@ MESI 是指4中状态的首字母。每个Cache line有4个状态，可用2个bi
 
 
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211027152314.jpeg)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325175030.jpeg)
 
 ### 例：
 
@@ -118,14 +118,14 @@ MESI 是指4中状态的首字母。每个Cache line有4个状态，可用2个bi
 
 假设有三个CPU A、B、C，对应三个缓存分别是cache a、b、 c。在主内存中定义了x的引用值为0。
 
-![在这里插入图片描述](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211027153429.png)
+![在这里插入图片描述](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325175032.png)
 
 - 单核读取
   那么执行流程是：
   CPU A发出了一条指令，从主内存中读取x。
   从主内存通过bus读取到缓存中（远端读取Remote read）,这是该Cache line修改为E状态（独享）.
 
-![在这里插入图片描述](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211027153512.png)
+![在这里插入图片描述](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325175035.png)
 
 
 
@@ -136,7 +136,7 @@ MESI 是指4中状态的首字母。每个Cache line有4个状态，可用2个bi
   CPU B发出了一条指令，从主内存中读取x。
   CPU B试图从主内存中读取x时，CPU A检测到了地址冲突。这时CPU A对相关数据做出响应。此时x 存储于cache a和cache b中，x在chche a和cache b中都被设置为S状态(共享)。
 
-![在这里插入图片描述](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211027153527.png)
+![在这里插入图片描述](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325175038.png)
 
 - 修改数据
   那么执行流程是：
@@ -144,7 +144,7 @@ MESI 是指4中状态的首字母。每个Cache line有4个状态，可用2个bi
   CPU A 将x设置为M状态（修改）并通知缓存了x的CPU B, CPU B将本地cache b中的x设置为I状态(无效)
   CPU A 对x进行赋值。
 
-![在这里插入图片描述](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211027153544.png)
+![在这里插入图片描述](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325175040.png)
 
 - 同步数据
   那么执行流程是：
@@ -152,5 +152,5 @@ MESI 是指4中状态的首字母。每个Cache line有4个状态，可用2个bi
   CPU B 通知CPU A,CPU A将修改后的数据同步到主内存时cache a 修改为E（独享）
   CPU A同步CPU B的x,将cache a和同步后cache b中的x设置为S状态（共享）。
 
-![在这里插入图片描述](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211027153556.png)
+![在这里插入图片描述](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325175043.png)
 

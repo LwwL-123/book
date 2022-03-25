@@ -1,6 +1,6 @@
 # 深入理解 IPFS 
 
-![深入理解 IPFS - 分层架构总览](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211217151014.jpg)
+![深入理解 IPFS - 分层架构总览](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325174715.jpg)
 
 我们首先从官方文档中一张比较经典的层级架构图开始，右边是 IPFS 的层级图，左边是对应现实网络中的一些实现形式。
 

@@ -50,7 +50,7 @@ type entry struct {
 
 划重点，Map 类型本质上是有两个 “map”。一个叫 read、一个叫 dirty，长的也差不多：
 
-![image-20220307101658172](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220307101658.png)
+![image-20220307101658172](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173248.png)
 
 当我们从 sync.Map 类型中读取数据时，其会先查看 read 中是否包含所需的元素：
 

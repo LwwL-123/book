@@ -8,7 +8,7 @@
 
 同一个进程内多个线程之间共享相同的地址空间，就可以共享代码段、数据段、打开的文件等资源，但每个线程都有独立一套的寄存器和栈，可以看到线程执行时，CPU操作的是线程的栈帧，面向的是某个线程，所以才说线程是独立调度的最小单位，进程是资源分配的最小单位
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220124191833.png" alt="image-20220121153100602" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171657.png" alt="image-20220121153100602" style="zoom:50%;" />
 
 
 
@@ -22,13 +22,13 @@
 
 在创建线程时，操作系统会在用户空间和内核空间分配两段栈，即用户栈和内核栈，线程切换到内核态执行时，会使用内核栈，为了是不允许用户代码对其进行修改以保证安全。操作系统会记录每个线程的控制信息，例如`执行入口，线程栈，线程ID等`，在Windows中线程控制信息对应TCB，可以在PCB中找到进程拥有的线程列表，同一个进程内的线程会共享进程地址空间和句柄表等资源。而在Linux中，只用了一个task_struct结构体，进程创建子进程时会指定他和自己使用同一套地址空间和句柄表的资源，用这种方法实现多线程的效果
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220124191833.png" alt="image-20220121175035090" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171701.png" alt="image-20220121175035090" style="zoom:50%;" />
 
 ### 1. 进程有哪些状态
 
 
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220121220648.png" alt="image-20220121220648358" style="zoom:67%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171704.png" alt="image-20220121220648358" style="zoom:67%;" />
 
 假如进程死锁，那么死锁的进程，都会在阻塞状态，等待资源的释放
 
@@ -36,7 +36,7 @@
 
 由于虚拟内存管理原因，进程的所使用的空间可能并没有映射到物理内存，而是在硬盘上，这时进程就会出现挂起状态，另外调用 sleep 也会被挂起。
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220121220641.png" alt="image-20220121220641026" style="zoom:67%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171707.png" alt="image-20220121220641026" style="zoom:67%;" />
 
 ### 2. 进程控制块PCB
 
@@ -64,19 +64,19 @@
 
 PCB在内存中的存储方式是以链表方式存储：
 
-![image-20220121220635140](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220124191835.png)
+![image-20220121220635140](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171713.png)
 
 ### 3. 用户态-》内核态
 
 线程中发生函数调用就是在线程栈中分配函数调用栈，而虚拟内存分配，文件操作，网络读写等很多功能都是由操作系统来完成的，再向用户程序暴露接口。所以线程免不了要“系统调用”，CPU中会有一个特权标志，用于记录当前程序是执行在用户态还是内核态，只有标记为内核态才可以访问内核空间。如果线程处于用户态，就不能访问内核空间，所以系统调用发生时，就得切换到内核态，使用线程的内核栈，执行内核空间的系统函数
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220121192725.png" alt="image-20220121192724814" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171721.png" alt="image-20220121192724814" style="zoom:50%;" />
 
 这就是从``用户态``切换到``内核态``。
 
 最初系统调用是通过软中断触发的，就是通过指令模拟中断。在OS中，会有一张中断向量表，用来吧各个中断编号映射到相应的处理程序，例如在linux系统中，系统调用中断对应的编号为0x80，对应的系统程序，就是用来派发系统调用的。在硬件层面，CPU有一个中断控制器，负责接收中断信号，切换到内核态，保存用户态执行现场。一部分寄存器的值会通过硬件保存起来，还有一部分通用寄存器的值，会被压入内核栈中。等系统调用结束后，再利用之前保存的信息，恢复线程在用户态的执行现场，继续执行后面的指令，即完成的一次系统调用。
 
-![image-20220121201347884](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220124191836.png)
+![image-20220121201347884](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171727.png)
 
 
 
@@ -84,13 +84,13 @@ PCB在内存中的存储方式是以链表方式存储：
 
 现代操作系统中，CPU的执行权被分为不同的时间片，只有获得CPU时间片的程序才能运行，由于时间片很短，所以用户感觉不到程序切换的过程。一个线程CPU时间用完时，CPU硬件时钟会触发一次时钟中断，对应的中断处理程序，会从已经就绪的线程中，挑选一个来执行
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220124191839.png" alt="image-20220121205405539" style="zoom: 67%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171731.png" alt="image-20220121205405539" style="zoom: 67%;" />
 
 
 
 如果现在要将线程A1切换到A2，而这两个线程同属于线程A，那么就只需要将线程A1的执行现场保存起来，后续再把指令指针，栈指针这些寄存器的值修改为线程A2的信息。当A1重新获得时间片时，会根据切换前保存在栈的信息，恢复到切换前的执行现场，继续完成他的任务
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220124191839.png" alt="image-20220121210340514" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171736.png" alt="image-20220121210340514" style="zoom:50%;" />
 
 但如果现在线程A1要切换到另一个进程的线程B1，除了线程切换外，还要切换进程。首先CPU保存的页表需要切换到进程B，所以进程切换和线程切换的区别是，进程切换会导致地址空间等进程资源发生变化，还会导致TLB缓存失效，代价会更大
 
@@ -123,7 +123,7 @@ PCB在内存中的存储方式是以链表方式存储：
 
 线程可以选择一个来执行，此时CPU中指令指针就会指向这个执行体的执行入口，栈帧和栈指针寄存器也会指向线程给他们分配的执行栈。要切换执行体时，要保存当前执行体中的执行现场，然后切换到另一个执行体，通过同样的方式，可以恢复到之前的执行体，这些由线程创建的执行体也就是所谓的协程，因为用户程序不能操作内核空间，所以只能给协程分配用户栈，而OS对协程一无所知，所以又叫做用户态线程
 
-![image-20220122221620184](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220122221620.png)
+![image-20220122221620184](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171740.png)
 
 
 
@@ -150,7 +150,7 @@ PCB在内存中的存储方式是以链表方式存储：
 
 *原则五*：对于鼠标、键盘这种交互式比较强的应用，我们当然希望它的响应时间越快越好，否则就会影响用户体验了。所以，**对于交互式比较强的应用，响应时间也是调度程序需要考虑的原则。**
 
-![image-20220125123648750](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220125123648.png)
+![image-20220125123648750](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171744.png)
 
 针对上面的五种调度原则，总结成如下：
 
@@ -182,7 +182,7 @@ PCB在内存中的存储方式是以链表方式存储：
 
 每个进程的用户地址空间都是独立的，一般而言是不能互相访问的，但内核空间是每个进程都共享的，所以进程之间要通信必须通过内核。
 
-![image-20220125132221287](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220125132221.png)
+![image-20220125132221287](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171748.png)
 
 - 管道：**半双工单向传输，效率低，不适合频繁交换数据**
 
@@ -218,7 +218,7 @@ int pipe(int fd[2])
 
 这里表示创建一个匿名管道，并返回了两个描述符，一个是管道的读取端描述符 `fd[0]`，另一个是管道的写入端描述符 `fd[1]`。注意，这个匿名管道是特殊的文件，只存在于内存，不存于文件系统中。
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220125170158.png" alt="image-20220125170157991" style="zoom: 67%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171751.png" alt="image-20220125170157991" style="zoom: 67%;" />
 
 其实，**所谓的管道，就是内核里面的一串缓存**。从管道的一段写入的数据，实际上是缓存在内核中的，另一端读取，也就是从内核中读取这段数据。另外，管道传输的数据是无格式的流且大小受限。
 
@@ -229,7 +229,7 @@ int pipe(int fd[2])
 - 父进程关闭读取的 fd[0]，只保留写入的 fd[1]；
 - 子进程关闭写入的 fd[1]，只保留读取的 fd[0]；
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220125170820.png" alt="image-20220125170820171" style="zoom: 50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171757.png" alt="image-20220125170820171" style="zoom: 50%;" />
 
 所以说如果需要双向通信，则应该创建两个管道。
 
@@ -237,7 +237,7 @@ int pipe(int fd[2])
 
 在 shell 里面执行 `A | B`命令的时候，A 进程和 B 进程都是 shell 创建出来的子进程，A 和 B 之间不存在父子关系，它俩的父进程都是 shell。
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220125170912.png" alt="image-20220125170912441" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171800.png" alt="image-20220125170912441" style="zoom:50%;" />
 
 我们可以得知，**对于匿名管道，它的通信范围是存在父子关系的进程**。因为管道没有实体，也就是没有管道文件，只能通过 fork 来复制父进程 fd 文件描述符，来达到通信的目的。
 

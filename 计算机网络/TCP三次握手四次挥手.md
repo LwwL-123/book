@@ -18,7 +18,7 @@ FIN：释放一个连接。
 - 第二次握手(SYN=1, ACK=1, seq=y, ACKnum=x+1)， 发送完毕后，服务器端进入 SYN_RCVD 状态。
 - 第三次握手(ACK=1，ACKnum=y+1)，发送完毕后，客户端进入 ESTABLISHED 状态，当服务器端接收到这个包时,也进入 ESTABLISHED 状态，TCP 握手，即可以开始数据传输。
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211012182044.png" alt="三次握手" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173306.png" alt="三次握手" style="zoom:50%;" />
 
 ### 1.1.2. TCP握手为什么是三次，不能是两次？不能是四次？
 
@@ -40,7 +40,7 @@ FIN：释放一个连接。
 
 假设不采用“三次握手”，那么只要 B 发出确认，新的连接就建立了。由于现在 A 并没有发出建立连接的请求，因此不会理睬 B 的确认，也不会向 B 发送数据。但 B 却以为新的运输连接已经建立，并一直等待 A 发来数据。这样，B 的很多资源就白白浪费掉了。采用“三次握手”的办法可以防止上述现象发生。
 
-<img src="https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211012183545.png" alt="image-20211012183545155" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173311.png" alt="image-20211012183545155" style="zoom:50%;" />
 
 
 
@@ -62,7 +62,7 @@ TCP 协议规定SYN报文虽然不携带数据， 但是也要消耗1个序列�
 
 ## 1.2 tcp四次挥手
 
-<img src="http://interview.wzcu.com/static/tcp3_img.png" alt="四次挥手" style="zoom:50%;" />
+<img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325173314.png" alt="四次挥手" style="zoom:50%;" />
 
 1. 第一次挥手(FIN=1，seq=u)，发送完毕后，客户端进入FIN_WAIT_1 状态
 2. 第二次挥手(ACK=1，ack=u+1,seq =v)，发送完毕后，服务器端进入CLOSE_WAIT 状态，客户端接收到这个确认包之后，进入 FIN_WAIT_2 状态

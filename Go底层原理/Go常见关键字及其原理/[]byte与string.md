@@ -117,7 +117,7 @@ type slice struct {
 
 array是底层数组的指针，len表示长度，cap表示容量。对于[]byte来说，array指向的就是byte数组。
 
-![在这里插入图片描述](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211227183048.png)
+![在这里插入图片描述](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172918.png)
 
 
 
@@ -157,7 +157,7 @@ func gostringnocopy(str *byte) string {
 
 可以看到，入参str指针就是指向byte的指针，那么我们可以确定string的底层数据结构就是byte数组。
 
-![在这里插入图片描述](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211227183246.png)
+![在这里插入图片描述](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172921.png)
 
 
 
@@ -215,7 +215,7 @@ b := []byte{1} // 分配存储'1'数组的内存空间，b结构体的array指�
 b = []byte{2}  // 将array的内容改为'2'
 ```
 
-![在这里插入图片描述](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211227183552.png)
+![在这里插入图片描述](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172924.png)
 
 因为string的指针指向的内容是不可以更改的，所以每更改一次字符串，就得重新分配一次内存，之前分配的空间还需要gc回收，这是导致string相较于[]byte操作低效的根本原因。
 
@@ -293,9 +293,9 @@ func slicestringcopy(to []byte, fm string) int {
 
 ```
 
-![在这里插入图片描述](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211227184003.png)
+![在这里插入图片描述](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172928.png)
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220107150014.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172930.png)
 
 2. string([]byte)的实现（源码也在`src/runtime/string.go`中）
 
@@ -349,7 +349,7 @@ func slicestringcopy(to []byte, fm string) int {
 
 可见，当数组长度超过32时，同样需要调用mallocgc分配一块新内存。最后通过memmove完成拷贝。
 
-![img](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220107145947.png)
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172935.png)
 
 
 
@@ -379,11 +379,11 @@ type SliceHeader struct {
 
 - []byte转string图解
 
-![在这里插入图片描述](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211227184932.png)
+![在这里插入图片描述](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172938.png)
 
 - string转[]byte图解
 
-![在这里插入图片描述](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211227184943.png)
+![在这里插入图片描述](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172941.png)
 
 
 

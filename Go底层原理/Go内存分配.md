@@ -8,7 +8,7 @@ Go这门语言抛弃了C/C++中的开发者管理内存的方式：主动申请�
 
 
 
-![内存分配](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211222172218.jpeg)
+![内存分配](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172045.jpeg)
 
 这幅图表达了计算机的存储体系，从上至下依次是：
 
@@ -19,7 +19,7 @@ Go这门语言抛弃了C/C++中的开发者管理内存的方式：主动申请�
 - 鼠标等外接设备
 - 从上至下，访问速度越来越慢，访问时间越来越长。
 
-![内存分配](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211222172251.png)
+![内存分配](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172048.png)
 
 然而，CPU跟内存的速率也不是相同的，从上图可以看到，CPU的速率提高的很快（摩尔定律），然而内存速率增长的很慢，虽然CPU的速率现在增加的很慢了，但是内存的速率也没增加多少，速率差距很大，从1980年开始CPU和内存速率差距在不断拉大，为了弥补这2个硬件之间的速率差异，所以在CPU跟内存之间增加了比内存更快的Cache，Cache是内存数据的缓存，可以降低CPU访问内存的时间。
 
@@ -35,7 +35,7 @@ Go这门语言抛弃了C/C++中的开发者管理内存的方式：主动申请�
 
 虚拟内存是当代操作系统必备的一项重要功能了，它向进程屏蔽了底层了RAM和磁盘，并向进程提供了远超物理内存大小的内存空间。我们看一下虚拟内存的**分层设计**。
 
-![内存分配](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211222172439.png)
+![内存分配](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172053.png)
 
 
 
@@ -53,7 +53,7 @@ Go这门语言抛弃了C/C++中的开发者管理内存的方式：主动申请�
 
 我们现在从虚拟内存，再进一层，看虚拟内存中的栈和堆，也就是进程对内存的管理。
 
-![内存分配](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211222173858.png)
+![内存分配](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172056.png)
 
 上图展示了一个进程的虚拟内存划分，代码中使用的内存地址都是虚拟内存地址，而不是实际的物理内存地址。栈和堆只是虚拟内存上2块不同功能的内存区域：
 
@@ -74,11 +74,11 @@ Go这门语言抛弃了C/C++中的开发者管理内存的方式：主动申请�
 
 在一个最简单的内存管理中，堆内存最初会是一个完整的大块，即未分配内存，当来申请的时候，就会从未分配内存，分割出一个小内存块(block)，然后用链表把所有内存块连接起来。需要一些信息描述每个内存块的基本信息，比如大小(size)、是否使用中(used)和下一个内存块的地址(next)，内存块实际数据存储在data中。
 
-![内存分配](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211222180042.png)
+![内存分配](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172101.png)
 
 一个内存块包含了3类信息，如下图所示，元数据、用户数据和对齐字段，内存对齐是为了提高访问效率。下图申请5Byte内存的时候，就需要进行内存对齐。
 
-![内存分配](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211222180103.png)
+![内存分配](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172103.png)
 
 释放内存实质是把使用的内存块从链表中取出来，然后标记为未使用，当分配内存块的时候，可以从未使用内存块中有先查找大小相近的内存块，如果找不到，再从未分配的内存中分配内存。
 
@@ -92,7 +92,7 @@ Go这门语言抛弃了C/C++中的开发者管理内存的方式：主动申请�
 
 
 
-![内存分配](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211222180546.png)
+![内存分配](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172106.png)
 
 
 
@@ -100,17 +100,17 @@ Go这门语言抛弃了C/C++中的开发者管理内存的方式：主动申请�
 
 当程序里发生了`32kb`以下的小块内存申请时，Go会从一个叫做的`mcache`的本地缓存给程序分配内存。这个本地缓存`mcache`持有一系列的大小为`32kb`的内存块，这样的一个内存块里叫做`mspan`，它是要给程序分配内存时的分配单元。
 
-![image-20211222153644273](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211222153644.png)
+![image-20211222153644273](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172110.png)
 
 在Go的调度器模型里，每个线程`M`会绑定给一个处理器`P`，在单一粒度的时间里只能做多处理运行一个`goroutine`，每个`P`都会绑定一个上面说的本地缓存`mcache`。当需要进行内存分配时，当前运行的`goroutine`会从`mcache`中查找可用的`mspan`。从本地`mcache`里分配内存时不需要加锁，这种分配策略效率更高。
 
 那么有人就会问了，有的变量很小就是数字，有的却是一个复杂的结构体，申请内存时都分给他们一个`mspan`这样的单元会不会产生浪费。其实`mcache`持有的这一系列的`mspan`并不都是统一大小的，而是按照大小，从8字节到32KB分了大概70类的`msapn`。
 
-![image-20211222154003875](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211222154004.png)
+![image-20211222154003875](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172114.png)
 
 如果结构体的大小是32字节，正好32字节的这种`mspan`能满足需求，那么分配内存的时候就会给它分配一个32字节大小的`mspan`。
 
-![image-20211222154151132](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211222154151.png)
+![image-20211222154151132](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172116.png)
 
 
 
@@ -145,7 +145,7 @@ type mcentral struct {
 
 `mcentral`里维护着两个双向链表，**nonempty**表示链表里还有空闲的`mspan`待分配。**empty**表示这条链表里的`mspan`都被分配了`object`。
 
-![图片](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211222154531)
+![图片](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172122)
 
 如果上面我们那个程序申请内存的时候，`mcache`里已经没有合适的空闲`mspan`了，那么工作线程就会像下图这样去`mcentral`里去申请。
 
@@ -154,7 +154,7 @@ type mcentral struct {
 - 获取 加锁；从`nonempty`链表找到一个可用的`mspan`；并将其从`nonempty`链表删除；将取出的`mspan`加入到`empty`链表；将`mspan`返回给工作线程；解锁。
 - 归还 加锁；将`mspan`从`empty`链表删除；将`mspan`加入到`nonempty`链表；解锁。
 
-![image-20211222154842718](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211222154842.png)
+![image-20211222154842718](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172125.png)
 
 
 
@@ -162,7 +162,7 @@ type mcentral struct {
 
 当`mcentral`没有空闲的`mspan`时，会向`mheap`申请。而`mheap`没有资源时，会向操作系统申请新内存。`mheap`主要用于大对象的内存分配，以及管理未切割的`mspan`，用于给`mcentral`切割成小对象。
 
-![图片](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211222155531)
+![图片](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172128)
 
 同时我们也看到，`mheap`中含有所有规格的`mcentral`，所以，当一个`mcache`从`mcentral`申请`mspan`时，只需要在独立的`mcentral`中使用锁，并不会影响申请其他规格的`mspan`。
 
@@ -170,7 +170,7 @@ type mcentral struct {
 
 
 
-![图片](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20211222155625)
+![图片](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172131)
 
 如果 `arena` 区域没有足够的空间，会调用 runtime.mheap.sysAlloc 从操作系统中申请更多的内存。
 
@@ -180,7 +180,7 @@ type mcentral struct {
 
 Go没法使用工作线程的本地缓存`mcache`和全局中心缓存`mcentral`上管理超过32KB的内存分配，所以对于那些超过32KB的内存申请，会直接从堆上(`mheap`)上分配对应的数量的内存页（每页大小是8KB）给程序。
 
-![image-20220105141746303](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220105141746.png)
+![image-20220105141746303](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172134.png)
 
 
 
@@ -188,7 +188,7 @@ Go没法使用工作线程的本地缓存`mcache`和全局中心缓存`mcentral`
 
 我们把内存分配管理涉及的所有概念串起来，可以勾画出Go内存管理的一个全局视图：
 
-![image-20220105141751765](https://gitee.com/lzw657434763/pictures/raw/master/Blog/20220105141751.png)
+![image-20220105141751765](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325172136.png)
 
 总结起来关于Go内存分配管理的策略有如下几点：
 

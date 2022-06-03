@@ -6,4 +6,6 @@
 
 
 
-在kubernetes项目里，pod实现需要使用一个中间容器，这个容器叫infra，在这个pod中，infra容器永远都是第一个被创建的，用户定义的其他容器通过join network namespace的方式与infra关联在一起。这样多个容器就是对等关系，而不是拓扑了
+在kubernetes项目里，pod实现需要使用一个中间容器，这个容器叫infra，在这个pod中，infra容器永远都是第一个被创建的，用户定义的其他容器通过join network namespace的方式与infra关联在一起。这样多个容器就是对等关系，而不是拓扑了。
+
+infra容器是一个极少资源的容器，永远处于暂停状态。

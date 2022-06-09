@@ -21,7 +21,7 @@ panic: assignment to entry in nil map
 
 
 
-## 2. 空指针的引用
+## 2. 空指针的引用(重点！)
 
 #### 问题
 
@@ -250,3 +250,268 @@ func main() {
 你以为这就万事大吉，解决了？并不。当切片扩容时，Go 底层会重新申请新的更大空间，存在与原有切片分离的场景。
 
 因此还是要及时将变更的值返回出来，在主流程上统一处理元数据会更好。
+
+## 6. 同名变量的作用域
+
+#### 问题
+
+我们在编写程序时，由于各种临时变量，会常用变量名 n、i、err 等。有时候会遇到一些问题，如下代码：
+
+```go
+func main() {
+ n := 0
+ if true {
+  n := 1
+  n++
+ }
+ fmt.Println(n)
+}
+```
+
+程序的输出结果是什么。n 是 1，还是 2？
+
+输出结果：
+
+```
+0
+```
+
+#### 解决方法
+
+上述代码的 `n := 1` 又重新声明了一个新变量，他是同名变量，同时很关键的，他包含同名局部变量。
+
+我们的 `n++` 影响的是 if 区块里的变量 n，而不是外部的同名变量 n。如果要正确影响，应当修改为：
+
+```
+func main() {
+    n := 0
+    if true {
+        n = 1
+        n++
+    }
+    fmt.Println(n)
+}
+```
+
+输出结果：
+
+```
+2
+```
+
+
+
+## 7. 循环中的临时变量（重点！）
+
+#### 问题
+
+相信不少同学在业务代码中做过类似的事情，那就是：边循环处理业务数据，边变更值内容。
+
+如下代码：
+
+```go
+s := []int{1, 1, 1}
+for _, n := range s {
+    n += 1
+}
+fmt.Println(s)
+```
+
+程序输出的结果是什么，i 成功均都 +1 了吗？
+
+不，真正的输出结果是：`[1 1 1]`。
+
+#### 解决方法
+
+实际上在循环中，我们所引用的变量是**临时变量**，你去修改他是没有任何意义的，修改的根本不是你的原数据的结构。
+
+我们需要定位到原数据，根据索引去定位修改。如下代码：
+
+```go
+s := []int{1, 1, 1}
+for i := range s {
+    s[i] += 1
+}
+fmt.Println(s)
+```
+
+输出结果：
+
+```
+[2 2 2]
+```
+
+
+
+## 8. JSON 转换和输出为空
+
+#### 问题
+
+在做对外接口的数据对接和转换时，我们经常需要对 JSON 数据进行处理。
+
+如下代码：
+
+```go
+type T struct {
+ name string
+ age  int
+}
+
+func main() {
+ p := T{"煎鱼", 18}
+ jsonData, _ := json.Marshal(p)
+ fmt.Println(string(jsonData))
+}
+```
+
+输出结果是什么，能把姓名和年龄正常输出吗？
+
+输出结果：
+
+```
+{}
+```
+
+你没有看错，程序的输出结果是空，没有转换到任何东西。
+
+#### 解决方法
+
+原因是 JSON 的输出，只会输出公开（导出）字段，也就是首字母必须为大写。
+
+我们需要进行如下改造：
+
+```go
+type T struct {
+ Name string
+ Age  int
+}
+
+func main() {
+ p := T{"煎鱼", 18}
+ jsonData, _ := json.Marshal(p)
+ ...
+}
+```
+
+输出结果：
+
+```
+{"Name":"煎鱼","Age":18}
+```
+
+又或是显式指定 JSON 的标签：
+
+```go
+type T struct {
+ Name string `json:"name"`
+ Age  int    `json:"age"`
+}
+```
+
+现在 IDE 能够很方便的直接生成 JSON 标签了，建议大家可以习惯性补上，确保字段规范。
+
+真的可以避免不少的对接时的拉扯和误差。
+
+## 9. 以为 recover 是万能的
+
+#### 问题
+
+在 Go 中，goroutine + panic + recover 是天作之合，用起来很方便。常常会有同学以为他是万能的。
+
+如下代码：
+
+```go
+func gohead() {
+ go func() {
+  panic("煎鱼下班了")
+ }()
+}
+
+func main() {
+ go func() {
+  defer func() {
+   if r := recover(); r != nil {
+    fmt.Println(r)
+   }
+  }()
+
+  gohead()
+ }()
+
+ time.Sleep(time.Second)
+}
+```
+
+你认为输出结果是什么。程序被中断，还是成功 recover 了？
+
+输出结果：
+
+```
+panic: 煎鱼下班了
+
+goroutine 17 [running]:
+main.gohead.func1()
+        /Users/eddycjy/awesomeProject/main.go:10 +0x39
+created by main.gohead
+        /Users/eddycjy/awesomeProject/main.go:9 +0x35
+```
+
+你以为 recover 是万能的？并不。
+
+#### 解决方法
+
+Go1 现阶段没有万能解决方法，只能遵守 Go 的规范。
+
+Goroutine 建议需要有 recover 兜底，否则一旦出现 panic 就会导致应用中断，容器会重启。
+
+另外 Go 底层主动抛出的致命错误 throw，是没有办法使用 recover 拦截的，请务必注意。
+
+注：有同学一直认为 recover 可以拦截到 throw，特此说明。
+
+## 10. nil 不是 nil
+
+#### 问题
+
+我们在做程序的逻辑处理时，经常要对接口（interface）值进行判断。
+
+如下代码：
+
+```go
+func Foo() error {
+ var err *os.PathError = nil
+ return err
+}
+
+func main() {
+ err := Foo()
+ fmt.Println(err)
+ fmt.Println(err == nil)
+}
+```
+
+你认为输出结果是什么，是 nil 和 true 吗？
+
+输出结果：
+
+```
+<nil>
+false
+```
+
+表面看起来的 nil ，它并不等于 nil。
+
+#### 解决方法
+
+接口值，是特殊的。只有当它的值和动态类型都为 nil 时，接口值才等于 nil。
+
+在前面的问题代码中，实际上函数 `Foo` 返回的是 `[nil, *os.PathError]`，我们将其与 `[nil, nil]` 进行比较，所以是 false。
+
+如果要准确判断，要进行如下转换：
+
+```
+fmt.Println(err == (*os.PathError)(nil))
+```
+
+输出结果就会为 true。
+
+另外就是尽量使用 error 类型，又或是避免与 interface 进行比较，这是比较危险的行为（有不少人不知道这一现象）。

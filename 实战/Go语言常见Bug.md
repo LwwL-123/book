@@ -515,3 +515,4 @@ fmt.Println(err == (*os.PathError)(nil))
 输出结果就会为 true。
 
 另外就是尽量使用 error 类型，又或是避免与 interface 进行比较，这是比较危险的行为（有不少人不知道这一现象）。
+

@@ -52,6 +52,7 @@
 - [3.5 Databus-低延迟的分布式数据库同步系统](数据库/Databus-低延迟的分布式数据库同步系统.md)
 - [3.6 索引下推](数据库/索引下推.md)
 - [3.7 API分页方案](数据库/分页方案.md)
+- [3.8 ON DUPLICATE KEY UPDATE](数据库/为什么不建议使用ON DUPLICATE KEY UPDATE？.md)
 
 ## 4. 计算机组成原理
 
@@ -91,7 +92,7 @@
 - [8.4 Etcd]()
   - [Etcd](etcd/etcd.md)
 - [8.5 SOA和微服务区别](微服务/SOA和微服务区别.md)
-- [8.6 TCC(补偿事务)](微服务/TCC(补偿事务).md)
+- [8.6 TCC(补偿事务)](微服务/TCC补偿事务.md)
 - [8.7 API网关与BFF](微服务/API网关与BFF.md)
 
 

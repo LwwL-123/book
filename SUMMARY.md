@@ -53,6 +53,7 @@
 - [3.6 索引下推](数据库/索引下推.md)
 - [3.7 API分页方案](数据库/分页方案.md)
 - [3.8 ON DUPLICATE KEY UPDATE](数据库/为什么不建议使用ON DUPLICATE KEY UPDATE？.md)
+- [3.9 MySQL 是怎么加锁的](数据库/MySQL 是怎么加锁的？.md)
 
 ## 4. 计算机组成原理
 

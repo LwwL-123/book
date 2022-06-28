@@ -186,5 +186,47 @@ insert into user_info (name, phone, update_time) values (X,Y,Z) on duplicate key
 | 5    |                                                              | 申请插入意向锁成功                                           | 申请插入意向锁成功                                           |
 | 6    |                                                              | 死锁                                                         | 死锁                                                         |
 
-​    因此形成死锁，其中一个事务回滚。
+​    因此形成死锁，其中一个事务回滚。两个事务都持有gap锁，又想拿到插入意向锁，而插入意向锁与间隙锁是冲突的，所以，产生了死锁
 
+
+
+**插入意向锁与间隙锁是冲突的，所以当其它事务持有该间隙的间隙锁时，需要等待其它事务释放间隙锁之后，才能获取到插入意向锁。而间隙锁与间隙锁之间是兼容的，所以所以两个事务中 `select ... for update` 语句并不会相互影响**。
+
+案例中的事务 A 和事务 B 在执行完后 `select ... for update` 语句后都持有范围为`(1006,+∞）`的间隙锁，而接下来的插入操作为了获取到插入意向锁，都在等待对方事务的间隙锁释放，于是就造成了循环等待，导致死锁。
+
+
+
+## 为什么间隙锁与间隙锁之间是兼容的？
+
+在MySQL官网上还有一段非常关键的描述：
+
+*Gap locks in InnoDB are “purely inhibitive”, which means that their only purpose is to prevent other transactions from Inserting to the gap. Gap locks can co-exist. A gap lock taken by one transaction does not prevent another transaction from taking a gap lock on the same gap. There is no difference between shared and exclusive gap locks. They do not conflict with each other, and they perform the same function.*
+
+这段话表明间隙锁在本质上是不区分共享间隙锁或互斥间隙锁的，而且间隙锁是不互斥的，即两个事务可以同时持有包含共同间隙的间隙锁。
+
+这里的共同间隙包括两种场景：
+
+- 其一是两个间隙锁的间隙区间完全一样；
+- 其二是一个间隙锁包含的间隙区间是另一个间隙锁包含间隙区间的子集。
+
+**间隙锁本质上是用于阻止其他事务在该间隙内插入新记录，而自身事务是允许在该间隙内插入数据的**。也就是说间隙锁的应用场景包括**并发读取、并发更新、并发删除和并发插入**。
+
+
+
+## 插入意向锁是什么？
+
+注意！插入意向锁名字虽然有意向锁，但是它并不是意向锁，它是一种特殊的间隙锁。
+
+在MySQL的官方文档中有以下重要描述：
+
+*An Insert intention lock is a type of gap lock set by Insert operations prior to row Insertion. This lock signals the intent to Insert in such a way that multiple transactions Inserting into the same index gap need not wait for each other if they are not Inserting at the same position within the gap. Suppose that there are index records with values of 4 and 7. Separate transactions that attempt to Insert values of 5 and 6, respectively, each lock the gap between 4 and 7 with Insert intention locks prior to obtaining the exclusive lock on the Inserted row, but do not block each other because the rows are nonconflicting.*
+
+这段话表明尽管**插入意向锁是一种特殊的间隙锁，但不同于间隙锁的是，该锁只用于并发插入操作**。
+
+如果说间隙锁锁住的是一个区间，那么「插入意向锁」锁住的就是一个点。因而从这个角度来说，插入意向锁确实是一种特殊的间隙锁。
+
+插入意向锁与间隙锁的另一个非常重要的差别是：尽管「插入意向锁」也属于间隙锁，但两个事务却不能在同一时间内，一个拥有间隙锁，另一个拥有该间隙区间内的插入意向锁（当然，插入意向锁如果不在间隙锁区间内则是可以的）。
+
+另外，我补充一点，插入意向锁的生成时机：
+
+- 每插入一条新记录，都需要看一下待插入记录的下一条记录上是否已经被加了间隙锁，如果已加间隙锁，那 Insert 语句应该被阻塞，并生成一个插入意向锁 

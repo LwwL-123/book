@@ -167,3 +167,57 @@ func min(a,b int) int {
 }
 ```
 
+
+
+#### [56. 合并区间](https://leetcode.cn/problems/merge-intervals/)
+
+```go
+func merge(intervals [][]int) [][]int {
+    // 排序
+    quickSort(intervals)
+
+    var res [][]int
+    for _, interval := range intervals{
+        var length = len(res)
+        if length == 0 || res[length-1][1] < interval[0]{
+            res = append(res, interval)
+        }else{
+            res[length-1][1] = max(res[length-1][1], interval[1])
+        }
+    }
+
+    return res
+}
+
+func quickSort(s [][]int) {
+    len := len(s)
+    if len < 2 {
+        return
+    }
+
+    head,trip := 0, len-1
+    value := s[head][0]
+    for head < trip {
+        if s[head+1][0] > value {
+            s[head+1],s[trip] = s[trip],s[head+1]
+            trip--
+        }else if s[head+1][0] < value {
+            s[head],s[head+1] = s[head+1],s[head]
+            head++
+        }else {
+            head++
+        }
+    }
+    quickSort(s[:head])
+    quickSort(s[head+1:])
+}
+
+func max(a,b int) int {
+    if a > b {
+        return a
+    }
+
+    return b
+}
+```
+

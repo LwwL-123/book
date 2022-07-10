@@ -221,3 +221,49 @@ func max(a,b int) int {
 }
 ```
 
+#### [380. O(1) 时间插入、删除和获取随机元素](https://leetcode.cn/problems/insert-delete-getrandom-o1/)
+
+```go
+type RandomizedSet struct {
+    // key-数字，value-数组中的下标
+    m map[int]int
+    nums []int
+}
+
+
+func Constructor() RandomizedSet {
+    m := make(map[int]int)
+    tmp := &RandomizedSet{m,[]int{}}
+    return *tmp
+}
+
+
+func (this *RandomizedSet) Insert(val int) bool {
+    if _,ok := this.m[val]; ok {
+        return false
+    }
+
+    this.nums = append(this.nums,val)
+    this.m[val] = len(this.nums)-1
+
+    return true
+}
+
+
+func (this *RandomizedSet) Remove(val int) bool {
+    if _,ok := this.m[val]; !ok {
+        return false
+    }
+    this.m[this.nums[len(this.nums)-1]] = this.m[val]
+    this.nums[this.m[val]] = this.nums[len(this.nums)-1]
+    this.nums = this.nums[:len(this.nums)-1]
+    delete(this.m,val)
+
+    return true
+}
+
+
+func (this *RandomizedSet) GetRandom() int {
+    return this.nums[rand.Intn(len(this.nums))]
+}
+```

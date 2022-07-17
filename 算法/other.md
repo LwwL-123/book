@@ -267,3 +267,29 @@ func (this *RandomizedSet) GetRandom() int {
     return this.nums[rand.Intn(len(this.nums))]
 }
 ```
+
+
+
+#### [48. 旋转图像](https://leetcode.cn/problems/rotate-image/)
+
+```go
+func rotate(matrix [][]int)  {
+
+    for i := 0; i < len(matrix); i++ {
+        for j := i+1; j < len(matrix); j++ {
+            matrix[i][j],matrix[j][i] = matrix[j][i],matrix[i][j] 
+        }
+    }
+
+    for i := 0; i < len(matrix); i++ {
+        left,right := 0,len(matrix)-1
+        for left < right {
+            matrix[i][left],matrix[i][right] = matrix[i][right],matrix[i][left]
+            left++
+            right--
+        }
+    }
+
+}
+```
+

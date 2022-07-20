@@ -293,3 +293,76 @@ func rotate(matrix [][]int)  {
 }
 ```
 
+
+
+#### [448. 找到所有数组中消失的数字](https://leetcode.cn/problems/find-all-numbers-disappeared-in-an-array/)
+
+```go
+func findDisappearedNumbers(nums []int) []int {
+    n := len(nums)
+    tmp := make([]int,n+1)
+    for k,_ := range tmp {
+        tmp[k] = k
+    }
+
+    for _,num := range nums {
+        tmp[num] = 0
+    }
+
+    j := 0
+    for _,v := range tmp {
+        if v != 0 {
+            tmp[j] = v
+            j++
+        }
+    }
+    return tmp[:j]
+}
+```
+
+删除元素
+
+```go
+    j := 0
+    for _,v := range tmp {
+        if v != 0 {
+            tmp[j] = v
+            j++
+        }
+    }
+    return tmp[:j]
+```
+
+
+
+#### [338. 比特位计数](https://leetcode.cn/problems/counting-bits/)
+
+```go
+func countBits(n int) []int {
+    dp := make([]int,n+1)
+    for i := 1; i <= n; i++ {
+        dp[i] = dp[i&(i-1)] + 1
+    }
+    return dp
+}
+```
+
+
+
+#### [461. 汉明距离](https://leetcode.cn/problems/hamming-distance/)
+
+```go
+func hammingDistance(x int, y int) int {
+    i :=x^y//x和y异或,得到一个新的数(异或相同为0,不同为1,此时咱们需要统计1的个数)
+    count :=0//定义数量的初始值为0
+    for(i!=0){//只要i不为0,那就继续循环
+        if ((i&1)==1){//如果i和1相与,值为1的话就count++
+            count++
+        }
+        i = i>>1//i右移一位
+    }
+    return count
+
+}
+```
+

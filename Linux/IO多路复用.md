@@ -122,11 +122,45 @@ epoll 通过两个方面，很好解决了 select/poll 的问题。
 
 epoll 的方式即使监听的 Socket 数量越多的时候，效率不会大幅度降低，能够同时监听的 Socket 的数目也非常的多了，上限就为系统定义的进程打开的最大文件描述符个数。
 
-![2.png](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220325171618.png)
 
-总的来说，就是内核不断地调用epoll_wailt，来监测是否有新事件。
 
-当epoll wait返回就绪事件时，判断是否是新的连接，如果是新的连接则将描述符加入epoll表，监听读写事件。如果不是新的连接，说明已建立的连接上有读或写就绪事件，这样我们根据EPOLLOUT或者EPOLLIN进行写或者读操作，上图是echo server的基本原理，实际生产中监听EPOLLIN还是EPOLLOUT根据实际情况而定。epoll的通俗解释是一种当文件描述符的内核缓冲区非空的时候，发出可读信号进行通知，当写缓冲区不满的时候，发出可写信号通知的机制。以上是单线程下epoll工作原理。
+#### epoll流程
+
+- **创建epoll对象**
+
+如下图所示，当某个进程调用epoll_create方法时，内核会创建一个eventpoll对象（也就是程序中epfd所代表的对象）。eventpoll对象也是文件系统中的一员，和socket一样，它也会有等待队列。
+
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220722142130.jpg)
+
+创建一个代表该epoll的eventpoll对象是必须的，因为内核要维护“就绪列表”等数据，“就绪列表”可以作为eventpoll的成员。
+
+- **维护监视列表**
+
+创建epoll对象后，可以用epoll_ctl添加或删除所要监听的socket。以添加socket为例，如下图，如果通过epoll_ctl添加sock1、sock2和sock3的监视，内核会将eventpoll添加到这三个socket的等待队列中。
+
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220722150636.jpg)
+
+当socket收到数据后，中断程序会操作eventpoll对象，而不是直接操作进程。
+
+- **接收数据**
+
+当socket收到数据后，中断程序会给eventpoll的“就绪列表”添加socket引用。如下图展示的是sock2和sock3收到数据后，中断程序让rdlist引用这两个socket。
+
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220722150859.jpg)
+
+eventpoll对象相当于是socket和进程之间的中介，socket的数据接收并不直接影响进程，而是通过改变eventpoll的就绪列表来改变进程状态。
+
+当程序执行到epoll_wait时，如果rdlist已经引用了socket，那么epoll_wait直接返回，如果rdlist为空，阻塞进程。
+
+- **阻塞和唤醒进程**
+
+假设计算机中正在运行进程A和进程B，在某时刻进程A运行到了epoll_wait语句。如下图所示，内核会将进程A放入eventpoll的等待队列中，阻塞进程。
+
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220722153610.jpg)
+
+当socket接收到数据，中断程序一方面修改rdlist，另一方面唤醒eventpoll等待队列中的进程，进程A再次进入运行状态（如下图）。也因为rdlist的存在，进程A可以知道哪些socket发生了变化。
+
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220722153648.jpg)
 
 
 
@@ -190,3 +224,20 @@ epoll 是解决 C10K 问题的利器，通过两个方面解决了 select/poll �
 
 
 
+再来看看epoll：
+epoll不会让每个 socket的等待队列都添加进程A引用，而是在等待队列，添加 eventPoll对象的引用。
+当socket就绪时，中断程序会操作eventPoll，在eventPoll中的就绪列表(rdlist)，添加scoket引用。
+这样的话，进程A只需要不断循环遍历rdlist，从而获取就绪的socket。
+从代码来看每次执行到epoll_wait，其实都是去遍历 rdlist。
+
+如果rdlist为空，那么就阻塞进程。
+当有socket处于就绪状态，也是发中断信号，再调用对应的中断程序。
+此时中断程序，会把socket加到rdlist，然后唤醒进程。进程再去遍历rdlist，获取到就绪socket。
+
+
+总之： poll是翻译轮询的意思，我们可以看到poll和epoll都有轮询的过程。
+不同点在于：
+poll轮询的是所有的socket。
+而epoll只轮询就绪的socket。
+
+![img](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220722153811.jpg)

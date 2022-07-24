@@ -366,3 +366,152 @@ func hammingDistance(x int, y int) int {
 }
 ```
 
+#### [915. 分割数组](https://leetcode.cn/problems/partition-array-into-disjoint-intervals/)
+
+```go
+func partitionDisjoint(nums []int) int {
+    leftMax := make([]int,len(nums))
+    rightMin := make([]int,len(nums))
+
+    leftMax[0] = nums[0]
+    rightMin[len(nums)-1] = nums[len(nums)-1]
+
+    for i := 1; i < len(nums);i++ {
+        leftMax[i] = max(leftMax[i-1],nums[i])
+    }
+
+    for i := len(nums)-2; i >= 0; i-- {
+        rightMin[i] = min(rightMin[i+1],nums[i])
+    }
+
+    res := len(nums)
+    for i := 0; i < len(nums)-1; i++ {
+        if leftMax[i] <= rightMin[i+1] {
+            res = min(res,i)
+        }
+    }
+    return res+1
+}
+
+func max(a,b int) int { 
+    if a > b {
+        return a
+    } 
+    return b
+}
+func min(a,b int) int { 
+    if a < b {
+        return a
+    } 
+    return b
+}
+```
+
+#### [207. 课程表](https://leetcode.cn/problems/course-schedule/)
+
+```go
+func canFinish(numCourses int, prerequisites [][]int) bool {
+    var (
+        // edges[i][],表示学完课程i，可以学习的课程
+        edges = make([][]int, numCourses)
+        indeg = make([]int, numCourses) 
+        result []int
+    )
+
+    for _, info := range prerequisites {
+        // 
+        edges[info[1]] = append(edges[info[1]], info[0])
+        // 入度+1
+        indeg[info[0]]++
+    }
+
+    q := []int{}
+    for i := 0; i < numCourses; i++ {
+        if indeg[i] == 0 {
+            q = append(q, i)
+        }
+    }
+
+    for len(q) > 0 {
+        u := q[0]
+        q = q[1:]
+        result = append(result, u)
+        for _, v := range edges[u] {
+            indeg[v]--
+            if indeg[v] == 0 {
+                q = append(q, v)
+            }
+        }
+    }
+    return len(result) == numCourses
+}
+```
+
+
+
+#### [208. 实现 Trie (前缀树)](https://leetcode.cn/problems/implement-trie-prefix-tree/)
+
+```go
+type Trie struct {
+    children [26]*Trie
+    isEnd    bool
+}
+
+func Constructor() Trie {
+    return Trie{}
+}
+
+func (t *Trie) Insert(word string) {
+    node := t
+    for _, ch := range word {
+        ch -= 'a'
+        if node.children[ch] == nil {
+            node.children[ch] = &Trie{}
+        }
+        node = node.children[ch]
+    }
+    node.isEnd = true
+}
+
+func (t *Trie) SearchPrefix(prefix string) *Trie {
+    node := t
+    for _, ch := range prefix {
+        ch -= 'a'
+        if node.children[ch] == nil {
+            return nil
+        }
+        node = node.children[ch]
+    }
+    return node
+}
+
+func (t *Trie) Search(word string) bool {
+    node := t.SearchPrefix(word)
+    return node != nil && node.isEnd
+}
+
+func (t *Trie) StartsWith(prefix string) bool {
+    return t.SearchPrefix(prefix) != nil
+}
+```
+
+#### [238. 除自身以外数组的乘积](https://leetcode.cn/problems/product-of-array-except-self/)
+
+```go
+func productExceptSelf(nums []int) []int {
+    dp := make([]int,len(nums))
+    dp[0] = 1
+    
+    for i := 1; i <len(nums);i++ {
+        dp[i] = dp[i-1] * nums[i-1]
+    }
+
+    tmp := nums[len(nums)-1]
+    for i := len(nums)-2;i >= 0; i-- {
+        dp[i] *= tmp
+        tmp = tmp * nums[i] 
+    }
+    return dp
+}
+```
+

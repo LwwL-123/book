@@ -514,3 +514,25 @@ func productExceptSelf(nums []int) []int {
     return dp
 }
 ```
+
+#### [41. 缺失的第一个正数](https://leetcode.cn/problems/first-missing-positive/)
+
+原地换位
+
+```go
+func firstMissingPositive(nums []int) int {
+    for i := 0; i < len(nums); i++ {
+        for nums[i] > 0 && nums[i] <= len(nums) && nums[nums[i]-1] != nums[i] {
+            nums[i],nums[nums[i]-1] = nums[nums[i]-1],nums[i]
+        }
+    } 
+
+    for k,_ := range nums {
+        if nums[k] != k + 1 {
+            return k + 1
+        }
+    }
+    return len(nums) + 1 
+}
+```
+

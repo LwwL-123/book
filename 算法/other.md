@@ -536,3 +536,43 @@ func firstMissingPositive(nums []int) int {
 }
 ```
 
+#### [57. 插入区间](https://leetcode.cn/problems/insert-interval/)
+
+```go
+func insert(intervals [][]int, newInterval []int) [][]int {
+    res := [][]int{}
+
+    // 左侧无重叠部分
+    i := 0
+    for i < len(intervals) && intervals[i][1] < newInterval[0] {
+        res = append(res,intervals[i])
+        i++
+    }
+
+    // 重叠部分
+    for i < len(intervals) && intervals[i][0] <= newInterval[1] {
+        newInterval[0] = min(intervals[i][0],newInterval[0])
+        newInterval[1] = max(intervals[i][1],newInterval[1])
+        i++
+    }
+    res = append(res,newInterval)
+
+    // 右侧无重叠部分
+    for i < len(intervals) && intervals[i][0] > newInterval[1] {
+        res = append(res,intervals[i])
+        i++
+    }
+    return res
+}
+
+func max(a,b int) int {
+    if a > b {return a}
+    return b
+}
+
+func min(a,b int) int {
+    if a < b {return a}
+    return b
+}
+```
+

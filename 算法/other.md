@@ -576,3 +576,64 @@ func min(a,b int) int {
 }
 ```
 
+#### [59. 螺旋矩阵 II](https://leetcode.cn/problems/spiral-matrix-ii/)
+
+```go
+func generateMatrix(n int) [][]int {
+    top, bottom := 0, n-1
+    left, right := 0, n-1
+    num := 1
+    tar := n * n
+    matrix := make([][]int, n)
+    // 初始化矩阵
+    for i := 0; i < n; i++ {
+        matrix[i] = make([]int, n)
+    }
+
+    // 填充数量
+    for num <= tar {
+        for i := left; i <= right; i++ {
+            matrix[top][i] = num
+            num++
+        }
+        top++
+        for i := top; i <= bottom; i++ {
+            matrix[i][right] = num
+            num++
+        }
+        right--
+        for i := right; i >= left; i-- {
+            matrix[bottom][i] = num
+            num++
+        }
+        bottom--
+        for i := bottom; i >= top; i-- {
+            matrix[i][left] = num
+            num++
+        }
+        left++
+    }
+    return matrix
+}
+```
+
+#### [80. 删除有序数组中的重复项 II](https://leetcode.cn/problems/remove-duplicates-from-sorted-array-ii/)
+
+```go
+func removeDuplicates(nums []int) int {
+    var process func(k int) int
+    process = func(k int) int {
+        cur := 0
+        for _,v := range nums {
+            if cur < k || nums[cur-k] != v {
+                nums[cur] = v
+                cur++
+            }
+        }
+        return cur
+    }
+
+    return process(1)
+}
+```
+

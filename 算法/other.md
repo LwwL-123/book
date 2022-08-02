@@ -637,3 +637,37 @@ func removeDuplicates(nums []int) int {
 }
 ```
 
+#### [43. 字符串相乘](https://leetcode.cn/problems/multiply-strings/)
+
+```go
+func multiply(num1 string, num2 string) string {
+    if num1 == "0" || num2 == "0" {
+        return "0"
+    }
+
+    res := make([]int,len(num1)+len(num2))
+    for i,n1 := range num1 {
+        for j,n2 := range num2 {
+            res[i+j+1] += int(n1-'0') * int(n2-'0')
+        }
+    }
+
+    for i := len(res) - 1; i >= 1; i-- {
+        if res[i] >= 10 {
+            res[i-1] += res[i] / 10
+            res[i] = res[i] % 10
+        }
+    }
+
+    s := ""
+    ifStart := false
+    for _, v := range res {
+        if ifStart || v != 0 {
+            ifStart = true
+            s += strconv.Itoa(v)
+        } 
+    }
+    return s
+}
+```
+

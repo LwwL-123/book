@@ -671,3 +671,80 @@ func multiply(num1 string, num2 string) string {
 }
 ```
 
+#### [50. Pow(x, n)](https://leetcode.cn/problems/powx-n/)
+
+快速幂
+
+x的n次方可以认为是x的平方的n/2次方，依次类推。这样可以将求幂问题的时间复杂度变为O(log n)。
+注意 ：n需要分奇偶进行分析。
+
+```go
+
+func myPow(x float64, n int) float64 {
+	var pow func(float64, int) float64
+	pow = func(x float64, n int) float64 {
+		if n == 0 {
+			return 1
+		}
+		y := pow(x, n/2)
+		// n 为偶数，可以分解完全
+		if n&1 == 0 {
+			return y * y
+		}
+		// n 为奇数，多出一个x
+		return y * y * x
+	}
+	if n >= 0 {
+		return pow(x, n)
+	}
+	return 1.0 / pow(x, -n)
+}
+```
+
+#### [剑指 Offer 03. 数组中重复的数字](https://leetcode.cn/problems/shu-zu-zhong-zhong-fu-de-shu-zi-lcof/)
+
+```go
+func findRepeatNumber(nums []int) int {
+	for i := 0; i < len(nums); i++ {
+		for nums[i] != i {
+			if nums[nums[i]] == nums[i] {
+				return nums[nums[i]]
+			}
+			nums[nums[i]], nums[i] = nums[i], nums[nums[i]]
+		}
+	}
+	return -1
+}
+```
+
+#### [88. 合并两个有序数组](https://leetcode.cn/problems/merge-sorted-array/)
+
+从后向前合并
+
+```go
+func merge(nums1 []int, m int, nums2 []int, n int)  {
+    now := len(nums1)-1
+    l1,l2 := m-1,n-1
+    for now >= 0 {
+        if l1 >= 0 && l2 >= 0 {
+            if nums1[l1] > nums2[l2] {
+                nums1[now] = nums1[l1]
+                l1--
+            }else if nums1[l1] <= nums2[l2] {
+                nums1[now] = nums2[l2]
+                l2--
+            }
+           
+        }else if l1 >= 0 {
+            nums1[now] = nums1[l1]
+            l1--            
+        }else if l2 >= 0 {
+            nums1[now] = nums2[l2]
+            l2--
+        }
+         now--
+
+    }
+}
+```
+

@@ -748,3 +748,35 @@ func merge(nums1 []int, m int, nums2 []int, n int)  {
 }
 ```
 
+#### [451. 根据字符出现频率排序](https://leetcode.cn/problems/sort-characters-by-frequency/)
+
+```go
+type ch struct {
+    data byte
+    count int
+}
+
+func frequencySort(s string) string {
+    hmap := make(map[byte]int)
+    for i:=0;i<len(s);i++ {
+        hmap[s[i]]++
+    }
+
+    chs := make([]ch,len(hmap))
+    for k,v := range hmap {
+        chs = append(chs,ch{k,v})
+    }
+
+    sort.Slice(chs,func(i,j int) bool {
+        return chs[i].count > chs[j].count
+    })
+
+    res := ""
+    for k,_ := range chs {
+        res += strings.Repeat(string(chs[k].data),chs[k].count)
+    }
+
+    return res
+}
+```
+

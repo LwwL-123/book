@@ -780,3 +780,33 @@ func frequencySort(s string) string {
 }
 ```
 
+#### [150. 逆波兰表达式求值](https://leetcode.cn/problems/evaluate-reverse-polish-notation/)
+
+```go
+func evalRPN(tokens []string) int {
+    stack := []int{}
+    for _,v := range tokens {
+        if v == "+" || v == "-" || v == "*" || v == "/" {
+            num1 := stack[len(stack)-2]
+            num2 := stack[len(stack)-1]
+            stack = stack[:len(stack)-2]
+
+            if v == "+" {
+                stack = append(stack,num1+num2)
+            }else if v == "-" {
+                stack = append(stack,num1-num2)
+            }else if v == "*" {
+                stack = append(stack,num1*num2)
+            }else if v == "/" {
+                stack = append(stack,num1/num2)
+            }
+        }else {
+            tmp ,_ := strconv.Atoi(string(v))
+            stack = append(stack,tmp)
+        }
+    }
+
+    return stack[len(stack)-1]
+}
+```
+

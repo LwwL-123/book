@@ -407,46 +407,6 @@ func min(a,b int) int {
 }
 ```
 
-#### [207. 课程表](https://leetcode.cn/problems/course-schedule/)
-
-```go
-func canFinish(numCourses int, prerequisites [][]int) bool {
-    var (
-        // edges[i][],表示学完课程i，可以学习的课程
-        edges = make([][]int, numCourses)
-        indeg = make([]int, numCourses) 
-        result []int
-    )
-
-    for _, info := range prerequisites {
-        // 
-        edges[info[1]] = append(edges[info[1]], info[0])
-        // 入度+1
-        indeg[info[0]]++
-    }
-
-    q := []int{}
-    for i := 0; i < numCourses; i++ {
-        if indeg[i] == 0 {
-            q = append(q, i)
-        }
-    }
-
-    for len(q) > 0 {
-        u := q[0]
-        q = q[1:]
-        result = append(result, u)
-        for _, v := range edges[u] {
-            indeg[v]--
-            if indeg[v] == 0 {
-                q = append(q, v)
-            }
-        }
-    }
-    return len(result) == numCourses
-}
-```
-
 
 
 #### [208. 实现 Trie (前缀树)](https://leetcode.cn/problems/implement-trie-prefix-tree/)

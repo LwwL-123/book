@@ -29,65 +29,46 @@ Local Repo：本地仓库，一个存放在本地的版本库；HEAD会只是当
 
 
 
-相关命令
 
-1. 修改本地已被跟踪文件，文件进入未暂存区域。
 
-**2.** 未暂存区域转到暂存区域
+### 二、git reset
 
-- git add files
+![在这里插入图片描述](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/20220831161924.png)
 
-3. 暂存区提交到本地仓库
-
-- git commit -m
-
-4. 直接从未暂存区提交到本地仓库
-
-- git commit -am
-- 经测试，对已跟踪的文件可以正确执行，而对于未跟踪文件（即新增文件）则会出错
-
-5. 本地库回退到暂存区，可以修改后再次commit提交
-
-- git reset --soft hash值
-- git reset --soft origin/master
-- 一般回退到暂存区的文件作排查用，不要直接修改，不然会同时出现在暂存区和未暂存区（其实即使修改了也木有太大关系）
-
-**6.** **本地库回退到未暂存区**
-
-- **git reset –mixed** *hash**值*
-- **git reset –mixed** *origin/master*
-- 一般回退到未暂存状态就是为了进一步的修改
-
-**7.** **本地库回退到文件初始状态（即此版本的）**
-
-- **git reset –hard** *hash**值*
-
-- 注意这里，通常先执行一次fetch，保证本地版本是origin的最新版本，然后再回退。（最厉害的是，这么操作不会有冲突，直接让文件变成和origin保持一致）
-
-  - **git fetch origin**
-  - **git reset –hard** *origin/master*
-  - 特别注意：这么操作会使你对文件的修改全部消失，还原成最初状态。
-
-- (针对上一条情况衍生讲解)通常在推送到origin时，先要pull，然后再推送，一般是修改提交了的文件和
-
-  pull下来的同一个文件产生冲突（所以建议修改代码前，一定先要pull）
-
-  - **git pull**
-  - **git push** *origin master*
-
-**8.** **暂存区回退到未暂存区**
-
-- **git reset –** *files*
-- git rest
-  - 撤销所有暂存区的文件
-
-**9.** **未暂存区回退到文件初始状态**
-
-- **git checkout –** *files*
-
-**10.** **暂存区回退到文件初始状态**
-
-- **git checkout head –** *files*
+在复习了git提交流程与HEAD指针与commit关系之后，我们就可以先使用git reset命令来重置文件状态了。
 
 
 
+#### 2.1、git reset --mixed
+
+- 重置index区
+
+--mixed是默认参数，该命令是重置HEAD和index区。例如我们修改了工作区的一个文件并通过git add命令添加到index区，但是又想要恢复刚刚的git add操作。这种情况下会重置index区的变更，保留工作区内容
+
+
+
+- 重置本地仓库repository区
+
+如果我们已经执行完git commit命令，但是想要进行恢复重置的话也可以使用git reset命令，但是会稍微有一些区别
+
+git reset HEAD^ ，这个时候就会重置index区域和repository区，但是会保留工作区内容
+
+
+
+#### 2.2、git reset --soft
+
+该命令的主要功能是重置HEAD，保留index和工作区。
+
+例如我们已经执行完git commit操作，这时我们发现需要commit内容存在错误，需要恢复。我们可以执行
+
+```
+git reset --soft HEAD^
+```
+
+可以看到，在执行了reset soft命令后repository区域的已经被重置，而index区域的依然被保留
+
+
+
+#### 2.3、git reset --hard
+
+该命令会重置掉工作区，index区和repository区，所以在使用的使用一定要小心。

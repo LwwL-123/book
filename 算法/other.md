@@ -770,3 +770,47 @@ func evalRPN(tokens []string) int {
 }
 ```
 
+#### [870. 优势洗牌](https://leetcode.cn/problems/advantage-shuffle/)
+
+```go
+type node struct {
+	index, num int
+	targetNum  int
+}
+func advantageCount(nums1 []int, nums2 []int) []int {
+	nodes := []node{}
+	for k, v := range nums2 {
+		nodes = append(nodes, node{
+			index: k,
+			num:   v,
+		})
+	}
+	sort.Slice(nums1, func(i, j int) bool {
+		return nums1[i] > nums1[j]
+	})
+	sort.Slice(nodes, func(i, j int) bool {
+		return nodes[i].num > nodes[j].num
+	})
+
+	l, r := 0, len(nums2)-1
+	for i := 0; i < len(nodes); i++ {
+		// 如果我的🐴比对面快
+		if nums1[l] > nodes[i].num {
+			nodes[i].targetNum = nums1[l]
+			l++
+		} else {
+			nodes[i].targetNum = nums1[r]
+			r--
+		}
+	}
+	sort.Slice(nodes, func(i, j int) bool {
+		return nodes[i].index < nodes[j].index
+	})
+	var res []int
+	for i := 0; i < len(nodes); i++ {
+		res = append(res, nodes[i].targetNum)
+	}
+	return res
+}
+```
+

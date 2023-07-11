@@ -17,9 +17,47 @@ Starknet 是一种无需许可的去中心化 Validity-Rollup（也称为“ZK-R
   - ArgentX：主流，开源 ，https://github.com/argentlabs/
   - Braavos：只开源账户合约，https://github.com/myBraavos/
 
-## 1. Starknet账户结构
+## 1.Starknet工作流程
 
-### 1.1 EIP-4337 (账户抽象)
+在以太坊上，每提交一笔交易都需要所有节点检查、验证并执行交易来验证计算正确性，并将计算后的状态变化在网络中广播。
+
+StarkNet 仅在链下执行计算并生成一个 ZK 证明，然后在链上验证该证明的正确性，最后**把多个 L2 交易打包为以太坊上的一笔交易**。因此，StarkNet 上发生的交易成本可以被同一打包批次的其他交易所均摊，交易越多，成本越低。
+
+### 1.1 Starknet组成
+
+StarkNet 有五个组成部分，分别是在 StarkNet 上的 Prover（证明者）、Sequencer（排序器）和全节点，以及部署在以太坊上的验证者（Verifier）和核心状态合约（StarkNet Core）。
+
+- Sequencer（排序器）
+  - 是一个链下服务器，接收所有的事务、订单，确认（validate）并捆绑（bundle）他们到区块。目前只有一个由 StarkWare 控制的排序器。但在未来有去中心的区块创建计划。为了让排序器确认交易，它必须使用 Cairo 操作系统来执行交易，这是 EVM 的替代品，用于用 Cairo 编写的智能合约。
+- Prover（证明者）
+  - 证明者负责生成一个加密证明，以证明排序器在通过执行新区块中包含的交易得出新的全局状态时进行计算的完整性。为了让验证器生成有效性证明，它需要得到由排序器执行计算的 "执行轨迹"，由 Cairo 语言生成 。
+  - 目前系统中只有一个证明者，它不仅为 StarkNet 生成证明，也为所有其他运行在自己的 StarkEx Rollup 上的应用程序（Immutable X, dYdX, Sorare,等等）生成证明。这就是为什么这项服务也被称为 "共享证明器"（Shared Prover）或 SHARP。
+- 全节点
+  - 记录在 Rollup 中执行的所有事务，并跟踪系统的当前全局状态。全节点通过 p2p 网络接收这些信息。全局状态的变化和与之相关的有效性证明在每次创建新区块时都会被共享。当一个新的全节点建立后，它能够通过连接到 Ethereum 节点并处理所有与 StarkNet 相关的 L1 事务来重构 Rollup 的历史
+- 验证者（Verifier）
+  - 验证者是以太坊上的一个智能合约，它从证明者那里接收新生成的证明作为 L1 交易 并在链上进行确认。确认的结果被发送到 StarkNet 的核心智能合约以保存记录，并从StarkNet触发一组新的 L1 交易来更新链上的全局状态以保存记录。
+- 核心状态合约（StarkNet Core）
+  - Core 是一个智能合约，每当一个新的 L2 区块被创建并且其加密证明被验证者成功地在链上确认时，它就会从 StarkNet 接收对 L2 全局状态的改变。
+  - 这些关于 StarkNet 的 "metadata "被 StarkNet 的全节点解密，以便在首次同步时重建网络的历史。
+
+![StarkNet's current architecture](https://picture-1258612855.cos.ap-shanghai.myqcloud.com/202306131633517.jpeg)
+
+工作流程：
+
+1. 当我们在 StarkNet 上发起一个交易，一个排序器将会接收、排序、验证，并将它们打包到区块。执行交易，然后状态转换发送给 StarkNet Core 合约；
+2. 证明者将为交易生成证明，并发送给以太坊的验证者合约；
+3. 验证者将验证结果发送到以太坊上的 StarkNet Core 合约，并从 StarkNet Core 合约触发一组新的以太坊交易，以更新链上的全局状态以进行记录保存。
+4. 全节点基本发挥存储功能。全节点存储状态改变、元数据、证明以及记录在 StarkNet 中的已被执行的所有事务，并跟踪系统的当前全局状态。在有必要的时候，全节点将解密“metadata”来重构 StarkNet 的历史。
+
+
+
+ StarkNet为固定的一分钟出块时间，而每隔一小时，系统会从每分钟创建的所有有效性证明中生成一个有效性证明，并将其与该区间内发生的所有状态变化一起提交给以太坊，每小时在以太坊上完成一次结算。不过这个一小时并不需要用户等待。
+
+
+
+## 2. Starknet账户结构
+
+### 2.1 EIP-4337 (账户抽象)
 
 ​	在以太坊中，个人用户帐户被称为外部拥有帐户 (EOA)。EOA 与智能合约的不同之处在于它们不受代码控制。 EOA 由一对私钥和公钥确定。虽然简单，但 EOA 有一个主要缺点，即账户行为没有灵活性，以太坊协议规定了 EOA 发起的交易有效的含义（签名方案是固定的）。特别是，对公钥的控制可以完全控制帐户。虽然这在理论上是一种安全的帐户管理方法，但在实践中它有一些缺点，例如要求您保持助记词的安全但又可供您访问，以及钱包功能的灵活性有限。
 ​	EIP-4337 是以太坊的一项设计提案，概述了账户抽象，所有账户都通过以太坊网络上的专用智能合约进行管理，以此来提高灵活性和可用性。您可以在基本 EOA 功能之上添加自定义逻辑，从而将帐户抽象化引入以太坊。
@@ -41,6 +79,8 @@ Starknet 是一种无需许可的去中心化 Validity-Rollup（也称为“ZK-R
   - 只能在收到交易后发送交易
 
   - CA代码可以自定义执行各种不同的动作，如转移代币，甚至创建一个新的合约
+  
+  - 合约地址在线下预先计算
 
 <img src="https://picture-1258612855.cos.ap-shanghai.myqcloud.com/202304281806142.png" alt="img" style="zoom: 67%;" />
 
@@ -78,7 +118,7 @@ const addrETH = "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004
 
 
 
-### 1.2 EIP-2645（L2层私钥派生协议）
+### 2.2 EIP-2645（L2层私钥派生协议）
 
 在 ZK-Rollups 等计算完整性证明 (CIP) Layer-2 解决方案的背景下，用户需要在针对这些环境优化的新椭圆曲线上签署消息。我们利用现有的密钥派生工作（BIP32、BIP39 和 BIP44）来定义一种有效的方法来安全地生成 CIP L2 私钥，并在第 2 层应用程序之间创建域分离。
 
@@ -105,9 +145,9 @@ m / purpose' / layer' / application' / eth_address_1' / eth_address_2' / index
 
 
 
-## 2. Starknet交易类型
+## 3. Starknet交易类型
 
-### 2.1 Starknet 四种交易
+### 3.1 Starknet 四种交易
 
 - *declare*
   - 声明合约类，contract class
@@ -127,7 +167,7 @@ const privateKey = stark.randomAddress();
 // 计算公钥
 starkKeyPub = ec.starkCurve.getStarkKey(privateKey);
 
-// 预计算合约地址
+// 预计算合约地址（Pedersen哈希算法）
 precalculatedAddress = calculateContractAddressFromHash(
   starkKeyPub,     // salt,
   accountClassHash, // 合约类hash
@@ -135,6 +175,3 @@ precalculatedAddress = calculateContractAddressFromHash(
   0                  // deployerAddress，为0
 );
 ```
-
-
-

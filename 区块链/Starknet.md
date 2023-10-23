@@ -175,3 +175,30 @@ precalculatedAddress = calculateContractAddressFromHash(
   0                  // deployerAddress，为0
 );
 ```
+
+
+
+
+
+
+
+
+
+
+
+```
+{"type":"DEPLOY_ACCOUNT","contract_address_salt":"0x2f4a65ecea5351f49f181841bdddcdf62f600d0e4864755699386d42dd17e37","constructor_calldata":["0x309c042d3729173c7f2f91a34f04d8c509c1b292d334679ef1aabf8da0899cc","0x79dc0da7c54b95f10aa182ad0a46400db63156920adb65eca2654c0945a463","0x2","0x2f4a65ecea5351f49f181841bdddcdf62f600d0e4864755699386d42dd17e37","0x0"],"class_hash":"0x3530cc4759d78042f1b543bf797f5f3d647cde0388c33734cf91b7f7b9314a9","max_fee":"0x7157cb0e14a0","version":"0x1","nonce":"0x0","signature":["0x3dad4567ba1b2be59ee25e41066c23379a86aae7fec17f5c14b53fae016dd36","0x590da04dd36fa3601e014f9b3f6a29fccf4b07ca915dc3ee6ff98beda84d6d6"]}
+```
+
+```
+curl --location 'https://fullnode.okg.com/starknet/native/analysis/rpc?apikey=GAXV8d4WgjmWH07q38TH' \
+--header 'Content-Type: application/json' \
+--data '{
+    "jsonrpc": "2.0",
+    "method": "starknet_addDeployAccountTransaction",
+    "params": [{"type":"DEPLOY_ACCOUNT","contract_address_salt":"0x3287091b49fd8bf3942d0eb6f42bf98b10cd41159e7bbc2658c594aa784b8c6","constructor_calldata":["0x309c042d3729173c7f2f91a34f04d8c509c1b292d334679ef1aabf8da0899cc","0x79dc0da7c54b95f10aa182ad0a46400db63156920adb65eca2654c0945a463","0x2","0x3287091b49fd8bf3942d0eb6f42bf98b10cd41159e7bbc2658c594aa784b8c6","0x0"],"class_hash":"0x3530cc4759d78042f1b543bf797f5f3d647cde0388c33734cf91b7f7b9314a9","max_fee":"0xb5e620f48000","version":"0x1","nonce":"0x0","signature":["0x6c87024c4f9a3d15bafb2dfb39a210e00df47cf5a63de4decd2ee65d844ae3","0x4e59ee4dfc3ad11ca1ba98bad81fd8e174f8f32b5bf715ca894bee543aacec1"]}
+],
+    "id": 1
+}'
+```
+
